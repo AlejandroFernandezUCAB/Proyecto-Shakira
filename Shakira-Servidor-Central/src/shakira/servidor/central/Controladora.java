@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira;
+package shakira.servidor.secundario;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
