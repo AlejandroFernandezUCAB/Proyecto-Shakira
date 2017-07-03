@@ -18,7 +18,13 @@ public class ConsolaShakira extends javax.swing.JFrame {
      * Creates new form ConsolaShakira
      */
     public ConsolaShakira() {
+        
         initComponents();
+        this.setSize(800, 587);
+        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -38,7 +44,6 @@ public class ConsolaShakira extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(800, 600));
         setResizable(false);
         setSize(new java.awt.Dimension(800, 600));
 
@@ -144,6 +149,11 @@ public class ConsolaShakira extends javax.swing.JFrame {
        
     }//GEN-LAST:event_inputComandoKeyPressed
 
+    /**
+     * Metodo que envía información a al servidor en caso de que se presione enter
+     * @param evt Al presionar tecla enter
+     */
+    
     public void enviarInformacion(java.awt.event.KeyEvent evt){
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
@@ -156,10 +166,14 @@ public class ConsolaShakira extends javax.swing.JFrame {
         
     }
     
+    /**
+     * Metodo que envía la linea de comando al servidor
+     */
      public void enviarInformacion(){
 
         Controladora controladora = new Controladora(panel ,inputComando, consolaTextArea);
         controladora.enviarInformacion();
+        inputComando.setText("");
         
     }
     
