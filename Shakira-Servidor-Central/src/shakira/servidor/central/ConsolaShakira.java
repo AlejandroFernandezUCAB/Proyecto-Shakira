@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira;
+package shakira.servidor.secundario;
 
 import java.awt.Event;
 import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author pedro
  */
 public class ConsolaShakira extends javax.swing.JFrame {
-    private String nombreUsuario;
+
     /**
      * Creates new form ConsolaShakira
      */
@@ -25,11 +24,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        this.nombreUsuario = JOptionPane.showInputDialog(
-            this,
-            "Inserte nombre de usuario",
-            "SHAKIRA DOWNLOADER", 
-            JOptionPane.INFORMATION_MESSAGE);
+        
     }
 
     /**
@@ -56,7 +51,6 @@ public class ConsolaShakira extends javax.swing.JFrame {
 
         consolaTextArea.setColumns(20);
         consolaTextArea.setFont(new java.awt.Font("Ubuntu Mono", 0, 15)); // NOI18N
-        consolaTextArea.setForeground(new java.awt.Color(1, 1, 1));
         consolaTextArea.setRows(5);
         consolaTextArea.setEnabled(false);
         jScrollPane1.setViewportView(consolaTextArea);
@@ -146,9 +140,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
     private void enviarBotonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarBotonKeyPressed
         
        enviarInformacion(evt);
-       String prueba;
-       String hola;
-       String Hola2;
+       
     }//GEN-LAST:event_enviarBotonKeyPressed
 
     private void inputComandoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputComandoKeyPressed
@@ -166,9 +158,9 @@ public class ConsolaShakira extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             
-            Controladora controladora = new Controladora(nombreUsuario,panel ,inputComando, consolaTextArea);
+            Controladora controladora = new Controladora(panel ,inputComando, consolaTextArea);
             controladora.enviarInformacion();
-            inputComando.setText("Hola");
+            inputComando.setText("");
             
         }
         
@@ -179,11 +171,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
      */
      public void enviarInformacion(){
 
-        Controladora controladora = new Controladora( 
-                nombreUsuario,
-                panel ,
-                inputComando,
-                consolaTextArea );
+        Controladora controladora = new Controladora(panel ,inputComando, consolaTextArea);
         controladora.enviarInformacion();
         inputComando.setText("");
         
@@ -214,6 +202,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

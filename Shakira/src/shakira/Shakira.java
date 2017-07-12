@@ -5,6 +5,9 @@
  */
 package shakira;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alejandro Fernandez
