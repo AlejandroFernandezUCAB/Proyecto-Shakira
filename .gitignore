@@ -34,3 +34,10 @@ Shakira/nbproject/private/private\.xml
 /Shakira-Servidor-Central/build/
 /Shakira-Servidor-Central/dist/
 /Shakira-Servidor-Secundario/build/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+Shakira/nbproject/

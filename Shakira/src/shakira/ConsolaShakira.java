@@ -21,7 +21,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
     public ConsolaShakira() {
         
         initComponents();
-        this.setSize(800, 587);
+        this.setSize(800, 610);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);

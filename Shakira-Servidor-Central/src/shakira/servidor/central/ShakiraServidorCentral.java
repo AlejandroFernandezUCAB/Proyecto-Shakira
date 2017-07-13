@@ -5,6 +5,10 @@
  */
 package shakira.servidor.central;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.*;
+
 /**
  *
  * @author pedro
@@ -15,10 +19,26 @@ public class ShakiraServidorCentral {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-         
+        int i=0;
         ConsolaShakira consola = new ConsolaShakira();
         consola.show();
         
+        try {
+            
+            ServerSocket s = new ServerSocket(8888);
+            for (;;){
+                
+                System.out.println(i + "\n");
+                Socket ss = s.accept();
+                new SocketConexionHilo(ss,i).start();
+                i++;
+                
+            }
+        }catch (Exception e){
+            
+            i=0;
+            
+        }
+        
     }
-    
 }
