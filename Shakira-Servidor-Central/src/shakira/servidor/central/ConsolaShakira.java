@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira.servidor.secundario;
+package shakira.servidor.central;
 
 import java.awt.Event;
 import java.awt.event.KeyEvent;
