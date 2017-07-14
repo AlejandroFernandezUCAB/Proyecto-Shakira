@@ -42,6 +42,8 @@ public class SocketConexionHilo extends Thread{
 	else { 
             
             System.out.println("Ip:" + str); 
+            BaseDeDatos bdd = new BaseDeDatos();
+            bdd.agregarUsuarioBDD(str, 500);
             str = "Recibido";
             System.out.println(str);
             byte buf[] = str.getBytes();

@@ -53,9 +53,9 @@ public class SocketConexion {
             System.out.println(str);
             byte buf[] = str.getBytes();
             out.write(buf);
-            boolean done=true;
+            boolean done=false;
                   while (!done) {
-          
+                      System.out.println(done);
                     str=in.readLine();
                     if (str==null) 
                         done=true;
@@ -67,9 +67,9 @@ public class SocketConexion {
 
                     }
         
-      }
+                }
             s.close();
-            
+             System.out.println("cerrar socket");
             }catch(IOException e){
                 
                 System.out.println(e);

@@ -61,13 +61,14 @@ public static String password = "redes2";
                         con.close();
                     }
                     
-                    return 1;
-
+                    
                 } catch (SQLException ex) {
 
                     System.out.println(ex);                
                     return 0;
                 }
+                
+                return 1;
         }
            
     }
