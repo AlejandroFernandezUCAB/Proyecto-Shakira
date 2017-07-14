@@ -1,4 +1,6 @@
-﻿CREATE TABLE CLIENTE(
+﻿CREATE USER redes2 WITH PASSWORD 'redes2';
+
+CREATE TABLE CLIENTE(
 
 	ipCliente varchar(15) not null,
 	puertoEscucha int not null,

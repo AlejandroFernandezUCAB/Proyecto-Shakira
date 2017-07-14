@@ -22,7 +22,8 @@ public class ShakiraServidorCentral {
         int i=0;
         ConsolaShakira consola = new ConsolaShakira();
         consola.show();
-        
+        BaseDeDatos bdd = new BaseDeDatos();
+        bdd.conexion();
         try {
             
             ServerSocket s = new ServerSocket(8888);
