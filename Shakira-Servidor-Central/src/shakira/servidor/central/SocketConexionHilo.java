@@ -31,15 +31,20 @@ public class SocketConexionHilo extends Thread{
       PrintWriter out=new PrintWriter( ss.getOutputStream() ,true );
       System.out.println("Hola! Escribir BYE para salir");
       boolean done=false;
+      
       while (!done) {
+          
 	String str=in.readLine();
 	if (str==null) 
             done=true;
 	else { 
+            
             System.out.println("Echo:("+counter+"):"+str); 
 	    if (str.trim().equals("BYE")) 
-                done=true; 
+            done=true; 
+            
         }
+        
       }
       ss.close();
     }  catch (Exception e) { 

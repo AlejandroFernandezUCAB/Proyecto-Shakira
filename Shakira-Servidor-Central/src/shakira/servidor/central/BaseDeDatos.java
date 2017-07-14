@@ -7,6 +7,7 @@ package shakira.servidor.central;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,21 +27,49 @@ public static String password = "redes2";
 
 /**
  * Metodo que crea la conexion en la base de datos
+     * @param direccionIp direccion ip cliente
+     * @param puertoEscucha puerto escucha del cliente
+     * @return devuelve 1 si se registró correctamente, si hay error 0
  */
-    public void abrirConexion() {
-        
-        try{
 
+    public int agregarUsuarioBDD(String direccionIp, int puertoEscucha){
+        
+        String stm = "INSERT INTO CLIENTE(direccionIp, puertoEscucha) VALUES(?, ?)";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y e guarda el usuario, aun no se verifica si se guardo
+        try{
             Class.forName(driver);
-            Connection con = DriverManager.getConnection(connectString, user , password);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.setString(1, direccionIp);
+            pst.setInt(2, puertoEscucha);                    
+            pst.executeUpdate();
+            
             } catch ( SQLException | ClassNotFoundException e ){
 
                 System.out.println(e.getMessage());
-            }
-    }
+                
+            } finally {
+            // Con el finally se cierran todas las conexiones los con, pst;
+                try {
+                    
+                    if (pst != null) {
+                        pst.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                    
+                    return 1;
 
-    public int agregarUsuarioBDD(String direccionIp, int puertoEscucha){
-        u
+                } catch (SQLException ex) {
+
+                    System.out.println(ex);                
+                    return 0;
+                }
+        }
+           
     }
 }
 
