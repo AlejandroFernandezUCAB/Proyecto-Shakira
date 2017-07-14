@@ -5,8 +5,10 @@
  */
 package shakira;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -44,13 +46,28 @@ public class SocketConexion {
         try{
             
             Socket s=new Socket("192.168.0.2",500);
-            InputStream in=s.getInputStream();
+            BufferedReader in = new BufferedReader( new InputStreamReader( s.getInputStream() ) );
             OutputStream out=s.getOutputStream();
             InetAddress adress = InetAddress.getLocalHost();
-            String str = adress.getHostAddress().toString();
+            String str = adress.getHostAddress();
             System.out.println(str);
             byte buf[] = str.getBytes();
             out.write(buf);
+            boolean done=true;
+                  while (!done) {
+          
+                    str=in.readLine();
+                    if (str==null) 
+                        done=true;
+                    else { 
+
+                        System.out.println("Server:" + str); 
+                        System.out.println(str);
+                        done=true; 
+
+                    }
+        
+      }
             s.close();
             
             }catch(IOException e){
