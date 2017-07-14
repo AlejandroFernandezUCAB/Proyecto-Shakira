@@ -47,7 +47,7 @@ public class SocketConexion {
             InputStream in=s.getInputStream();
             OutputStream out=s.getOutputStream();
             InetAddress adress = InetAddress.getLocalHost();
-            String str = adress.toString();
+            String str = adress.getHostAddress().toString();
             System.out.println(str);
             byte buf[] = str.getBytes();
             out.write(buf);
