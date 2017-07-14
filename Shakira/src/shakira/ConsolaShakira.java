@@ -168,7 +168,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
             
             Controladora controladora = new Controladora(nombreUsuario,panel ,inputComando, consolaTextArea);
             controladora.enviarInformacion();
-            inputComando.setText("Hola");
+            inputComando.setText("");
             
         }
         

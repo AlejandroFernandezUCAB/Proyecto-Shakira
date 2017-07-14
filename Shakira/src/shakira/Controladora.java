@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import sun.security.util.Length;
 
 /**
  *
@@ -47,15 +48,16 @@ public class Controladora {
         if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí")){
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
+           
+        }else if( sacarInscribir(inputToString).equalsIgnoreCase("inscribir") ){
             
-        }else {
+            inscribirUsuario();
             
+        }else{
             output.setText( output.getText() + nombreUsuario + " > " + inputToString + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
-            /*
-                Prueba para socket
-            */
+
             try{
                 
                 InetAddress adress = InetAddress.getLocalHost();
@@ -66,9 +68,40 @@ public class Controladora {
             }catch(UnknownHostException e){
                 
             }
+            
         }
             
-        
     }
-        
+    
+    /**
+     * Metodo que verifica si está escrito el comando inscribir
+     * @param inputToString recibe el comando completo
+     * @return devuelve las primeras 9 letras para ver si es inscribir
+     */
+    public String sacarInscribir(String inputToString){
+        String comando = "";
+        if (inputToString.length() > 8){
+            for (int i = 0; i < 9; i++) {
+            
+            comando = comando + inputToString.charAt(i);
+            System.out.println(comando);
+            
+            }
+        }
+        return comando;
+    }
+    
+    /**
+     * Envía la informacion a a controladora de sockets 
+     * Se saca el ip local y se envia
+     */
+    public void inscribirUsuario(){
+        try{
+            InetAddress adress = InetAddress.getLocalHost();
+            SocketConexion s = new SocketConexion();
+            s.inscribirUsuario( adress.toString() , 1 );
+        }catch (UnknownHostException e){
+            
+        }
+    }
 }
