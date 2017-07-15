@@ -94,7 +94,7 @@ public static String password = "redes2";
 
             while (rs.next()){
                 
-                System.out.println("CEDULA" + rs.getString("ipcliente"));
+                System.out.println("Ip: " + rs.getString("ipcliente"));
                 if(rs.getString("ipcliente").contains(ip)){
                     suiche = true;
                 }
