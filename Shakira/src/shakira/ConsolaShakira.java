@@ -21,7 +21,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
     public ConsolaShakira() {
         
         initComponents();
-        this.setSize(800, 587);
+        this.setSize(800, 610);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
@@ -168,7 +168,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
             
             Controladora controladora = new Controladora(nombreUsuario,panel ,inputComando, consolaTextArea);
             controladora.enviarInformacion();
-            inputComando.setText("Hola");
+            inputComando.setText("");
             
         }
         

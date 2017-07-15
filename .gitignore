@@ -1,37 +1,44 @@
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-Shakira/nbproject/private/private\.xml
-/ServidorCentral-Shakira/nbproject/private/
-/ServidorCentral-Shakira/ServidorCentral-Shakira-war/nbproject/private/
-/ServidorCentral-Shakira/ServidorCentral-Shakira-ejb/nbproject/private/
-/ServidorSecundario-Shakira/nbproject/private/
-/ServidorSecundario-Shakira/ServidorSecundario-Shakira-war/nbproject/private/
-/ServidorSecundario-Shakira/ServidorSecundario-Shakira-ejb/nbproject/private/
-/Shakira/build/
-/Shakira-Servidor-Central/nbproject/private/
-/Shakira-Servidor-Secundario/nbproject/private/
-/Shakira-Servidor-Central/build/
-/Shakira-Servidor-Central/dist/
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+Shakira/nbproject/private/private\.xml
+/ServidorCentral-Shakira/nbproject/private/
+/ServidorCentral-Shakira/ServidorCentral-Shakira-war/nbproject/private/
+/ServidorCentral-Shakira/ServidorCentral-Shakira-ejb/nbproject/private/
+/ServidorSecundario-Shakira/nbproject/private/
+/ServidorSecundario-Shakira/ServidorSecundario-Shakira-war/nbproject/private/
+/ServidorSecundario-Shakira/ServidorSecundario-Shakira-ejb/nbproject/private/
+/Shakira/build/
+/Shakira-Servidor-Central/nbproject/private/
+/Shakira-Servidor-Secundario/nbproject/private/
+/Shakira-Servidor-Central/build/
+/Shakira-Servidor-Central/dist/
 /Shakira-Servidor-Secundario/build/
+Shakira/nbproject/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 Shakira/nbproject/
