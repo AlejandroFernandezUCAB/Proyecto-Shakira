@@ -85,7 +85,7 @@ public class SocketConexionHilo extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(8);
+            entrada = entrada.substring(9);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             

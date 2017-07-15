@@ -47,7 +47,7 @@ public class SocketConexion {
     }
     
     
-    public void inscribirUsuario(String direccionIp, int puerto) throws IOException{
+    public int inscribirUsuario(String direccionIp, int puerto) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
@@ -63,31 +63,31 @@ public class SocketConexion {
          }
          
         BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
-        String linea;
+        String linea=null;
         
         try {
           while (true) {
             // Leo la entrada del usuario
-            InetAddress adress = InetAddress.getLocalHost();
-            String str = "inscribir"+adress.getHostAddress();
+            String str = "inscribir"+direccionIp;
             System.out.println(str);
             // La envia al servidor
             salida.println(str);
             // Envía a la salida estándar la respuesta del servidor
             linea = entrada.readLine();
-            System.out.println("Respuesta servidor: " + linea);
-            
+            System.out.println("Respuesta servidor: " + linea);    
             break;
           }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }
-
+        
         // Libera recursos
         salida.close();
         entrada.close();
         stdIn.close();
         s.close();
+        return Integer.parseInt(linea);
+        
   }
         /*try{
             int c;

@@ -5,6 +5,7 @@
  */
 package shakira;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import javax.swing.JFrame;
@@ -43,18 +44,21 @@ public class Controladora {
  * Enviar información al servidor, por los momentos pura interfaz
  */    
     public void enviarInformacion (){
-        
+
         String inputToString = input.getText().trim().toLowerCase();
-        if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí")){
+        if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí") ){
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
            
         }else if( sacarInscribir(inputToString).equalsIgnoreCase("inscribir") ){
             
             inscribirUsuario();
+            output.setText( output.getText() + nombreUsuario + " > " + inputToString + "\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
             
         }else{
-            output.setText( output.getText() + nombreUsuario + " > " + inputToString + "\n");
+            output.setText( output.getText() + nombreUsuario + " > " + input + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
 
@@ -93,12 +97,20 @@ public class Controladora {
      * Envía la informacion a a controladora de sockets 
      * Se saca el ip local y se envia
      */
-    public void inscribirUsuario(){
+    public int inscribirUsuario(){
         try{
+            
             InetAddress adress = InetAddress.getLocalHost();
             SocketConexion s = new SocketConexion();
             s.inscribirUsuario( adress.toString() , 1 );
+            
         }catch (UnknownHostException e){
+            
+            System.out.println(e.getMessage());
+            
+        }catch (IOException e){
+            
+            System.out.println(e.getMessage());
             
         }
     }
