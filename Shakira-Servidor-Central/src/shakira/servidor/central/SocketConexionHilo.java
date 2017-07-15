@@ -41,6 +41,7 @@ public class SocketConexionHilo extends Thread{
         
         try {
             
+          //Establece el canal de entrada
           entrada = new BufferedReader(new InputStreamReader(ss.getInputStream()));
           // Establece canal de salida
           salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(ss.getOutputStream())),true);
@@ -49,8 +50,12 @@ public class SocketConexionHilo extends Thread{
           //Además se le responde al cliente 
           while (true) {  
             String str = entrada.readLine();
-            BaseDeDatos bdd = new BaseDeDatos();
-            bdd.agregarUsuarioBDD( str , 1 );
+            
+            if( str.contains("inscribir")){
+                
+                
+            }
+            
             salida.println( str );
             break;
           }
@@ -66,40 +71,5 @@ public class SocketConexionHilo extends Thread{
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
-
-        
-      }
-        
-//    try {
-//      int bytesEntrantes;
-//      int tamañoString = 0;
-//      InputStream in = ss.getInputStream();
-//      OutputStream out = ss.getOutputStream();
-//      String bytesEnsamblados = "";
-//      while ((bytesEntrantes = in.read())!=-1) {
-//          
-//            bytesEnsamblados = bytesEnsamblados + (char) bytesEntrantes;
-//            
-//            //Al final de la cadena hay una f para saber que es el final de la cadena y asi poder "parar" el ciclo
-//            if( bytesEnsamblados.contains("f") == true  ){
-//                
-//                bytesEnsamblados.replace('f', ' ');
-//                bytesEnsamblados = bytesEnsamblados.trim();
-//                System.out.println( "Ip:" + bytesEntrantes ); 
-//                /*BaseDeDatos bdd = new BaseDeDatos();
-//                bdd.agregarUsuarioBDD( bytesEnsamblados , 500);
-//                System.out.println( bytesEntrantes );*/
-//                byte buf[] = "Recibido".getBytes();
-//                out.write(buf);                       
-//                System.out.println("Chao");
-//                ss.close();
-//                
-//            }
-//        }
-//            
-//    }  catch (Exception e) { 
-//        
-//        System.out.println(e); 
-//        
-//    }
     }
+}

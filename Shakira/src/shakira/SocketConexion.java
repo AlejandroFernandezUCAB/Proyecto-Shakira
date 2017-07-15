@@ -54,7 +54,7 @@ public class SocketConexion {
          
          //Inicializo la conexion con el socket
          try{
-            s = new Socket("192.168.0.1", 500);
+            s = new Socket("192.168.0.2", 500);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
             salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
