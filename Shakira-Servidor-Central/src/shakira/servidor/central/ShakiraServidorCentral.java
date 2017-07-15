@@ -20,8 +20,6 @@ public class ShakiraServidorCentral {
      */
     public static void main(String[] args) {
         int i=0;
-        ConsolaShakira consola = new ConsolaShakira();
-        consola.show();
         try {
             
             ServerSocket s = new ServerSocket(500);
