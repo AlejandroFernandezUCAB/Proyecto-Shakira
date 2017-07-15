@@ -77,7 +77,6 @@ public class SocketConexion {
           while (true) {
             // Leo la entrada del usuario
             String str = "inscribir"+direccionIp;
-            System.out.println(str);
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
