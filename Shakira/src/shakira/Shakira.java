@@ -5,9 +5,6 @@
  */
 package shakira;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author Alejandro Fernandez
@@ -19,7 +16,7 @@ public class Shakira {
      */
     public static void main(String[] args) {
         ConsolaShakira consola = new ConsolaShakira();
-        consola.show();
+        consola.show();       
     }
     
 }
