@@ -46,8 +46,14 @@ public class SocketConexion {
         }
     }
     
-    
-    public int inscribirUsuario(String direccionIp, int puerto) throws IOException{
+    /**
+     * Se procede a realizar la conexion con el servidor central para inscribir al cliente
+     * @param direccionIp direccion ip del cliente
+     * @param puerto puerto del cliente
+     * @return SI está o no registrado correctamente
+     * @throws IOException 
+     */
+    public String inscribirUsuario(String direccionIp, int puerto) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
@@ -86,26 +92,8 @@ public class SocketConexion {
         entrada.close();
         stdIn.close();
         s.close();
-        return Integer.parseInt(linea);
+        return linea;
         
   }
-        /*try{
-            int c;
-            Socket s=new Socket("192.168.0.1",500);
-            DataOutputStream mensaje;
-            BufferedReader entrada = new BufferedReader ( new InputStreamReader(s.getInputStream()));
-            //Verificando conexion
-            System.out.println(entrada.readLine());
-            mensaje = new DataOutputStream(s.getOutputStream());
- + " f";
-            mensaje.writeUTF(str);
-            System.out.println(entrada.readLine());
-            System.out.println(entrada.readLine());
-            s.close();
-            System.out.println("cerrar socket");
-            }catch(IOException e){
-                
-                System.out.println(e);
-                
-            }*/
-    }
+
+}

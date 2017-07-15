@@ -52,27 +52,18 @@ public class Controladora {
            
         }else if( sacarInscribir(inputToString).equalsIgnoreCase("inscribir") ){
             
-            inscribirUsuario();
-            output.setText( output.getText() + nombreUsuario + " > " + inputToString + "\n");
+            output.setText( output.getText() + nombreUsuario + " > " + input.getText() + "\n");
+            output.setText( output.getText() + inscribirUsuario() + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
         }else{
-            output.setText( output.getText() + nombreUsuario + " > " + input + "\n");
+            output.setText( output.getText() + nombreUsuario + " > " + input.getText() + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
-
-            try{
-                
-                InetAddress adress = InetAddress.getLocalHost();
-                output.setText( output.getText() + nombreUsuario + " > " + "Su dirección ip es:"+ adress + "\n");
-                output.setLineWrap(true);
-                output.setWrapStyleWord(true);
-                
-            }catch(UnknownHostException e){
-                
-            }
-            
+            output.setText( output.getText() + "Cliente > Error en el comando\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
         }
             
     }
@@ -96,22 +87,19 @@ public class Controladora {
     /**
      * Envía la informacion a a controladora de sockets 
      * Se saca el ip local y se envia
+     * @return mensaje del servidor
      */
-    public int inscribirUsuario(){
-        try{
+    public String inscribirUsuario(){
+            String resultado = null;
+            try{
+                InetAddress adress = InetAddress.getLocalHost();
+                SocketConexion s = new SocketConexion();
+                resultado = s.inscribirUsuario( adress.getHostAddress() , 1 );
+            }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+        
+            return resultado;
             
-            InetAddress adress = InetAddress.getLocalHost();
-            SocketConexion s = new SocketConexion();
-            s.inscribirUsuario( adress.toString() , 1 );
-            
-        }catch (UnknownHostException e){
-            
-            System.out.println(e.getMessage());
-            
-        }catch (IOException e){
-            
-            System.out.println(e.getMessage());
-            
-        }
     }
 }

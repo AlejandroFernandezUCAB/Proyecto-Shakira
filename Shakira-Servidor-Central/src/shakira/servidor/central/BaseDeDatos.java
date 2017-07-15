@@ -45,41 +45,70 @@ public static String password = "redes2";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario,
+        if(verificarInscripcionUsuario(direccionIp) == false){
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);
+                pst.setString(1, direccionIp);
+                pst.setInt(2, puertoEscucha);                    
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.out.println("No se inscribio al usuario: " + direccionIp);
+                    return 0;
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.out.println(ex);                
+                        return 1;
+                    }
+
+            }
+            System.out.println("Se inscribio al usuario: " + direccionIp);
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+    
+    public boolean verificarInscripcionUsuario(String ip){
+        boolean suiche = false;
         try{
             Class.forName(driver);
-            con = DriverManager.getConnection(connectString, user , password);
-            pst = con.prepareStatement(stm);
-            pst.setString(1, direccionIp);
-            pst.setInt(2, puertoEscucha);                    
-            pst.executeUpdate();
-            
-            } catch ( SQLException | ClassNotFoundException e ){
-                
-                System.out.println(e.getMessage());
-                return 0;
-                
-            } finally {
-            // Con el finally se cierran todas las conexiones los con, pst;
-                try {
-                    
-                    if (pst != null) {
-                        pst.close();
-                    }
-                    if (con != null) {
-                        con.close();
-                    }
-                    
-                    
-                    
-                } catch (SQLException ex) {
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ipcliente FROM cliente");
 
-                    System.out.println(ex);                
-                    return 1;
-                }
+            while (rs.next()){
                 
+                System.out.println("CEDULA" + rs.getString("ipcliente"));
+                if(rs.getString("ipcliente").contains(ip)){
+                    suiche = true;
+                }
+            }
+
+                stmt.close();
+                con.close();
+
+            }catch ( Exception e ){
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
         }
-        return 1;
-    }
 }
 
 
