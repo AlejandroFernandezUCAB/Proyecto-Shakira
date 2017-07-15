@@ -6,12 +6,18 @@
 package shakira;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  *
@@ -41,39 +47,64 @@ public class SocketConexion {
     }
     
     
-    public void inscribirUsuario(String direccionIp, int puerto){
-            
-        try{
-            
-            Socket s=new Socket("192.168.0.2",500);
-            BufferedReader in = new BufferedReader( new InputStreamReader( s.getInputStream() ) );
-            OutputStream out=s.getOutputStream();
+    public void inscribirUsuario(String direccionIp, int puerto) throws IOException{
+         BufferedReader entrada = null;
+         PrintWriter salida = null;
+         Socket s = null;
+         
+         //Inicializo la conexion con el socket
+         try{
+            s = new Socket("192.168.0.1", 500);
+            entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            // Obtenemos el canal de salida
+            salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
+         }catch(IOException e){
+             System.out.println(e.getMessage());
+         }
+         
+        BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
+        String linea;
+        
+        try {
+          while (true) {
+            // Leo la entrada del usuario
             InetAddress adress = InetAddress.getLocalHost();
             String str = adress.getHostAddress();
-            System.out.println(str);
-            byte buf[] = str.getBytes();
-            out.write(buf);
-            boolean done=false;
-                  while (!done) {
-                      System.out.println(done);
-                    str=in.readLine();
-                    if (str==null) 
-                        done=true;
-                    else { 
+            // La envia al servidor
+            salida.println(str);
+            // Envía a la salida estándar la respuesta del servidor
+            linea = entrada.readLine();
+            System.out.println("Respuesta servidor: " + linea);
+            
+            break;
+          }
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
 
-                        System.out.println("Server:" + str); 
-                        System.out.println(str);
-                        done=true; 
-
-                    }
-        
-                }
+        // Libera recursos
+        salida.close();
+        entrada.close();
+        stdIn.close();
+        s.close();
+  }
+        /*try{
+            int c;
+            Socket s=new Socket("192.168.0.1",500);
+            DataOutputStream mensaje;
+            BufferedReader entrada = new BufferedReader ( new InputStreamReader(s.getInputStream()));
+            //Verificando conexion
+            System.out.println(entrada.readLine());
+            mensaje = new DataOutputStream(s.getOutputStream());
+ + " f";
+            mensaje.writeUTF(str);
+            System.out.println(entrada.readLine());
+            System.out.println(entrada.readLine());
             s.close();
-             System.out.println("cerrar socket");
+            System.out.println("cerrar socket");
             }catch(IOException e){
                 
                 System.out.println(e);
                 
-            }
+            }*/
     }
-}

@@ -18,23 +18,30 @@ import java.util.logging.Logger;
  *
  * @author Alejandro Fernandez
  */
-public class BaseDeDatos extends Exception {
+public class BaseDeDatos {
 
 public static String driver = "org.postgresql.Driver";
 public static String connectString = "jdbc:postgresql://localhost:5432/Shakira-Servidor-Central";
 public static String user = "redes2";
 public static String password = "redes2";
+    
 
+    /**
+     * Constructor vacio para crear el objeto
+     */
+    public BaseDeDatos(){
+            
+    }
 /**
  * Metodo que crea la conexion en la base de datos
-     * @param direccionIp direccion ip cliente
-     * @param puertoEscucha puerto escucha del cliente
+     * @param direccionIp Direccion ip cliente
+     * @param puertoEscucha Puerto escucha del cliente
      * @return devuelve 1 si se registró correctamente, si hay error 0
  */
 
     public int agregarUsuarioBDD(String direccionIp, int puertoEscucha){
         
-        String stm = "INSERT INTO CLIENTE(direccionIp, puertoEscucha) VALUES(?, ?)";
+        String stm = "INSERT INTO CLIENTE(ipcliente, puertoEscucha) VALUES(?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario, aun no se verifica si se guardo

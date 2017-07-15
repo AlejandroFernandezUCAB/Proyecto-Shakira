@@ -83,9 +83,7 @@ public class Controladora {
         if (inputToString.length() > 8){
             for (int i = 0; i < 9; i++) {
             
-            comando = comando + inputToString.charAt(i);
-            System.out.println(comando);
-            
+                comando = comando + inputToString.charAt(i);        
             }
         }
         return comando;

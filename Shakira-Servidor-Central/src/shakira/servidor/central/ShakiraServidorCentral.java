@@ -24,7 +24,7 @@ public class ShakiraServidorCentral {
         consola.show();
         try {
             
-            ServerSocket s = new ServerSocket(555);
+            ServerSocket s = new ServerSocket(500);
             for (;;){
                 
                 System.out.println(i + "\n");
