@@ -38,7 +38,7 @@ public class SocketConexionHilo extends Thread{
         BufferedReader entrada = null;
         PrintWriter salida = null;
         System.out.println("Escuchando: al socket" + ss);
-        
+        int suiche;
         try {
             
           //Establece el canal de entrada
@@ -53,10 +53,15 @@ public class SocketConexionHilo extends Thread{
             
             if( str.contains("inscribir")){
                 
+                suiche = inscribirUsuario(str);                                
+                if( suiche == 1){
+                   salida.println( "Servidor Central> Inscrito correctamente");                   
+                }else{
+                   salida.println(" Servidor Central> Ya ud se ha registrado");
+                }
                 
             }
             
-            salida.println( str );
             break;
           }
 
@@ -71,5 +76,18 @@ public class SocketConexionHilo extends Thread{
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    /**
+     * Metodo encargado de inscribir el usuario en la base de datos, el metodo quita la paabra inscribir
+     * @param entrada 
+     * @return si devuelve 1 significa que se guardo correctamente, si devuelve 0 ya estaba registrado
+     */
+    private int inscribirUsuario(String entrada) {
+        
+            entrada = entrada.substring(8);
+            BaseDeDatos bdd = new BaseDeDatos();
+            return bdd.agregarUsuarioBDD(entrada, 1);
+            
     }
 }

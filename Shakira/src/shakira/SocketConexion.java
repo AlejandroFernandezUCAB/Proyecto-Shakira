@@ -69,7 +69,8 @@ public class SocketConexion {
           while (true) {
             // Leo la entrada del usuario
             InetAddress adress = InetAddress.getLocalHost();
-            String str = adress.getHostAddress();
+            String str = "inscribir"+adress.getHostAddress();
+            System.out.println(str);
             // La envia al servidor
             salida.println(str);
             // Envía a la salida estándar la respuesta del servidor

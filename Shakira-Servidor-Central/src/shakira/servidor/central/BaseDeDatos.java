@@ -44,7 +44,7 @@ public static String password = "redes2";
         String stm = "INSERT INTO CLIENTE(ipcliente, puertoEscucha) VALUES(?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
-        //Se abren las conexiones a la BDD y e guarda el usuario, aun no se verifica si se guardo
+        //Se abren las conexiones a la BDD y e guarda el usuario,
         try{
             Class.forName(driver);
             con = DriverManager.getConnection(connectString, user , password);
@@ -54,8 +54,9 @@ public static String password = "redes2";
             pst.executeUpdate();
             
             } catch ( SQLException | ClassNotFoundException e ){
-
+                
                 System.out.println(e.getMessage());
+                return 0;
                 
             } finally {
             // Con el finally se cierran todas las conexiones los con, pst;
@@ -69,15 +70,15 @@ public static String password = "redes2";
                     }
                     
                     
+                    
                 } catch (SQLException ex) {
 
                     System.out.println(ex);                
-                    return 0;
+                    return 1;
                 }
                 
-                return 1;
         }
-           
+        return 1;
     }
 }
 
