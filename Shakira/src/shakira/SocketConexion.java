@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 /**
@@ -61,6 +62,7 @@ public class SocketConexion {
          //Inicializo la conexion con el socket
          try{
             s = new Socket("192.168.0.2", 500);
+            System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
             salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
@@ -78,14 +80,15 @@ public class SocketConexion {
             System.out.println(str);
             // La envia al servidor
             salida.println(str);
+            System.out.println("Se envio: "+ str);
             // Envía a la salida estándar la respuesta del servidor
             linea = entrada.readLine();
             System.out.println("Respuesta servidor: " + linea);    
             break;
           }
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
-        }
+        } catch (Exception e) {
+            return "Cliente > Problemas de conexión con el servidor, intente más tarde";
+        } 
         
         // Libera recursos
         salida.close();

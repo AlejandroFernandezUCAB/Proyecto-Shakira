@@ -57,7 +57,7 @@ public class SocketConexionHilo extends Thread{
                 if( suiche == 1){
                    salida.println( "Servidor Central> Inscrito correctamente");                   
                 }else{
-                   salida.println(" Servidor Central> Ya ud se ha registrado");
+                   salida.println( "Servidor Central> Ya ud se ha registrado");
                 }
                 
             }
