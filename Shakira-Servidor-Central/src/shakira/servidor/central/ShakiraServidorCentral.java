@@ -25,7 +25,7 @@ public class ShakiraServidorCentral {
             ServerSocket s = new ServerSocket(500);
             for (;;){
                 
-                System.out.println(i + "\n");
+                System.out.println("Se inició el hilo número : "+ i + "\n");
                 Socket ss = s.accept();
                 new SocketConexionHilo(ss,i).start();
                 i++;
