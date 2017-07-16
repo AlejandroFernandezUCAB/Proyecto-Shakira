@@ -13,6 +13,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  *
@@ -65,7 +67,11 @@ public class SocketConexionSecundario {
             
             System.err.println("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
             
-        } 
+        } catch (Exception e){
+            
+            System.err.println("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
+            
+        }
 
     }
     

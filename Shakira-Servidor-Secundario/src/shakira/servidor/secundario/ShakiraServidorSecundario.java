@@ -8,6 +8,8 @@ package shakira.servidor.secundario;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  *
@@ -20,22 +22,24 @@ public class ShakiraServidorSecundario {
      */
     public static void main(String[] args) {
          
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-         String comando = null;
-         
-        for ( ; ; ) {
-            
-          try{
-            System.out.print("Servidor Secundario > ");
-            comando = br.readLine();
-            comando = comando.trim();
-            new Controladora( comando ).start();
-          }catch( IOException e ){
-              
-              System.out.println("Servidor Secundario > Error en el comando, intente nuevamente");
-              
-          }
-          
+        String comando;
+        BufferedReader br ;
+        
+        while(true){  
+            try{
+                comando = "";
+                br = null;
+                br = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Servidor Secundario > ");
+                comando = br.readLine();
+                comando = comando.trim();
+                new Controladora( comando ).start();
+                
+            }catch(IOException e){
+
+                System.out.println(e.getMessage());
+
+            }
         }
     }
     
