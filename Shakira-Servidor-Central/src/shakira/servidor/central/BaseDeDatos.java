@@ -109,6 +109,76 @@ public static String password = "redes2";
         
             return suiche;
         }
+
+    public int agregarServidorBDD(String direccionIp, int puertoEscucha) {
+        String stm = "INSERT INTO SERVIDOR (ipservidor, puertoEscucha) VALUES(?, ?)";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y se guarda la BDD, además se verifica que no haya un servidor con la misma Ip
+        if( verificarInscripcionDeServidor( direccionIp ) == false ){
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);
+                pst.setString(1, direccionIp);
+                pst.setInt(2, puertoEscucha);                    
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.out.println("No se inscribio al servidor: " + direccionIp);
+                    return 0;
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.out.println(ex);                
+                        return 1;
+                    }
+
+            }
+            System.out.println("Se inscribio al servidor: " + direccionIp);
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+    
+    public boolean verificarInscripcionDeServidor(String ip){
+         boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ipservidor FROM servidor");
+
+            while (rs.next()){
+                
+                System.out.println("Ip: " + rs.getString("ipservidor"));
+                if(rs.getString("ipservidor").contains(ip)){
+                    suiche = true;
+                }
+            }
+
+                stmt.close();
+                con.close();
+
+            }catch ( Exception e ){
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+    }
 }
 
 

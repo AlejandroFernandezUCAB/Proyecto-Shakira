@@ -106,8 +106,8 @@ public class SocketConexionCentral extends Thread{
     }
 
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(9);
+            entrada = entrada.substring(11);
             BaseDeDatos bdd = new BaseDeDatos();
-            return bdd.agregarUsuarioBDD(entrada, 1);
+            return bdd.agregarServidorBDD(entrada, 1);
     }
 }
