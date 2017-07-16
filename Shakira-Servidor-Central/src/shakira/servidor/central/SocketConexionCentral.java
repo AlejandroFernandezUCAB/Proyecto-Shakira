@@ -22,12 +22,12 @@ import java.util.logging.Logger;
  *
  * @author Alejandro Fernandez
  */
-public class SocketConexionHilo extends Thread{
+public class SocketConexionCentral extends Thread{
        
     private Socket ss;
     private int counter;
     
-    public SocketConexionHilo( Socket i, int c){
+    public SocketConexionCentral( Socket i, int c){
         ss = i;
         counter = c;
     }
@@ -46,18 +46,32 @@ public class SocketConexionHilo extends Thread{
           // Establece canal de salida
           salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(ss.getOutputStream())),true);
           
-          //En este while se recibe la información del cliente y se procede a guardar en la base de datos
+          //En este while se recibe la información del cliente y se procede dependiendo el if
           //Además se le responde al cliente 
           while (true) {  
             String str = entrada.readLine();
+            
+            //En este if se verifica si contiene la cadena "inscribir", esto 
+            //significa que va a guardar el cliente en la base de datos
             
             if( str.contains("inscribir")){
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
-                   salida.println( "Servidor Central> Inscrito correctamente");                   
+                   salida.println( "Servidor Central > Inscrito correctamente");                   
                 }else{
-                   salida.println( "Servidor Central> Ya ud se ha registrado");
+                   salida.println( "Servidor Central > Ya ud se ha registrado");
+                }
+                
+            }
+            
+            if( str.trim().contains("inscribirs")){
+                
+                suiche = inscribirServidorSecundario(str);                                
+                if( suiche == 1){
+                   salida.println( "Servidor Central > Inscrito correctamente");                   
+                }else{
+                   salida.println( "Servidor Central > Ya ud se ha registrado");
                 }
                 
             }
@@ -89,5 +103,11 @@ public class SocketConexionHilo extends Thread{
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             
+    }
+
+    private int inscribirServidorSecundario(String entrada) {
+            entrada = entrada.substring(9);
+            BaseDeDatos bdd = new BaseDeDatos();
+            return bdd.agregarUsuarioBDD(entrada, 1);
     }
 }
