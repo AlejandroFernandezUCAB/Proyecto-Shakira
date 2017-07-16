@@ -146,9 +146,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
     private void enviarBotonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarBotonKeyPressed
         
        enviarInformacion(evt);
-       String prueba;
-       String hola;
-       String Hola2;
+
     }//GEN-LAST:event_enviarBotonKeyPressed
 
     private void inputComandoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputComandoKeyPressed
@@ -158,16 +156,15 @@ public class ConsolaShakira extends javax.swing.JFrame {
     }//GEN-LAST:event_inputComandoKeyPressed
 
     /**
-     * Metodo que envía información a al servidor en caso de que se presione enter
+     * Metodo que envía información a la controladora en caso de que se presione enter
      * @param evt Al presionar tecla enter
      */
     
     public void enviarInformacion(java.awt.event.KeyEvent evt){
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            
-            Controladora controladora = new Controladora(nombreUsuario,panel ,inputComando, consolaTextArea);
-            controladora.enviarInformacion();
+            String inputComandoString = inputComando.getText();
+            new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
             inputComando.setText("");
             
         }
@@ -175,16 +172,12 @@ public class ConsolaShakira extends javax.swing.JFrame {
     }
     
     /**
-     * Metodo que envía la linea de comando al servidor
+     * Metodo que envía la linea de comando a la controladora
      */
      public void enviarInformacion(){
-
-        Controladora controladora = new Controladora( 
-                nombreUsuario,
-                panel ,
-                inputComando,
-                consolaTextArea );
-        controladora.enviarInformacion();
+        
+        String inputComandoString = inputComando.getText();
+        new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
         inputComando.setText("");
         
     }
