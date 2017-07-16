@@ -19,11 +19,11 @@ import sun.security.util.Length;
  *
  * @author pedro
  */
-public class Controladora {
+public class Controladora extends Thread{
     private JPanel consola;
     private JTextField input;
     private JTextArea output;
-    private String nombreUsuario;
+    private String nombreUsuario, inputString;
 
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
@@ -39,26 +39,44 @@ public class Controladora {
         this.output = consolaTextArea;
         
     }
-    
-/**
- * Enviar información al servidor, por los momentos pura interfaz
- */    
-    public void enviarInformacion (){
 
-        String inputToString = input.getText().trim().toLowerCase();
-        if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí") ){
+    public Controladora(JPanel consola, JTextField input, JTextArea output, String nombreUsuario, String inputString) {
+        this.consola = consola;
+        this.input = input;
+        this.output = output;
+        this.nombreUsuario = nombreUsuario;
+        this.inputString = inputString;
+    }   
+
+    Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputString) {
+        this.consola = panel;
+        this.input = inputComando;
+        this.output = consolaTextArea;
+        this.nombreUsuario = nombreUsuario;
+        this.inputString = inputString;
+    }
+/**
+ * Enviar información al servidor y lo ejecuta como un hilo, para así la consola siga viva
+ * El primer if corresponde a que el comando esté introducido correctamente
+ * El segundo If verifica si lo que el cliente escribio posee "inscribir" en el segundo ourput.setText se hace llamada a la conexion de socket
+ * y regresa un string el cual es el encargado de decir si fue con exito o no la inscripcion
+ * El Else es en caso de que el comando este mal escrito 
+ */    
+    public void run (){
+
+        if(inputString.isEmpty() || inputString == null || inputString.equalsIgnoreCase("inserte comando aquí") ){
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
            
-        }else if( sacarInscribir(inputToString).equalsIgnoreCase("inscribir") ){
+        }else if( sacarInscribir(inputString).equalsIgnoreCase("inscribir") ){
             
-            output.setText( output.getText() + nombreUsuario + " > " + input.getText() + "\n");
+            output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setText( output.getText() + inscribirUsuario() + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
         }else{
-            output.setText( output.getText() + nombreUsuario + " > " + input.getText() + "\n");
+            output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             output.setText( output.getText() + "Cliente > Error en el comando\n");
@@ -70,15 +88,15 @@ public class Controladora {
     
     /**
      * Metodo que verifica si está escrito el comando inscribir
-     * @param inputToString recibe el comando completo
+     * @param inputString recibe el comando completo
      * @return devuelve las primeras 9 letras para ver si es inscribir
      */
-    public String sacarInscribir(String inputToString){
+    public String sacarInscribir(String inputString){
         String comando = "";
-        if (inputToString.length() > 8){
+        if (inputString.length() > 8){
             for (int i = 0; i < 9; i++) {
             
-                comando = comando + inputToString.charAt(i);        
+                comando = comando + inputString.charAt(i);        
             }
         }
         return comando;
