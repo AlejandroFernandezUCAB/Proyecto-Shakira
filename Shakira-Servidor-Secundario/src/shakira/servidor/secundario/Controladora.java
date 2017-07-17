@@ -15,36 +15,33 @@ import javax.swing.JTextField;
  *
  * @author pedro
  */
-public class Controladora {
-    private JPanel consola;
-    private JTextField input;
-    private JTextArea output;
+public class Controladora extends Thread{
+    private String comando;
 
-    public Controladora(JPanel consola,JTextField input, JTextArea output) {
-        this.consola = consola;
-        this.input = input;
-        this.output = output;
+      /**
+    * Constructor para inicializar el objeto
+    * @param comando comando recibido por el cliente
+    */
+    Controladora(String comando) {
+        this.comando = comando;
     }
     
-/**
- * Enviar información al servidor, por los momentos pura interfaz
- */    
-    public void enviarInformacion (){
+    
+    @Override
+    public void run(){
         
-        String inputToString = input.getText().trim().toLowerCase().toString();
-        if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí")){
+        if( comando.trim().contains("inscribir")){
             
-            JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
+            SocketConexionSecundario socket = new SocketConexionSecundario();
+            socket.inscribirServidor();
             
-        }else {
+        }else if( comando.trim().contains( "videos_descargando" ) ){
             
-            output.setText( output.getText() + inputToString + "\n");
-            output.setLineWrap(true);
-            output.setWrapStyleWord(true);
-            
+        }else if ( comando.trim().contains( "videos_descargados" ) ){
+        
+        }else{
+            System.err.println( "Servidor Secundario > Error en el comando" );
         }
-            
         
     }
-        
 }
