@@ -161,7 +161,7 @@ public static String password = "redes2";
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT ipservidor FROM servidor");
-
+            System.out.println("Ip de servidores actuales");
             while (rs.next()){
                 
                 System.out.println("Ip: " + rs.getString("ipservidor"));

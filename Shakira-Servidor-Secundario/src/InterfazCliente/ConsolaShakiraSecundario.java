@@ -5,6 +5,7 @@
  */
 package InterfazCliente;
 
+import LogicaCliente.Controladora;
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -13,23 +14,19 @@ import javax.swing.JOptionPane;
  *
  * @author pedro
  */
-public class ConsolaShakira extends javax.swing.JFrame {
-    private String nombreUsuario;
+public class ConsolaShakiraSecundario extends javax.swing.JFrame {
+    
     /**
      * Creates new form ConsolaShakira
      */
-    public ConsolaShakira() {
+    public ConsolaShakiraSecundario() {
         
         initComponents();
         this.setSize(800, 610);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        this.nombreUsuario = JOptionPane.showInputDialog(
-            this,
-            "Inserte nombre de usuario",
-            "SHAKIRA DOWNLOADER", 
-            JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     /**
@@ -164,7 +161,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             String inputComandoString = inputComando.getText();
-//            new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+            new Controladora(panel , inputComando , consolaTextArea, inputComandoString).start();
             inputComando.setText("");
             
         }
@@ -177,7 +174,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
      public void enviarInformacion(){
         
         String inputComandoString = inputComando.getText();
-//        new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+        new Controladora(panel , inputComando , consolaTextArea, inputComandoString).start();
         inputComando.setText("");
         
     }
@@ -199,21 +196,23 @@ public class ConsolaShakira extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolaShakiraSecundario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolaShakiraSecundario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolaShakiraSecundario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolaShakiraSecundario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsolaShakira().setVisible(true);
+                new ConsolaShakiraSecundario().setVisible(true);
             }
         });
     }

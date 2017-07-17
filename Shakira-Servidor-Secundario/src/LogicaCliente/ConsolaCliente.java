@@ -5,7 +5,7 @@
  */
 package LogicaCliente;
 
-import InterfazCliente.ConsolaShakira;
+import InterfazCliente.ConsolaShakiraSecundario;
 
 /**
  * Esta clase se usará para correr un hilo para el cliente y así poder tener 
@@ -16,7 +16,7 @@ public class ConsolaCliente extends Thread{
     @Override
     public void run(){
         
-        ConsolaShakira consola = new ConsolaShakira();
+        ConsolaShakiraSecundario consola = new ConsolaShakiraSecundario();
         consola.show();
         
     }

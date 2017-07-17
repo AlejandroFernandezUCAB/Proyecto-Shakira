@@ -23,7 +23,7 @@ import java.net.SocketTimeoutException;
 public class SocketConexionSecundario {
 
     
-    public void inscribirServidor() {
+    public String inscribirServidor() {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null;
@@ -51,7 +51,7 @@ public class SocketConexionSecundario {
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
-            // Envía a la salida estándar la respuesta del servidor
+            // Recibe la respuesta del servidor
             linea = entrada.readLine();
             System.out.println("Respuesta servidor: " + linea);    
             break;
@@ -65,14 +65,16 @@ public class SocketConexionSecundario {
            
         } catch (IOException e) {
             
-            System.err.println("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
+            return ("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
             
         } catch (Exception e){
             
-            System.err.println("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
+            return ("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
             
         }
-
+        
+        return linea;
+        
     }
     
 }
