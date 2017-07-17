@@ -1,4 +1,4 @@
-CREATE USER redes2 WITH PASSWORD 'redes2';
+--CREATE USER redes2 WITH PASSWORD 'redes2';
 
 CREATE TABLE CLIENTE(
 
@@ -34,3 +34,5 @@ CREATE TABLE VIDEOS_CLIENTE(
 	CONSTRAINT fk_video_cliente FOREIGN KEY ( videoFk ) REFERENCES VIDEO ( id_video ),
 	CONSTRAINT fk_cliente FOREIGN KEY ( clienteFk ) REFERENCES CLIENTE ( ipCliente )
 );
+
+commit;

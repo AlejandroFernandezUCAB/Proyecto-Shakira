@@ -32,7 +32,7 @@ public class ShakiraServidorCentral {
                 
             }
         }catch (Exception e){
-            
+            System.out.println("Excepcion");
             i=0;
             
         }

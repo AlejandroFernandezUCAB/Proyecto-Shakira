@@ -42,3 +42,5 @@ CREATE TABLE VIDEOS_CLIENTE(
 	CONSTRAINT fk_video_cliente FOREIGN KEY ( videoFk ) REFERENCES VIDEO ( id_video ),
 	CONSTRAINT fk_cliente FOREIGN KEY ( clienteFk ) REFERENCES CLIENTE ( ipCliente )
 );
+
+commit;
