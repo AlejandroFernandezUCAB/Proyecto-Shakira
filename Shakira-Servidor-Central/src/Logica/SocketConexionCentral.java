@@ -59,7 +59,7 @@ public class SocketConexionCentral extends Thread{
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
-                   salida.println( "Servidor Central > Inscrito correctamente");                   
+                   salida.println( "Servidor Central > Inscrito cliente correctamente");                   
                 }else{
                    salida.println( "Servidor Central > Ya ud se ha registrado");
                 }
@@ -70,7 +70,7 @@ public class SocketConexionCentral extends Thread{
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
-                   salida.println( "Servidor Central > Inscrito correctamente");                   
+                   salida.println( "Servidor Central > Servidor inscrito correctamente");                   
                 }else{
                    salida.println( "Servidor Central > Ya ud se ha registrado");
                 }
@@ -100,14 +100,14 @@ public class SocketConexionCentral extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(19);
+            entrada = entrada.substring(18);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             
     }
 
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(19);
+            entrada = entrada.substring(18);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada, 1);
     }

@@ -47,7 +47,7 @@ public class SocketConexionSecundario {
           direccionIp = InetAddress.getLocalHost().getHostAddress(); 
           while (true) {
             // Leo la direccion ip del servidor secundario
-            String str = "inscribirS"+direccionIp;
+            String str = "inscribir servidor"+direccionIp;
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
