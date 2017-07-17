@@ -55,24 +55,30 @@ public class SocketConexionCentral extends Thread{
             //En este if se verifica si contiene la cadena "inscribir", esto 
             //significa que va a guardar el cliente en la base de datos
             
-            if( str.contains("inscribir")){
+            if( str.contains("inscribir usuario")){
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
-                   salida.println( "Servidor Central > Inscrito correctamente");                   
+                   salida.println( "Servidor Central > Inscrito cliente correctamente");                   
                 }else{
                    salida.println( "Servidor Central > Ya ud se ha registrado");
                 }
                 
             }
             
-            if( str.trim().contains("inscribirs")){
+            if( str.trim().contains("inscribir servidor")){
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
-                   salida.println( "Servidor Central > Inscrito correctamente");                   
-                }else{
+                    
+                   salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   
+                }else if (suiche == 0){
+                    
                    salida.println( "Servidor Central > Ya ud se ha registrado");
+                   
+                }else{
+                   salida.println( "Servidor Central > Ya hay 3 servidores registrados");
                 }
                 
             }
@@ -81,7 +87,9 @@ public class SocketConexionCentral extends Thread{
           }
 
         } catch (IOException e) {
+            
           System.out.println("IOException: " + e.getMessage());
+          
         }  
         
         try{
@@ -100,14 +108,19 @@ public class SocketConexionCentral extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(9);
+            entrada = entrada.substring(18);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             
     }
-
+    
+    /**
+     * Metodo que inscribe al servidor secundario en la BDD
+     * @param entrada ip del servidor
+     * @return Regresa 1 si fue exitoso, 0 si ya estaba o hubo algún error y otro si ya hay 3 servidores registrados
+     */
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(11);
+            entrada = entrada.substring(18);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada, 1);
     }
