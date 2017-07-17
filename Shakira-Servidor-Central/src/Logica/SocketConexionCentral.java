@@ -100,14 +100,14 @@ public class SocketConexionCentral extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(9);
+            entrada = entrada.substring(10);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             
     }
 
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(11);
+            entrada = entrada.substring(12);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada, 1);
     }
