@@ -96,10 +96,10 @@ public static String password = "redes2";
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT ipcliente FROM cliente");
-
+            System.out.println("Servidor Central > Lista de clientes inscritos");
             while (rs.next()){
                 
-                System.out.println("Ip: " + rs.getString("ipcliente"));
+                System.out.println("Servidor Central > Ip: " + rs.getString("ipcliente"));
                 if(rs.getString("ipcliente").contains(ip)){
                     suiche = true;
                 }
@@ -140,7 +140,7 @@ public static String password = "redes2";
 
                     } catch ( SQLException | ClassNotFoundException e ){
 
-                        System.out.println("No se inscribio al servidor: " + direccionIp);
+                        System.out.println("Servidor Central > No se inscribio al servidor: " + direccionIp);
                         return 0;
 
                     } finally {
@@ -190,10 +190,10 @@ public static String password = "redes2";
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT ipservidor FROM servidor");
-            System.out.println("Ip de servidores actuales");
+            System.out.println("Servidor Central > Ip de servidores actuales");
             while (rs.next()){
                 
-                System.out.println("Ip: " + rs.getString("ipservidor"));
+                System.out.println("Servidor Central > Ip: " + rs.getString("ipservidor"));
                 if(rs.getString("ipservidor").contains(ip)){
                     suiche = true;
                 }
