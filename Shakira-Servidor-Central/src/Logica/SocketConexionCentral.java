@@ -55,7 +55,7 @@ public class SocketConexionCentral extends Thread{
             //En este if se verifica si contiene la cadena "inscribir", esto 
             //significa que va a guardar el cliente en la base de datos
             
-            if( str.contains("inscribir")){
+            if( str.contains("inscribir usuario")){
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
@@ -66,7 +66,7 @@ public class SocketConexionCentral extends Thread{
                 
             }
             
-            if( str.trim().contains("inscribirs")){
+            if( str.trim().contains("inscribir servidor")){
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
@@ -100,14 +100,14 @@ public class SocketConexionCentral extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(10);
+            entrada = entrada.substring(19);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada, 1);
             
     }
 
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(12);
+            entrada = entrada.substring(19);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada, 1);
     }
