@@ -221,22 +221,19 @@ public static String password = "redes2";
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor");
-            System.out.println("Ip de servidores actuales");
             
             //Ciclo donde busco en el query la cantidad de servidores
-            
             while (rs.next()){
                 
-                if(rs.getString("servidores").contains( direccionIp )){
+                if(rs.getString("servidores").contains( "3" )){
                     suiche = true;
                 }
-                
             }
 
                 stmt.close();
                 con.close();
-
             }catch ( Exception e ){
+                
                  System.out.println(e.getMessage());
             }
         
