@@ -70,9 +70,15 @@ public class SocketConexionCentral extends Thread{
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
+                    
                    salida.println( "Servidor Central > Servidor inscrito correctamente");                   
-                }else{
+                   
+                }else if (suiche == 0){
+                    
                    salida.println( "Servidor Central > Ya ud se ha registrado");
+                   
+                }else{
+                   salida.println( "Servidor Central > Ya hay 3 servidores registrados");
                 }
                 
             }
@@ -81,7 +87,9 @@ public class SocketConexionCentral extends Thread{
           }
 
         } catch (IOException e) {
+            
           System.out.println("IOException: " + e.getMessage());
+          
         }  
         
         try{
@@ -105,7 +113,12 @@ public class SocketConexionCentral extends Thread{
             return bdd.agregarUsuarioBDD(entrada, 1);
             
     }
-
+    
+    /**
+     * Metodo que inscribe al servidor secundario en la BDD
+     * @param entrada ip del servidor
+     * @return Regresa 1 si fue exitoso, 0 si ya estaba o hubo algún error y otro si ya hay 3 servidores registrados
+     */
     private int inscribirServidorSecundario(String entrada) {
             entrada = entrada.substring(18);
             BaseDeDatos bdd = new BaseDeDatos();

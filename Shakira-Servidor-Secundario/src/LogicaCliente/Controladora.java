@@ -55,16 +55,26 @@ public class Controladora extends Thread{
             output.setText( output.getText() + inscribirServidor() + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
-        }else if( comando.trim().contains( "videos_descargando" ) ){
             
-        }else if ( comando.trim().contains( "videos_descargados" ) ){
+        }else if( inputString.trim().contains( "videos_descargando" ) ){
+            
+        }else if ( inputString.trim().contains( "videos_descargados" ) ){
             
         }else{
-            System.err.println( "Servidor Secundario > Error en el comando" );
+            
+            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+            output.setText( output.getText() + "Servidor Secundario > Error en el comando" + "\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
+            
         }
         
     }
 
+    /**
+     * Metodo que devuelve un string de la respuesta del servidor central a la consola del cliente
+     * @return Respuesta del servidor
+     */
     private String inscribirServidor() {
         
         SocketConexionSecundario socket = new SocketConexionSecundario();
