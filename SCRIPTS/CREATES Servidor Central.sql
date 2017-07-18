@@ -3,7 +3,9 @@
 CREATE TABLE CLIENTE(
 
 	ipCliente varchar(15) not null,
-	puertoEscucha int not null,
+	--puertoEscucha int not null,
+	puertoCmd int not null,
+	puertoData int not null,	
 	CONSTRAINT pk_ipCliente PRIMARY KEY ( ipCliente )
 
 );
@@ -17,7 +19,8 @@ CREATE TABLE VIDEO(
 CREATE TABLE SERVIDOR(
 
 	ipServidor varchar(15) not null,
-	puertoEscucha int not null,
+	puertoCmd int not null,
+	puertoData int not null,
 	CONSTRAINT PK_ipServidor PRIMARY KEY ( ipServidor )
 
 );
