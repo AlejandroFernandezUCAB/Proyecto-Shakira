@@ -2,6 +2,14 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< Updated upstream
         <group/>
+=======
+        <group>
+            <file>file:/home/gian/GitHubProjects/Proyecto-Shakira/Shakira/src/shakira/Shakira.java</file>
+            <file>file:/home/gian/GitHubProjects/Proyecto-Shakira/Shakira/src/shakira/SocketConexion.java</file>
+            <file>file:/home/gian/GitHubProjects/Proyecto-Shakira/Shakira/src/shakira/Controladora.java</file>
+        </group>
+>>>>>>> Stashed changes
     </open-files>
 </project-private>
