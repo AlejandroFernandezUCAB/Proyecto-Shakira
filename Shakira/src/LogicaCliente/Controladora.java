@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira;
+package LogicaCliente;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -34,7 +34,7 @@ public class Controladora extends Thread{
         this.output = output;
     }
 
-    Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea) {
+    public Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea) {
         
         this.nombreUsuario = nombreUsuario;
         this.consola = panel;
@@ -51,7 +51,7 @@ public class Controladora extends Thread{
         this.inputString = inputString;
     }   
 
-    Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputString) {
+    public Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputString) {
         this.consola = panel;
         this.input = inputComando;
         this.output = consolaTextArea;

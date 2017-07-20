@@ -3,37 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira;
+package VistaCliente;
 
 import java.awt.Event;
 import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
+import LogicaCliente.Controladora;
 
 /**
  *
  * @author pedro
  */
-/*
-    Esta clase recibe el string de texto del usuario y lo envia al controlador, que es un 
-    sub proceso
-*/
 public class ConsolaShakira extends javax.swing.JFrame {
-    private String nombreUsuario;
+
     /**
      * Creates new form ConsolaShakira
      */
     public ConsolaShakira() {
         
         initComponents();
-        this.setSize(800, 610);
+        this.setSize(800, 587);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        this.nombreUsuario = JOptionPane.showInputDialog(
-            this,
-            "Inserte nombre de usuario",
-            "SHAKIRA DOWNLOADER", 
-            JOptionPane.INFORMATION_MESSAGE);
+        
     }
 
     /**
@@ -60,7 +52,6 @@ public class ConsolaShakira extends javax.swing.JFrame {
 
         consolaTextArea.setColumns(20);
         consolaTextArea.setFont(new java.awt.Font("Ubuntu Mono", 0, 15)); // NOI18N
-        consolaTextArea.setForeground(new java.awt.Color(1, 1, 1));
         consolaTextArea.setRows(5);
         consolaTextArea.setEnabled(false);
         jScrollPane1.setViewportView(consolaTextArea);
@@ -150,7 +141,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
     private void enviarBotonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarBotonKeyPressed
         
        enviarInformacion(evt);
-
+       
     }//GEN-LAST:event_enviarBotonKeyPressed
 
     private void inputComandoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputComandoKeyPressed
@@ -160,15 +151,16 @@ public class ConsolaShakira extends javax.swing.JFrame {
     }//GEN-LAST:event_inputComandoKeyPressed
 
     /**
-     * Metodo que envía información a la controladora en caso de que se presione enter
+     * Metodo que envía información a al servidor en caso de que se presione enter
      * @param evt Al presionar tecla enter
      */
     
     public void enviarInformacion(java.awt.event.KeyEvent evt){
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            String inputComandoString = inputComando.getText();
-            new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+            
+            Controladora controladora = new Controladora(panel ,inputComando, consolaTextArea);
+            controladora.enviarInformacion();
             inputComando.setText("");
             
         }
@@ -176,12 +168,12 @@ public class ConsolaShakira extends javax.swing.JFrame {
     }
     
     /**
-     * Metodo que envía la linea de comando a la controladora
+     * Metodo que envía la linea de comando al servidor
      */
      public void enviarInformacion(){
-        
-        String inputComandoString = inputComando.getText();
-        new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+
+        Controladora controladora = new Controladora(panel ,inputComando, consolaTextArea);
+        controladora.enviarInformacion();
         inputComando.setText("");
         
     }
@@ -211,6 +203,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ConsolaShakira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
