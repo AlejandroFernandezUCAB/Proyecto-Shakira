@@ -1,11 +1,9 @@
-﻿CREATE USER redes2 WITH PASSWORD 'redes2';
-
 CREATE TABLE CLIENTE(
 
 	ipCliente varchar(15) not null,
 	--puertoEscucha int not null,
 	puertoCmd int not null,
-	puertoData int not null,	
+	puertoData int not null,
 	CONSTRAINT pk_ipCliente PRIMARY KEY ( ipCliente )
 
 );
@@ -26,7 +24,7 @@ CREATE TABLE SERVIDOR(
 );
 
 CREATE TABLE VIDEOS_SERVIDOR(
-	
+
 	parte1 boolean not null,
 	parte2 boolean not null,
 	parte3 boolean not null,

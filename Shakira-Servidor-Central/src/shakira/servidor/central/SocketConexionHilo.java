@@ -37,7 +37,7 @@ public class SocketConexionHilo extends Thread{
         
         BufferedReader entrada = null;
         PrintWriter salida = null;
-        System.out.println("Escuchando: al socket" + ss);
+        //System.out.println("Escuchando: al socket" + ss);
         int suiche;
         try {
             
@@ -48,9 +48,13 @@ public class SocketConexionHilo extends Thread{
           
           //En este while se recibe la información del cliente y se procede a guardar en la base de datos
           //Además se le responde al cliente 
+            
+          //System.out.println("Direccion IP del cliente: " + ss.getInetAddress());
+          
+          //System.out.println("entrada: " + entrada);
           while (true) {  
             String str = entrada.readLine();
-            
+              //System.out.println("Recibi: " + str);
             if( str.contains("inscribir")){
                 
                 suiche = inscribirUsuario(str);                                
@@ -85,9 +89,9 @@ public class SocketConexionHilo extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(9);
+            entrada = entrada.substring(11);
             BaseDeDatos bdd = new BaseDeDatos();
-            return bdd.agregarUsuarioBDD(entrada, 1);
+            return bdd.agregarUsuarioBDD(entrada);
             
     }
 }
