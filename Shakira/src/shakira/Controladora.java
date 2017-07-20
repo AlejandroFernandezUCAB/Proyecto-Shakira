@@ -24,6 +24,9 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String nombreUsuario, inputString;
+        
+    //puertos del cliente {cmd,Data}
+    String[] puertos = {"1030","1029"};
 
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
@@ -112,7 +115,8 @@ public class Controladora extends Thread{
             try{
                 InetAddress adress = InetAddress.getLocalHost();
                 SocketConexion s = new SocketConexion();
-                resultado = s.inscribirUsuario( adress.getHostAddress() , 1 );
+                resultado = s.inscribirUsuario( puertos );
+                //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());
             }

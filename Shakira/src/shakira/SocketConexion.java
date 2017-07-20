@@ -25,19 +25,23 @@ import java.util.Scanner;
  * @author Alejandro Fernandez
  */
 public class SocketConexion {
-    
+
     /**
      * Probando Hilo
      */
-    public void conexionPrueba() {
+    public void conexionPrueba(String[] puertos) {
         int c;
         try{
-            Socket s=new Socket("192.168.0.2",500);
+            Socket s=new Socket("192.168.0.2",1026);
             InputStream in=s.getInputStream();
             OutputStream out=s.getOutputStream();
-            String str="Hola menor";
+//            String str="Hola menor";
+//            byte buf[]=str.getBytes();
+//            out.write(buf);
+            
+            String str = "inscribir_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
             byte buf[]=str.getBytes();
-            out.write(buf);
+            out.write(buf);            
             s.close();
             
         }catch(Exception e) {
@@ -54,14 +58,15 @@ public class SocketConexion {
      * @return SI está o no registrado correctamente
      * @throws IOException 
      */
-    public String inscribirUsuario(String direccionIp, int puerto) throws IOException{
+    public String inscribirUsuario(String[] puertos) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
          
          //Inicializo la conexion con el socket
          try{
-            s = new Socket("192.168.0.2", 500);
+            //s = new Socket("192.168.0.2", 500);
+            s = new Socket("192.168.0.2", 1026);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
@@ -76,7 +81,8 @@ public class SocketConexion {
         try {
           while (true) {
             // Leo la entrada del usuario
-            String str = "inscribir"+direccionIp;
+            //String str = "inscribir"+direccionIp;
+            String str = "inscribir_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);

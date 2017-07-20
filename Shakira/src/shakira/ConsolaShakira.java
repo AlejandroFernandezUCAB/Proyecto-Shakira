@@ -13,6 +13,10 @@ import javax.swing.JOptionPane;
  *
  * @author pedro
  */
+/*
+    Esta clase recibe el string de texto del usuario y lo envia al controlador, que es un 
+    sub proceso
+*/
 public class ConsolaShakira extends javax.swing.JFrame {
     private String nombreUsuario;
     /**
