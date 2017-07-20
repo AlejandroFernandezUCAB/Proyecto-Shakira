@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shakira.servidor.central;
+package Main;
 
+import Logica.SocketConexionHilo;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
