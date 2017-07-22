@@ -22,6 +22,8 @@ public class Controladora extends Thread{
     private String inputString;
     //puertos del cliente {cmd,Data}
     String[] puertos = {"1031","1032"};
+    //Puertos ip y puertos servidor central
+    String[] datosServidorCentral = {"192.168.0.1","1026","1025"};
     
   /**
     * Constructor para inicializar el objeto
@@ -80,6 +82,7 @@ public class Controladora extends Thread{
     private String inscribirServidor() {
         
         SocketConexionSecundario socket = new SocketConexionSecundario();
-        return socket.inscribirServidor( puertos );
+        return socket.inscribirServidor( datosServidorCentral[0] , 
+                Integer.parseInt( datosServidorCentral[1]) ,puertos );
     }
 }

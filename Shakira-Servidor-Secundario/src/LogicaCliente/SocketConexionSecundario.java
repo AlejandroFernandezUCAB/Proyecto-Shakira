@@ -20,7 +20,7 @@ import java.net.Socket;
 public class SocketConexionSecundario {
 
     
-    public String inscribirServidor(String[] puertos) {
+    public String inscribirServidor(String ipServidorCentral, int puertoCentral, String[] puertos) {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null;
@@ -29,7 +29,7 @@ public class SocketConexionSecundario {
         
          //Inicializo la conexion con el socket
          try{
-            s = new Socket("192.168.0.2", 500);
+            s = new Socket( ipServidorCentral , puertoCentral);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
