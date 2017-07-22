@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BaseDeDatos.BaseDeDatos;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -50,12 +51,13 @@ public class SocketConexionHilo extends Thread{
           //En este while se recibe la información del cliente y se procede a guardar en la base de datos
           //Además se le responde al cliente 
             
-          //System.out.println("Direccion IP del cliente: " + ss.getInetAddress());
           
-          //System.out.println("entrada: " + entrada);
+          
           while (true) {  
             String str = entrada.readLine();
-
+            
+            //-------INSCRIPCION----------
+            
             if( str.contains("inscribirU")){
                 
                 suiche = inscribirUsuario(str);                                
@@ -82,9 +84,20 @@ public class SocketConexionHilo extends Thread{
                 
             }
             
+            //-------DESCARGA----------
+            
+            else if ( str.trim().contains("descarga")) {
+                String ipCliente = ss.getInetAddress().toString().substring(1);
+                System.out.println("entrada: " + str);
+                System.out.println("Direccion IP del cliente: " + ipCliente);
+                if (this.verificarInscripcionUsuario(ipCliente) == true /* falta verificar que el video existe en la BD */) {
+                    System.out.println("usuario Inscrito");
+                    salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
+                }
+              }
             break;
           }
-
+          
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         }  
@@ -122,5 +135,11 @@ public class SocketConexionHilo extends Thread{
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada);
             
+    }
+    
+    
+    private boolean verificarInscripcionUsuario(String entrada){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.verificarInscripcionUsuario(entrada);
     }
 }
