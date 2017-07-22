@@ -27,6 +27,8 @@ public class Controladora extends Thread{
         
     //puertos del cliente {cmd,Data}
     String[] puertos = {"1030","1029"};
+    //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
+    String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
 
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
@@ -71,10 +73,20 @@ public class Controladora extends Thread{
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
            
-        }else if( sacarInscribir(inputString).equalsIgnoreCase("inscribir") ){
+        }else if( extraerComando(inputString,8).equalsIgnoreCase("inscribir") ){
             
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setText( output.getText() + inscribirUsuario() + "\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
+            
+        }else if( extraerComando(inputString,5).equalsIgnoreCase("video") ){
+            
+            String nombreVid = inputString.substring(8);
+            System.out.println("nombreVid = " + nombreVid);
+            
+            output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
+            output.setText( output.getText() + descargar(nombreVid) + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
@@ -94,12 +106,13 @@ public class Controladora extends Thread{
      * @param inputString recibe el comando completo
      * @return devuelve las primeras 9 letras para ver si es inscribir
      */
-    public String sacarInscribir(String inputString){
+    public String extraerComando(String inputString, int size){
         String comando = "";
-        if (inputString.length() > 8){
-            for (int i = 0; i < 9; i++) {
+        if (inputString.length() > size){
+            for (int i = 0; i < size+1; i++) {
             
-                comando = comando + inputString.charAt(i);        
+                comando = comando + inputString.charAt(i); 
+                System.out.println(comando);
             }
         }
         return comando;
@@ -107,15 +120,17 @@ public class Controladora extends Thread{
     
     /**
      * Envía la informacion a a controladora de sockets 
-     * Se saca el ip local y se envia
+     * Se saca pasa la ip del servidor Central y los puertos de
+     * este cliente para que lo inscriba
      * @return mensaje del servidor
      */
     public String inscribirUsuario(){
             String resultado = null;
             try{
-                InetAddress adress = InetAddress.getLocalHost();
+                //InetAddress adress = InetAddress.getLocalHost();
                 SocketConexion s = new SocketConexion();
-                resultado = s.inscribirUsuario( puertos );
+                resultado = s.inscribirUsuario
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
                 //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());
@@ -124,4 +139,29 @@ public class Controladora extends Thread{
             return resultado;
             
     }
+    
+    /**
+     *Envio el nombre del video al servidor principal, este verifica
+     * si estoy inscrito, de ser asi, aprueba la peticion y continua con
+     * la siguiente fase de la descarga.
+     * @param nombreVid nombre del video a descargar
+     * @return mensaje del servidor
+     */
+    public String descargar(String nombreVid){
+            String resultado = null;
+            try{
+                SocketConexion s = new SocketConexion();
+                //resultado = s.inscribirUsuario
+        //(datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
+                resultado = s.descargarVid
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]),nombreVid);
+                
+            }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+        
+            return resultado;
+            
+    }
+    
 }
