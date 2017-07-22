@@ -101,6 +101,11 @@ public static String password = "redes2";
         }
     }
     
+    /**
+     * Aqui se verifica que el cliente no haya estado inscrito
+     * @param ip
+     * @return 
+     */
     public boolean verificarInscripcionUsuario(String ip){
         boolean suiche = false;
         try{
@@ -111,8 +116,104 @@ public static String password = "redes2";
 
             while (rs.next()){
                 
- //               System.out.println("Ip cliente (clase Base de Datos): " + rs.getString("ipcliente"));
                 if(rs.getString("ipcliente").contains(ip)){
+                    suiche = true;
+                }
+                
+            }
+
+                stmt.close();
+                con.close();
+
+            }catch ( Exception e ){
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+        }
+
+     /**
+     * Agrega a la bdd un servidor secundario
+     * @param direccionIp 
+     * @param puertoEscucha
+     * @return regresa 0si no se pudo registrar, 1 si fue exitoso
+     */
+    public int agregarServidorBDD(String ip) {
+        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata) VALUES(?, ?, ?)";
+        PreparedStatement pst = null;
+        Connection con=null;
+        String[] campos = extraerIPyPuertos( ip );
+        //Se verifica que no haya un servidor con la misma Ip
+        if( verificarInscripcionDeServidor( campos[0] ) == false ){
+            //Se verifica que no haya más de 3 servidores
+            if( verificarCapacidadMaximaDeServidores( campos[0] ) == false){
+                //Se abren las conexiones con la base de datos y se procede a guardar en la base de datos
+                try{
+                    Class.forName(driver);
+                    con = DriverManager.getConnection(connectString, user , password);
+                    pst = con.prepareStatement(stm);
+                    pst.setString(1, campos[0]);
+                    pst.setInt(2, Integer.parseInt( campos[1]) );                    
+                    pst.setInt(3, Integer.parseInt( campos[2]) );                    
+                    pst.executeUpdate();
+
+                    } catch ( SQLException | ClassNotFoundException e ){
+
+                        System.out.println("Servidor Central > No se inscribio al servidor: " + campos[0]);
+                        return 0;
+
+                    } finally {
+                    // Con el finally se cierran todas las conexiones los con, pst;
+                        try {
+
+                            if (pst != null) {
+                                pst.close();
+                            }
+                            if (con != null) {
+                                con.close();
+                            }
+
+                        } catch (SQLException ex) {
+
+                            System.out.println(ex);                
+                            return 1;
+                        }
+
+                }
+                System.out.println("Servidor Central > Se inscribio al servidor: " + campos[0]);
+                return 1;
+                
+            }else{ 
+                
+                System.out.println("Servidor Central > Maximo de servidores alcanzados");
+                return 3;
+                
+            }
+
+        }else{
+            
+            return 0;
+            
+        }
+    }
+    
+    /**
+     * Metodo que verifica si ya hay un servidor secundario registrado.
+     * @param ip ip del servidor
+     * @return True si ya hay un servior con esa ip, false si no lo hay
+     */
+    public boolean verificarInscripcionDeServidor(String ip){
+         boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ipservidor FROM servidor");
+            System.out.println("Servidor Central > Ip de servidores actuales");
+            while (rs.next()){
+                
+                System.out.println("Servidor Central > Ip: " + rs.getString("ipservidor"));
+                if(rs.getString("ipservidor").contains(ip)){
                     suiche = true;
                 }
             }
@@ -125,7 +226,38 @@ public static String password = "redes2";
             }
         
             return suiche;
-        }
+    }
+    
+    /**
+     * Se verifica si no hay más de 3 servidores
+     * @param direccionIp
+     * @return true si hay más de 3 servidores, false si hay menos de 3
+     */ 
+    public boolean verificarCapacidadMaximaDeServidores(String direccionIp) {
+        boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                if(rs.getString("servidores").contains( "3" )){
+                    suiche = true;
+                }
+            }
+
+                stmt.close();
+                con.close();
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+    }
 }
 
 

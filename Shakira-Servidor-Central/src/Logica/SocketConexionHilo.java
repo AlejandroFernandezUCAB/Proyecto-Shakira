@@ -55,14 +55,29 @@ public class SocketConexionHilo extends Thread{
           //System.out.println("entrada: " + entrada);
           while (true) {  
             String str = entrada.readLine();
-              //System.out.println("Recibi: " + str);
-            if( str.contains("inscribir")){
+
+            if( str.contains("inscribirU")){
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
                    salida.println( "Servidor Central> Inscrito correctamente");                   
                 }else{
                    salida.println( "Servidor Central> Ya ud se ha registrado");
+                }
+                
+            }else if( str.trim().contains("inscribirS")){
+                
+                suiche = inscribirServidorSecundario(str);                                
+                if( suiche == 1){
+                    
+                   salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   
+                }else if (suiche == 0){
+                    
+                   salida.println( "Servidor Central > Ya ud se ha registrado");
+                   
+                }else{
+                   salida.println( "Servidor Central > Ya hay 3 servidores registrados");
                 }
                 
             }
@@ -90,9 +105,22 @@ public class SocketConexionHilo extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(11);
+            entrada = entrada.substring(12);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada);
+            
+    }
+
+    /**
+     * Metodo que inscribe al servidor secundario en la BDD
+     * @param entrada ip del servidor
+     * @return Regresa 1 si fue exitoso, 0 si ya estaba o hubo algún error y otro si ya hay 3 servidores registrados
+     */
+    private int inscribirServidorSecundario(String entrada) {
+        
+            entrada = entrada.substring(12);
+            BaseDeDatos bdd = new BaseDeDatos();
+            return bdd.agregarServidorBDD(entrada);
             
     }
 }
