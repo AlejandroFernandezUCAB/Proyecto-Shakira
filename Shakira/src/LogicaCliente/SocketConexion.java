@@ -53,18 +53,20 @@ public class SocketConexion {
     
     /**
      * Se procede a realizar la conexion con el servidor central para inscribir al cliente
+     * @param ipServidorCentral ip del servidor central
+     * @param puertoServidor puerto escucha del servidor central
      * @param puertos Aqui iran los puertos del cliente
      * @return SI está o no registrado correctamente
      * @throws IOException 
      */
-    public String inscribirUsuario(String[] puertos) throws IOException{
+    public String inscribirUsuario(String ipServidorCentral, int puertoServidor, String[] puertos) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
          
          //Inicializo la conexion con el socket
          try{
-            s = new Socket("192.168.0.2", 500);
+            s = new Socket( ipServidorCentral, puertoServidor);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
