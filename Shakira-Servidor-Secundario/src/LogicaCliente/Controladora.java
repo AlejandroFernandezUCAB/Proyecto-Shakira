@@ -5,46 +5,79 @@
  */
 package LogicaCliente;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 
 /**
  *
  * @author pedro
  */
-public class Controladora {
-    private JPanel consola;
+public class Controladora extends Thread{
+    private String comando;
+    private JPanel panel;
     private JTextField input;
     private JTextArea output;
-
-    public Controladora(JPanel consola,JTextField input, JTextArea output) {
-        this.consola = consola;
-        this.input = input;
-        this.output = output;
-    }
+    private String inputString;
     
-/**
- * Enviar información al servidor, por los momentos pura interfaz
- */    
-    public void enviarInformacion (){
+  /**
+    * Constructor para inicializar el objeto
+    * @param comando comando recibido por el cliente
+    */
+    Controladora(String comando) {
+        this.comando = comando;
+    }
+    /**
+     * Constructor para inicializar las diferentes cosas de la interfaz
+     * @param panel
+     * @param inputComando
+     * @param consolaTextArea
+     * @param inputComandoString 
+     */
+    public Controladora(JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputComandoString) {
+        this.panel = panel;
+        this.input = inputComando;
+        this.output = consolaTextArea;
+        this.inputString = inputComandoString;
+    }
+
+      
+    @Override
+    public void run(){
         
-        String inputToString = input.getText().trim().toLowerCase().toString();
-        if(inputToString.isEmpty() || inputToString == null || inputToString.equalsIgnoreCase("inserte comando aquí")){
+        //En este if se verifica si la linea ingresada tiene inscribir, si es así procede a registrarse
+        //El metodo que se llama para inscribir al servidor es inscribirServidor()
+        
+        if( inputString.trim().contains("inscribir")){
             
-            JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
+            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+            output.setText( output.getText() + inscribirServidor() + "\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
             
-        }else {
+        }else if( inputString.trim().contains( "videos_descargando" ) ){
             
-            output.setText( output.getText() + inputToString + "\n");
+        }else if ( inputString.trim().contains( "videos_descargados" ) ){
+            
+        }else{
+            
+            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+            output.setText( output.getText() + "Servidor Secundario > Error en el comando" + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
         }
-            
         
     }
+
+    /**
+     * Metodo que devuelve un string de la respuesta del servidor central a la consola del cliente
+     * @return Respuesta del servidor
+     */
+    private String inscribirServidor() {
         
+        SocketConexionSecundario socket = new SocketConexionSecundario();
+        return socket.inscribirServidor();
+    }
 }
