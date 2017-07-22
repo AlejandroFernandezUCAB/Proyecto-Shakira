@@ -65,8 +65,7 @@ public class SocketConexion {
          
          //Inicializo la conexion con el socket
          try{
-            //s = new Socket("192.168.0.2", 500);
-            s = new Socket("192.168.0.2", 1026);
+            s = new Socket("192.168.0.2", 500);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida
@@ -81,7 +80,6 @@ public class SocketConexion {
         try {
           while (true) {
             // Leo la entrada del usuario
-            //String str = "inscribir"+direccionIp;
             String str = "inscribirU_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
             // La envia al servidor
             salida.println(str);

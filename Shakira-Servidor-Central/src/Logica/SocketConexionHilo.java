@@ -65,7 +65,7 @@ public class SocketConexionHilo extends Thread{
                    salida.println( "Servidor Central> Ya ud se ha registrado");
                 }
                 
-            }else             if( str.trim().contains("inscribir servidor")){
+            }else if( str.trim().contains("inscribir servidor")){
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
@@ -105,7 +105,7 @@ public class SocketConexionHilo extends Thread{
      */
     private int inscribirUsuario(String entrada) {
         
-            entrada = entrada.substring(11);
+            entrada = entrada.substring(12);
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarUsuarioBDD(entrada);
             
