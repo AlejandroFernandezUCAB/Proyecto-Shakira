@@ -27,6 +27,8 @@ public class Controladora extends Thread{
         
     //puertos del cliente {cmd,Data}
     String[] puertos = {"1030","1029"};
+    //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
+    String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
 
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
@@ -107,7 +109,8 @@ public class Controladora extends Thread{
     
     /**
      * Envía la informacion a a controladora de sockets 
-     * Se saca el ip local y se envia
+     * Se saca pasa la ip del servidor Central y los puertos de
+     * este cliente para que lo inscriba
      * @return mensaje del servidor
      */
     public String inscribirUsuario(){
@@ -115,7 +118,8 @@ public class Controladora extends Thread{
             try{
                 InetAddress adress = InetAddress.getLocalHost();
                 SocketConexion s = new SocketConexion();
-                resultado = s.inscribirUsuario( puertos );
+                resultado = s.inscribirUsuario
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
                 //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());
