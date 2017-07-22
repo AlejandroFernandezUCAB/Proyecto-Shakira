@@ -154,7 +154,7 @@ public static String password = "redes2";
                     pst = con.prepareStatement(stm);
                     pst.setString(1, campos[0]);
                     pst.setInt(2, Integer.parseInt( campos[1]) );                    
-                    pst.setInt(2, Integer.parseInt( campos[2]) );                    
+                    pst.setInt(3, Integer.parseInt( campos[2]) );                    
                     pst.executeUpdate();
 
                     } catch ( SQLException | ClassNotFoundException e ){
