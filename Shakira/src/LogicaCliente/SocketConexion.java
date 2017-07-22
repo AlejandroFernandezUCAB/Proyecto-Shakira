@@ -82,7 +82,7 @@ public class SocketConexion {
           while (true) {
             // Leo la entrada del usuario
             //String str = "inscribir"+direccionIp;
-            String str = "inscribir_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
+            String str = "inscribirU_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);

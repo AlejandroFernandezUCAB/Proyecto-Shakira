@@ -56,7 +56,7 @@ public class SocketConexionHilo extends Thread{
           while (true) {  
             String str = entrada.readLine();
               //System.out.println("Recibi: " + str);
-            if( str.contains("inscribir")){
+            if( str.contains("inscribirU")){
                 
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
