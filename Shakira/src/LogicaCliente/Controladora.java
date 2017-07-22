@@ -68,12 +68,12 @@ public class Controladora extends Thread{
  * El Else es en caso de que el comando este mal escrito 
  */    
     public void run (){
-
+        
         if(inputString.isEmpty() || inputString == null || inputString.equalsIgnoreCase("inserte comando aquí") ){
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
            
-        }else if( extraerComando(inputString,8).equalsIgnoreCase("inscribir") ){
+        }else if( extraerComando(inputString, 9).equalsIgnoreCase("inscribir") ){
             
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setText( output.getText() + inscribirUsuario() + "\n");
@@ -82,14 +82,18 @@ public class Controladora extends Thread{
             
         }else if( extraerComando(inputString,5).equalsIgnoreCase("video") ){
             
-            String nombreVid = inputString.substring(8);
+            System.out.println("comando para descargar videos");
+            try{
+            String nombreVid = inputString.substring(6);
             System.out.println("nombreVid = " + nombreVid);
-            
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setText( output.getText() + descargar(nombreVid) + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
-            
+            }
+            catch(StringIndexOutOfBoundsException e){
+                output.setText(output.getText() + "Cliente > Debe especificar el nombre del video" + "\n");
+            }            
         }else{
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setLineWrap(true);
@@ -104,12 +108,13 @@ public class Controladora extends Thread{
     /**
      * Metodo que verifica si está escrito el comando inscribir
      * @param inputString recibe el comando completo
-     * @return devuelve las primeras 9 letras para ver si es inscribir
+     * @param size Tamaño de la cadena (empezando a contar desde 1)
+     * @return devuelve las primeras n=(size) letras para ver si es un comando
      */
     public String extraerComando(String inputString, int size){
         String comando = "";
-        if (inputString.length() > size){
-            for (int i = 0; i < size+1; i++) {
+        if (inputString.length() >= size){
+            for (int i = 0; i < size; i++) {
             
                 comando = comando + inputString.charAt(i); 
                 System.out.println(comando);
