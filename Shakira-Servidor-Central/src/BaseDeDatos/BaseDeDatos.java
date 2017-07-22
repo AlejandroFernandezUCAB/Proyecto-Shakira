@@ -101,6 +101,11 @@ public static String password = "redes2";
         }
     }
     
+    /**
+     * Aqui se verifica que el cliente no haya estado inscrito
+     * @param ip
+     * @return 
+     */
     public boolean verificarInscripcionUsuario(String ip){
         boolean suiche = false;
         try{
@@ -111,10 +116,10 @@ public static String password = "redes2";
 
             while (rs.next()){
                 
- //               System.out.println("Ip cliente (clase Base de Datos): " + rs.getString("ipcliente"));
                 if(rs.getString("ipcliente").contains(ip)){
                     suiche = true;
                 }
+                
             }
 
                 stmt.close();
