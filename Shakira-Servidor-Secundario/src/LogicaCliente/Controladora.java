@@ -20,6 +20,8 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String inputString;
+    //puertos del cliente {cmd,Data}
+    String[] puertos = {"1031","1032"};
     
   /**
     * Constructor para inicializar el objeto
@@ -78,6 +80,6 @@ public class Controladora extends Thread{
     private String inscribirServidor() {
         
         SocketConexionSecundario socket = new SocketConexionSecundario();
-        return socket.inscribirServidor();
+        return socket.inscribirServidor( puertos );
     }
 }

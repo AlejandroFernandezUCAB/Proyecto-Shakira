@@ -138,26 +138,28 @@ public static String password = "redes2";
      * @param puertoEscucha
      * @return regresa 0si no se pudo registrar, 1 si fue exitoso
      */
-    public int agregarServidorBDD(String direccionIp, int puertoEscucha) {
-        String stm = "INSERT INTO SERVIDOR (ipservidor, puertoEscucha) VALUES(?, ?)";
+    public int agregarServidorBDD(String ip) {
+        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata) VALUES(?, ?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
+        String[] campos = extraerIPyPuertos( ip );
         //Se verifica que no haya un servidor con la misma Ip
-        if( verificarInscripcionDeServidor( direccionIp ) == false ){
+        if( verificarInscripcionDeServidor( campos[0] ) == false ){
             //Se verifica que no haya más de 3 servidores
-            if( verificarCapacidadMaximaDeServidores( direccionIp ) == false){
+            if( verificarCapacidadMaximaDeServidores( campos[0] ) == false){
                 //Se abren las conexiones con la base de datos y se procede a guardar en la base de datos
                 try{
                     Class.forName(driver);
                     con = DriverManager.getConnection(connectString, user , password);
                     pst = con.prepareStatement(stm);
-                    pst.setString(1, direccionIp);
-                    pst.setInt(2, puertoEscucha);                    
+                    pst.setString(1, campos[0]);
+                    pst.setInt(2, Integer.parseInt( campos[1]) );                    
+                    pst.setInt(2, Integer.parseInt( campos[2]) );                    
                     pst.executeUpdate();
 
                     } catch ( SQLException | ClassNotFoundException e ){
 
-                        System.out.println("Servidor Central > No se inscribio al servidor: " + direccionIp);
+                        System.out.println("Servidor Central > No se inscribio al servidor: " + campos[0]);
                         return 0;
 
                     } finally {
@@ -178,7 +180,7 @@ public static String password = "redes2";
                         }
 
                 }
-                System.out.println("Servidor Central > Se inscribio al servidor: " + direccionIp);
+                System.out.println("Servidor Central > Se inscribio al servidor: " + campos[0]);
                 return 1;
                 
             }else{ 

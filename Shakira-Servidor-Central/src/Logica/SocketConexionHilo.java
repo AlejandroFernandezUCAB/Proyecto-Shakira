@@ -55,7 +55,7 @@ public class SocketConexionHilo extends Thread{
           //System.out.println("entrada: " + entrada);
           while (true) {  
             String str = entrada.readLine();
-              //System.out.println("Recibi: " + str);
+
             if( str.contains("inscribirU")){
                 
                 suiche = inscribirUsuario(str);                                
@@ -65,7 +65,7 @@ public class SocketConexionHilo extends Thread{
                    salida.println( "Servidor Central> Ya ud se ha registrado");
                 }
                 
-            }else if( str.trim().contains("inscribir servidor")){
+            }else if( str.trim().contains("inscribirS")){
                 
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
@@ -117,8 +117,10 @@ public class SocketConexionHilo extends Thread{
      * @return Regresa 1 si fue exitoso, 0 si ya estaba o hubo algún error y otro si ya hay 3 servidores registrados
      */
     private int inscribirServidorSecundario(String entrada) {
-            entrada = entrada.substring(18);
+        
+            entrada = entrada.substring(12);
             BaseDeDatos bdd = new BaseDeDatos();
-            return bdd.agregarServidorBDD(entrada, 1);
+            return bdd.agregarServidorBDD(entrada);
+            
     }
 }

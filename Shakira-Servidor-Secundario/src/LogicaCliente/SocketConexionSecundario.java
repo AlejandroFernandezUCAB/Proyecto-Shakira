@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 
 /**
  *
@@ -23,11 +20,10 @@ import java.net.SocketTimeoutException;
 public class SocketConexionSecundario {
 
     
-    public String inscribirServidor() {
+    public String inscribirServidor(String[] puertos) {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null;
-        String direccionIp = null;
         BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
         String linea=null;
         
@@ -44,10 +40,9 @@ public class SocketConexionSecundario {
                
         try {
             
-          direccionIp = InetAddress.getLocalHost().getHostAddress(); 
           while (true) {
             // Leo la direccion ip del servidor secundario
-            String str = "inscribir servidor"+direccionIp;
+            String str = "inscribirS_" + s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
@@ -55,6 +50,7 @@ public class SocketConexionSecundario {
             linea = entrada.readLine();
             System.out.println("Respuesta servidor: " + linea);    
             break;
+            
           }
           
            // Libera recursos

@@ -53,8 +53,7 @@ public class SocketConexion {
     
     /**
      * Se procede a realizar la conexion con el servidor central para inscribir al cliente
-     * @param direccionIp direccion ip del cliente
-     * @param puerto puerto del cliente
+     * @param puertos Aqui iran los puertos del cliente
      * @return SI está o no registrado correctamente
      * @throws IOException 
      */
