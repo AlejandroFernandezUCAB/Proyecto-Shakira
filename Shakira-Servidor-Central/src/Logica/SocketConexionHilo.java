@@ -133,13 +133,18 @@ public class SocketConexionHilo extends Thread{
      */
     private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) {
         try{
-            
+            BaseDeDatos bd = new BaseDeDatos();
             str = entrada.readLine();
             int videosQueMeLLegaran = Integer.parseInt(str);
             for (int i = 0; i < videosQueMeLLegaran; i++) {
                 //Recibo los videos
                 str = entrada.readLine();
                 System.out.println(str);
+                if( bd.agregarVideoSincronizacion(str) == true) {
+                    System.out.println("Servidor central > El Video: " + str
+                            + " se guardo correctamente");
+                }
+                
             }
             
         }catch(IOException e){
