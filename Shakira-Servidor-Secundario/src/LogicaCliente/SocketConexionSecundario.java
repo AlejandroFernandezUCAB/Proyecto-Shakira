@@ -57,10 +57,11 @@ public class SocketConexionSecundario {
             nombreVideos = bd.nombreDeVideos();
             //El digo la cantidad de vídeos que voy a enviar
             salida.println( nombreVideos.length );
-            //Realizo el for para enviar el nombre de cada video automatico
-              for (int i = 1; i < nombreVideos.length ; i++) {
-                  salida.println( nombreVideos[i] );
+              //Realizo el for para enviar el nombre de cada video automatico
+              for (String nombreVideo : nombreVideos) {
+                  salida.println(nombreVideo);                  
               }
+              System.out.println("Se terminó");
             break;
             
           }
@@ -76,7 +77,7 @@ public class SocketConexionSecundario {
             return ("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
             
         } catch (Exception e){
-            
+           
             return ("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
             
         }

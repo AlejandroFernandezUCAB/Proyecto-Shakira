@@ -31,7 +31,7 @@ public class BaseDeDatos {
     public String[] nombreDeVideos() {
         String[] videos = new String[ cantidadDeVideos() ];
         System.out.println(videos.length);
-        int i=1;
+        int i=0;
         try{
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);
@@ -40,7 +40,7 @@ public class BaseDeDatos {
             System.out.println("Servidor Secundario > Videos que se van a sincronizar:");
             while (rs.next()){
                 
-                System.out.println("Servidor Secundario > " + rs.getString("nombre"));
+                System.out.println("Servidor Secundario > " + rs.getString("nombre") + "Guardado en la posición:" + i);
                 videos[i] = rs.getString("nombre");
                 i++;
                 
