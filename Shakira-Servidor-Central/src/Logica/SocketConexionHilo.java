@@ -18,6 +18,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BaseDeDatos.BaseDeDatos;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -92,11 +94,43 @@ public class SocketConexionHilo extends Thread{
                 System.out.println("Direccion IP del cliente: " + ipCliente);
                 //verifico si el usuario esta inscrito
                     //verifico que el nombre del video existe
+                String nombreVid = this.extraerNombreVideo(str);
                 if (this.verificarInscripcionUsuario(ipCliente)  == true    && 
-                    this.verificarExistenciaVideo(this.extraerNombreVideo(str))     == false) 
+                    this.verificarExistenciaVideo(nombreVid) == false) 
                 {
                     System.out.println("usuario Inscrito");
                     salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
+                    int idVideo = this.obtenerIDVideo(nombreVid);
+                    //ya habiendo verificado que el cliente existe y tengo el video
+                    //le digo a los servidores secundarios que se lo envien...
+                    List<String> servidores = this.obtenerListaDeServidores();
+                    //enviarVideo_ipCliente_puertoCliente_idVideo_ipServidor)
+                    
+                    //envio al puerto de cmd
+                    String comandoServidor1 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(0))[0] + "_" + idVideo;
+                    String comandoServidor2 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(1))[0] + "_" + idVideo;
+                    String comandoServidor3 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(2))[0] + "_" + idVideo;
+                        //tengo que crear un socket cliente
+                        
+                        
+                    BufferedReader entradaSubSocket = null;
+                    PrintWriter salidaSubSocket = null;
+                    Socket subSocket = null;
+                    try{
+                       //s = new Socket("192.168.0.2", 500);
+                       subSocket = new Socket(ipServidorCentral, puertoServidor);
+                       System.out.println("Se inicializa el Sub-socket:" + subSocket);
+                       entradaSubSocket = new BufferedReader(new InputStreamReader(subSocket.getInputStream()));
+                       // Obtenemos el canal de salida
+                       salidaSubSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(subSocket.getOutputStream())),true);
+                    }catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
+                            
+                    //for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
+                       //enviar 
+                    //}
+                    
                 }
                 
               }
@@ -159,4 +193,23 @@ public class SocketConexionHilo extends Thread{
     private String extraerNombreVideo(String mensaje){
         return mensaje.substring(9);
     }
+    
+    
+    private List<String> obtenerListaDeServidores(){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.listaServidoresSecundarios();
+    }
+    
+    private int[] puertosAsociados(String IpServidor){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.listaDePuertos(IpServidor);
+    }
+
+    private int obtenerIDVideo(String nombreVid) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.idVideo(nombreVid);
+    }
+
+    
 }
