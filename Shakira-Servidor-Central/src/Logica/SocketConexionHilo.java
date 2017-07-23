@@ -55,7 +55,7 @@ public class SocketConexionHilo extends Thread{
           
           while (true) {  
             String str = entrada.readLine();
-            
+              System.out.println(entrada);
             //-------INSCRIPCION----------
             
             if( str.contains("inscribirU")){
@@ -90,10 +90,15 @@ public class SocketConexionHilo extends Thread{
                 String ipCliente = ss.getInetAddress().toString().substring(1);
                 System.out.println("entrada: " + str);
                 System.out.println("Direccion IP del cliente: " + ipCliente);
-                if (this.verificarInscripcionUsuario(ipCliente) == true /* falta verificar que el video existe en la BD */) {
+                //verifico si el usuario esta inscrito
+                    //verifico que el nombre del video existe
+                if (this.verificarInscripcionUsuario(ipCliente)  == true    && 
+                    this.verificarExistenciaVideo(this.extraerNombreVideo(str))     == false) 
+                {
                     System.out.println("usuario Inscrito");
                     salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
                 }
+                
               }
             break;
           }
@@ -141,5 +146,17 @@ public class SocketConexionHilo extends Thread{
     private boolean verificarInscripcionUsuario(String entrada){
         BaseDeDatos bdd = new BaseDeDatos();
         return bdd.verificarInscripcionUsuario(entrada);
+    }
+    
+    private boolean verificarExistenciaVideo(String nombreVid){
+        System.out.println("Verificando la existencia del video: " + nombreVid);
+        BaseDeDatos bdd = new BaseDeDatos();
+        //esto devuelve true si el resultado es 1
+            //de lo contrario si hubo un error o el video no existe devuelve false
+        return (  bdd.videoExiste(nombreVid) == 1 );
+    }
+    
+    private String extraerNombreVideo(String mensaje){
+        return mensaje.substring(9);
     }
 }
