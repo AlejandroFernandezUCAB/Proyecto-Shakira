@@ -61,16 +61,17 @@ public class SocketConexionHilo extends Thread{
             //-------INSCRIPCION----------
             
             if( str.contains("inscribirU")){
-                
+                System.out.println("---------------Inscribiendo Usuario--------------");
                 suiche = inscribirUsuario(str);                                
                 if( suiche == 1){
                    salida.println( "Servidor Central> Inscrito correctamente");                   
                 }else{
                    salida.println( "Servidor Central> Ya ud se ha registrado");
                 }
+                System.out.println("---------------FIN proceso--------------");
                 
             }else if( str.trim().contains("inscribirS")){
-                
+                System.out.println("---------------Inscribiendo Servidor Secundario--------------");
                 suiche = inscribirServidorSecundario(str);                                
                 if( suiche == 1){
                     
@@ -83,7 +84,7 @@ public class SocketConexionHilo extends Thread{
                 }else{
                    salida.println( "Servidor Central > Ya hay 3 servidores registrados");
                 }
-                
+                System.out.println("---------------FIN proceso--------------");
             }
             
             //-------DESCARGA----------
@@ -178,7 +179,7 @@ public class SocketConexionHilo extends Thread{
                     //}
                     
                 }
-                System.out.println("-------------FIN DESCARGA-----------");
+                System.out.println("-------------FIN PROCESO DESCARGA-----------");
               }
             break;
           }
