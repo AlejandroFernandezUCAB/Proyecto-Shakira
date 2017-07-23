@@ -340,7 +340,7 @@ public static String password = "redes2";
             //ejecuto el Query
             rs = pst.executeQuery();
             
-            //recorro el conjunt y agrego los elementos
+            //recorro el conjunt y agrego los elementos a la lista
             while (rs.next()){
                 ListaDeIP.add(rs.getString("ip"));
             }
@@ -378,11 +378,11 @@ public static String password = "redes2";
      */
     public int[] listaDePuertos(String ipServidor){
         //declaro las variables
-        int[] puertos = new int[1];             
+        int[] puertos = new int[2];             
         PreparedStatement pst = null;
         Connection con=null;
         //armo el string con el query  
-        String stm = "SELECT puertocmd cmd, puertodata data from servidor where ipservidor = ?";
+        String stm = "SELECT puertocmd as cmd, puertodata as data from servidor where ipservidor = ?";
         try{
         Class.forName(driver);
             con = DriverManager.getConnection(connectString, user , password);
@@ -394,8 +394,9 @@ public static String password = "redes2";
             //ejecuto el query
             rs = pst.executeQuery();
             //guardo los resultados
+        if(rs.next()){
             puertos[0] = Integer.parseInt(rs.getString("cmd"));
-            puertos[1] = Integer.parseInt(rs.getString("data"));
+            puertos[1] = Integer.parseInt(rs.getString("data"));}
         }
         catch ( SQLException | ClassNotFoundException e ){
                 
@@ -445,7 +446,10 @@ public static String password = "redes2";
             //ejecuto el query
             rs = pst.executeQuery();
             //guardo el resultado
-            idVid = rs.getInt("id");
+            if (rs.next()) {
+                idVid = rs.getInt("id");
+            }
+            
         }
         catch ( SQLException | ClassNotFoundException e ){
                 

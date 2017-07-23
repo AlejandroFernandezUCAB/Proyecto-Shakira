@@ -89,6 +89,7 @@ public class SocketConexionHilo extends Thread{
             //-------DESCARGA----------
             
             else if ( str.trim().contains("descarga")) {
+                System.out.println("---------------DESCARGA--------------");
                 String ipCliente = ss.getInetAddress().toString().substring(1);
                 int puertoCliente = ss.getPort();
                 System.out.println("entrada: " + str);
@@ -96,8 +97,11 @@ public class SocketConexionHilo extends Thread{
                 //verifico si el usuario esta inscrito
                     //verifico que el nombre del video existe
                 String nombreVid = this.extraerNombreVideo(str);
+                
+                
+                //
                 if (this.verificarInscripcionUsuario(ipCliente)  == true    && 
-                    this.verificarExistenciaVideo(nombreVid) == false) 
+                    this.verificarExistenciaVideo(nombreVid) == true) 
                 {
                     System.out.println("usuario Inscrito");
                     salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
@@ -106,6 +110,15 @@ public class SocketConexionHilo extends Thread{
                     //le digo a los servidores secundarios que se lo envien...
                     List<String> servidores = this.obtenerListaDeServidores();
                     //enviarVideo_ipCliente_puertoCliente_idVideo_ipServidor)
+                    System.out.println("id del Video: " + idVideo);
+                    System.out.println("Ip servidores secundarios:");
+                    
+                    for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
+                        String ip = i.next();
+                        //System.out.println(i.next());
+                        System.out.println(ip);
+                        System.out.println(puertosAsociados(ip)[0]);
+                    }
                     
                     //envio al puerto de cmd, asi serian los strings
                     //String comandoServidor1 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(0))[0] + "_" + idVideo;
@@ -115,6 +128,7 @@ public class SocketConexionHilo extends Thread{
                     //tengo que crear un socket cliente
                         
                     //Sub-Socket de Prueba    
+                    /*
                     BufferedReader entradaSubSocket = null;
                     PrintWriter salidaSubSocket = null;
                     Socket subSocket = null;
@@ -154,6 +168,8 @@ public class SocketConexionHilo extends Thread{
                             entradaSubSocket.close();
                             subStdIn.close();
                             subSocket.close();
+                            
+                            */
                         //fin sub socket de prueba    
                             
                     //con esto podre iterar por las ip y abrir y cerrar los sockets en cada iteracion
@@ -162,7 +178,7 @@ public class SocketConexionHilo extends Thread{
                     //}
                     
                 }
-                
+                System.out.println("-------------FIN DESCARGA-----------");
               }
             break;
           }

@@ -28,8 +28,8 @@ public class Controladora extends Thread{
     //puertos del cliente {cmd,Data}
     String[] puertos = {"1030","1029"};
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
-    String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
-
+    //String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
+    String[] datosServidorCentral = {"127.0.0.1","1026","1025"};
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
         this.input = input;
