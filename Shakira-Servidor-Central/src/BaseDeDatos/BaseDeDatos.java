@@ -71,7 +71,7 @@ public static String password = "redes2";
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
-
+                    
                     System.out.println("No se inscribio al usuario: " + campos[0]);
                     return 0;
 
@@ -158,7 +158,7 @@ public static String password = "redes2";
                     pst.executeUpdate();
 
                     } catch ( SQLException | ClassNotFoundException e ){
-
+                        System.out.println(e.getMessage());        
                         System.out.println("Servidor Central > No se inscribio al servidor: " + campos[0]);
                         return 0;
 
