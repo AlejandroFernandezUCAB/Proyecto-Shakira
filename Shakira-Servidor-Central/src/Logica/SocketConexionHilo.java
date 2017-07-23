@@ -18,6 +18,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BaseDeDatos.BaseDeDatos;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -149,7 +151,19 @@ public class SocketConexionHilo extends Thread{
             }
             
             //While de espera de el archivo
-            
+            //Se recibe el nombre del archivo
+            str = entrada.readLine();
+            //Se recibe el tamaño
+            int tamaño = Integer.parseInt( entrada.readLine() );
+            System.out.println("Servidor Central > Recibiendo el archivo "+ str +
+                    " con un tamaño de " + tamaño);
+            FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
+            BufferedOutputStream out = new BufferedOutputStream(fos);
+            byte[] buffer = new byte[ tamaño ];
+            for (int i = 0; i < buffer.length; i++) {
+                buffer[i] = (byte)entrada.read();
+            }
+            out.write( buffer );
         }catch(IOException e){
             
         }

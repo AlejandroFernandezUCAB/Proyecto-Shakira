@@ -6,8 +6,12 @@
 package LogicaCliente;
 
 import BaseDeDatos.BaseDeDatos;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -62,7 +66,26 @@ public class SocketConexionSecundario {
                   salida.println(nombreVideo);                  
               }
               //Se envian los archivos por el socket al servidor central
-              
+              // Codigo para envio por socket de : http://www.geocities.ws/programmiersprache/envioarchivo.html
+              File archivoAEnviar = new File("C:\\Final_Fantasy_VII_Aeriss_Theme_Violin__Piano_Cover_Duet_Taylor_Davis__Lara_de_Wit(youtube.com).mp4");
+              int tamañoArchivo = ( int ) archivoAEnviar.length();
+              System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
+              //Se envia el nombre del archivo
+              salida.println( archivoAEnviar.getName() );
+              //Se envia el tamaño del archivo
+              salida.println( tamañoArchivo );
+              //Manejo de archivo y sockets
+              FileInputStream fis = new FileInputStream( archivoAEnviar );
+              BufferedInputStream bis = new BufferedInputStream(fis);
+              BufferedOutputStream bos = new BufferedOutputStream( s.getOutputStream() );
+              //Se crea un buffer con el tamaño del archivo
+              byte[] buffer = new byte[ tamañoArchivo ];
+              //Se lee y se introduce en el arrayde bytes
+              bis.read( buffer );
+              //Se realiza el envío
+              for (int i = 0; i < buffer.length; i++) {
+                 bos.write( buffer[i] );
+              }
             break;
             
           }
