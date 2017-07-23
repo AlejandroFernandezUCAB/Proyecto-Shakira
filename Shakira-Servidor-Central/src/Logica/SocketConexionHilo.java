@@ -71,6 +71,7 @@ public class SocketConexionHilo extends Thread{
                 if( suiche == 1){
                     
                    salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   sincronizacion(str, entrada, salida);
                    
                 }else if (suiche == 0){
                     
@@ -122,5 +123,27 @@ public class SocketConexionHilo extends Thread{
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada);
             
+    }
+
+    /**
+     * Metodo encargado de realizar la sincronización
+     * @param str Aqui entrará todo lo nuevo
+     * @param entrada Canal de entrada
+     * @param salida Canal de salida
+     */
+    private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) {
+        try{
+            
+            str = entrada.readLine();
+            int videosQueMeLLegaran = Integer.parseInt(str);
+            for (int i = 0; i < videosQueMeLLegaran; i++) {
+                //Recibo los videos
+                str = entrada.readLine();
+                System.out.println(str);
+            }
+            
+        }catch(IOException e){
+            
+        }
     }
 }

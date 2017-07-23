@@ -203,7 +203,7 @@ public static String password = "redes2";
      * @return True si ya hay un servior con esa ip, false si no lo hay
      */
     public boolean verificarInscripcionDeServidor(String ip){
-         boolean suiche = false;
+        boolean suiche = false;
         try{
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);

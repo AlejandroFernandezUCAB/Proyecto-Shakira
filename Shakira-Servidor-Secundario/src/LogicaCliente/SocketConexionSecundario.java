@@ -5,6 +5,7 @@
  */
 package LogicaCliente;
 
+import BaseDeDatos.BaseDeDatos;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class SocketConexionSecundario {
         Socket s = null;
         BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
         String linea=null;
+        String[] nombreVideos = null;
         
          //Inicializo la conexion con el socket
          try{
@@ -48,7 +50,17 @@ public class SocketConexionSecundario {
             System.out.println("Se envio: "+ str);
             // Recibe la respuesta del servidor
             linea = entrada.readLine();
-            System.out.println("Respuesta servidor: " + linea);    
+            System.out.println("Respuesta servidor: " + linea);   
+            //A partir de aquí comienza el proceso de sincronización
+            BaseDeDatos bd = new BaseDeDatos();
+            //Aqui recibe un array de string con el nombre de cada video;
+            nombreVideos = bd.nombreDeVideos();
+            //El digo la cantidad de vídeos que voy a enviar
+            salida.println( nombreVideos.length );
+            //Realizo el for para enviar el nombre de cada video automatico
+              for (int i = 1; i < nombreVideos.length ; i++) {
+                  salida.println( nombreVideos[i] );
+              }
             break;
             
           }
