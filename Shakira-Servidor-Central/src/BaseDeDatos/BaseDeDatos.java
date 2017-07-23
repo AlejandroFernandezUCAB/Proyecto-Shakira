@@ -197,10 +197,13 @@ public static String password = "redes2";
         }
     }
     
-    
-    public boolean agregarVideoSincronizacion(String video){
-        boolean suiche = true;
-        String stm = "INSERT INTO VIDEO(id, nombre) VALUES(?,?)";
+    /**
+     * Metodo que agrega a la base de datos el video
+     * @param video Nombre dle video a guardar
+     * @return si es true se guardó correctamente y false hubo error
+     */
+    public boolean agregarVideoSincronizacion(String video){        
+        String stm = "INSERT INTO VIDEO(id, nombre) VALUES( nextval('sec_id_video') ,?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y se guarda el video
@@ -209,14 +212,13 @@ public static String password = "redes2";
                 Class.forName(driver);
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
-                pst.setString(1, "nextval('sec_id_video')");
-                pst.setString(2, video);
+                pst.setString(1, video);
                 
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
 
-                    System.out.println("No se inscribio al usuario: " + video);
+                    System.err.println("Servidor Central > No se inscribio el video: " + video);
                     return false;
 
                 } finally {
@@ -232,13 +234,12 @@ public static String password = "redes2";
 
                     } catch (SQLException ex) {
 
-                        System.out.println(ex);                
+                        System.err.println(ex);                
                         return true;
                     }
 
             }
-            
-            System.out.println("Se inscribio al usuario: " + video);
+           
             return true;
     }
     /**

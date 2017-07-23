@@ -140,12 +140,15 @@ public class SocketConexionHilo extends Thread{
                 //Recibo los videos
                 str = entrada.readLine();
                 System.out.println(str);
+                //Se procede a guardar y se verifica si es true se guardo
                 if( bd.agregarVideoSincronizacion(str) == true) {
                     System.out.println("Servidor central > El Video: " + str
                             + " se guardo correctamente");
                 }
                 
             }
+            
+            //While de espera de el archivo
             
         }catch(IOException e){
             
