@@ -90,6 +90,7 @@ public class SocketConexionHilo extends Thread{
             
             else if ( str.trim().contains("descarga")) {
                 String ipCliente = ss.getInetAddress().toString().substring(1);
+                int puertoCliente = ss.getPort();
                 System.out.println("entrada: " + str);
                 System.out.println("Direccion IP del cliente: " + ipCliente);
                 //verifico si el usuario esta inscrito
@@ -106,19 +107,20 @@ public class SocketConexionHilo extends Thread{
                     List<String> servidores = this.obtenerListaDeServidores();
                     //enviarVideo_ipCliente_puertoCliente_idVideo_ipServidor)
                     
-                    //envio al puerto de cmd
-                    String comandoServidor1 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(0))[0] + "_" + idVideo;
-                    String comandoServidor2 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(1))[0] + "_" + idVideo;
-                    String comandoServidor3 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(2))[0] + "_" + idVideo;
-                        //tengo que crear un socket cliente
+                    //envio al puerto de cmd, asi serian los strings
+                    //String comandoServidor1 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(0))[0] + "_" + idVideo;
+                    //String comandoServidor2 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(1))[0] + "_" + idVideo;
+                    //String comandoServidor3 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(2))[0] + "_" + idVideo;
                         
+                    //tengo que crear un socket cliente
                         
+                    //Sub-Socket de Prueba    
                     BufferedReader entradaSubSocket = null;
                     PrintWriter salidaSubSocket = null;
                     Socket subSocket = null;
                     try{
-                       //s = new Socket("192.168.0.2", 500);
-                       subSocket = new Socket(ipServidorCentral, puertoServidor);
+                       
+                       subSocket = new Socket(servidores.get(0), puertosAsociados(servidores.get(0))[0]);
                        System.out.println("Se inicializa el Sub-socket:" + subSocket);
                        entradaSubSocket = new BufferedReader(new InputStreamReader(subSocket.getInputStream()));
                        // Obtenemos el canal de salida
@@ -126,7 +128,35 @@ public class SocketConexionHilo extends Thread{
                     }catch(IOException e){
                         System.out.println(e.getMessage());
                     }
+                    
+                    
+                    BufferedReader subStdIn = new BufferedReader(new InputStreamReader(System.in));
+                    String subLinea=null;
+                    
+                    try {
+                        while (true) {
+                          // Leo la entrada del usuario
+                          String subStr = "enviarVideo_"+ipCliente + "_" +puertoCliente + "_" + nombreVid;
+                          // La envia al servidor
+                          salidaSubSocket.println(str);
+                          System.out.println("Se envio al sub-socket: "+ str);
+                          // Envía a la salida estándar la respuesta del servidor
+                          subLinea = entradaSubSocket.readLine();
+                          System.out.println("Respuesta servidor: " + subLinea);    
+                          break;
+                        }
+                      } catch (Exception e) {
+                          System.out.println("Problemas de conexión con el servidor secundario, intente más tarde");
+                      } 
+                    
+                            // Libera recursos
+                            salidaSubSocket.close();
+                            entradaSubSocket.close();
+                            subStdIn.close();
+                            subSocket.close();
+                        //fin sub socket de prueba    
                             
+                    //con esto podre iterar por las ip y abrir y cerrar los sockets en cada iteracion
                     //for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
                        //enviar 
                     //}
