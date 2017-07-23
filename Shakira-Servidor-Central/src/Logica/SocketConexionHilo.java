@@ -129,7 +129,7 @@ public class SocketConexionHilo extends Thread{
                     //tengo que crear un socket cliente
                         
                     //Sub-Socket de Prueba    
-                    /*
+                    ///*
                     BufferedReader entradaSubSocket = null;
                     PrintWriter salidaSubSocket = null;
                     Socket subSocket = null;
@@ -170,7 +170,7 @@ public class SocketConexionHilo extends Thread{
                             subStdIn.close();
                             subSocket.close();
                             
-                            */
+                      //      */
                         //fin sub socket de prueba    
                             
                     //con esto podre iterar por las ip y abrir y cerrar los sockets en cada iteracion
