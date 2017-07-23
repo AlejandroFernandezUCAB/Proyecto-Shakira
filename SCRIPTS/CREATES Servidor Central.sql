@@ -1,4 +1,4 @@
-CREATE TABLE CLIENTE(
+﻿CREATE TABLE CLIENTE(
 
 	ipCliente varchar(15) not null,
 	--puertoEscucha int not null,
@@ -43,5 +43,10 @@ CREATE TABLE VIDEOS_CLIENTE(
 	CONSTRAINT fk_video_cliente FOREIGN KEY ( videoFk ) REFERENCES VIDEO ( id_video ),
 	CONSTRAINT fk_cliente FOREIGN KEY ( clienteFk ) REFERENCES CLIENTE ( ipCliente )
 );
+
+CREATE SEQUENCE sec_id_video 
+	start with 0
+	inscrement by 1
+	cycle;
 
 commit;

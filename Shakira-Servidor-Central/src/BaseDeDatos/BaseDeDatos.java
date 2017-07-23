@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.StringTokenizer;
-/**INSERT INTO CLIENTE(ipcliente, puertocmd, puertodata) VALUES(?, ?, ?)
+/**
  *
  * @author Alejandro Fernandez
  */
@@ -197,6 +197,50 @@ public static String password = "redes2";
         }
     }
     
+    
+    public boolean agregarVideoSincronizacion(String video){
+        boolean suiche = true;
+        String stm = "INSERT INTO VIDEO(id, nombre) VALUES(?,?)";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);
+                pst.setString(1, "nextval('sec_id_video')");
+                pst.setString(2, video);
+                
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.out.println("No se inscribio al usuario: " + video);
+                    return false;
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.out.println(ex);                
+                        return true;
+                    }
+
+            }
+            
+            System.out.println("Se inscribio al usuario: " + video);
+            return true;
+    }
     /**
      * Metodo que verifica si ya hay un servidor secundario registrado.
      * @param ip ip del servidor

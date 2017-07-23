@@ -61,7 +61,8 @@ public class SocketConexionSecundario {
               for (String nombreVideo : nombreVideos) {
                   salida.println(nombreVideo);                  
               }
-              System.out.println("Se terminó");
+              //Se envian los archivos por el socket al servidor central
+              
             break;
             
           }

@@ -40,7 +40,7 @@ public class BaseDeDatos {
             System.out.println("Servidor Secundario > Videos que se van a sincronizar:");
             while (rs.next()){
                 
-                System.out.println("Servidor Secundario > " + rs.getString("nombre") + "Guardado en la posición:" + i);
+                System.out.println("Servidor Secundario > " + rs.getString("nombre") );
                 videos[i] = rs.getString("nombre");
                 i++;
                 
