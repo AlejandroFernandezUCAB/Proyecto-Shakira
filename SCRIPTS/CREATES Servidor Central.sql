@@ -45,8 +45,8 @@ CREATE TABLE VIDEOS_CLIENTE(
 );
 
 CREATE SEQUENCE sec_id_video 
-	start with 0
-	inscrement by 1
+	start with 1
+	increment by 1
 	cycle;
 
 commit;
