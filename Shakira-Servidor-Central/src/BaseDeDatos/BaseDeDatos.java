@@ -203,7 +203,7 @@ public static String password = "redes2";
      * @return si es true se guardó correctamente y false hubo error
      */
     public boolean agregarVideoSincronizacion(String video){        
-        String stm = "INSERT INTO VIDEO(id, nombre) VALUES( nextval('sec_id_video') ,?)";
+        String stm = "INSERT INTO VIDEO(id_video, nombre) VALUES( nextval('sec_id_video') ,?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y se guarda el video
