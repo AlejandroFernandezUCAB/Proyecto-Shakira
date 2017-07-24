@@ -132,7 +132,7 @@ public class Controladora extends Thread{
             String resultado = null;
             try{
                 //InetAddress adress = InetAddress.getLocalHost();
-                SocketConexion s = new SocketConexion();
+                SocketConexionPrincipal s = new SocketConexionPrincipal();
                 resultado = s.inscribirUsuario
         (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), puertoCliente );
                 //s.conexionPrueba(puertos);
@@ -154,7 +154,7 @@ public class Controladora extends Thread{
     public String descargar(String nombreVid){
             String resultado = null;
             try{
-                SocketConexion s = new SocketConexion();
+                SocketConexionSecundario s = new SocketConexionSecundario();
                 //resultado = s.inscribirUsuario
         //(datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
                 resultado = s.descargarVid
@@ -167,5 +167,7 @@ public class Controladora extends Thread{
             return resultado;
             
     }
+    
+    
     
 }

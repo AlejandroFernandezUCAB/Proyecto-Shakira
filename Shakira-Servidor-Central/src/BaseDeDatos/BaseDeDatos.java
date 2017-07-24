@@ -43,12 +43,12 @@ public static String password = "redes2";
  */
 
     public String[] extraerIPyPuertos(String str){
-        String[] campos = new String[2];
+        String[] campos = new String[3];
         int i = 0;
         StringTokenizer tokens = new StringTokenizer(str,"_");
         while(tokens.hasMoreTokens()){
              campos[i] = tokens.nextToken();
-             //System.out.println(campos[i]);
+             System.out.println(campos[i]);
              i++;
         }
         return campos;
