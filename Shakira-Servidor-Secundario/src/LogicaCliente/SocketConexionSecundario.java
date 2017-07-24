@@ -72,7 +72,8 @@ public class SocketConexionSecundario {
               for (String rutaVideo : rutaVideos) {
                   File archivoAEnviar = new File(rutaVideo);
                   int tamañoArchivo = ( int ) archivoAEnviar.length();
-                  System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
+                  System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() + "Tamaño "
+                  + tamañoArchivo);
                   //Se envia el nombre del archivo
                   salida.println( archivoAEnviar.getName() );
                   //Se envia el tamaño del archivo

@@ -155,7 +155,27 @@ public class SocketConexionHilo extends Thread{
             //Aqui se procede a recibir los archivos
             
             //Se recibe el nombre del archivo
-            recibirArchivo(str, entrada, salida, videosQueMeLLegaran);
+            //for (int i = 0; i < cantidadVideos; i++) {
+            try{
+                str = entrada.readLine();
+                //Se recibe el tamaño
+                int tamaño = Integer.parseInt( entrada.readLine() );
+                System.out.println("Servidor Central > Recibiendo el archivo "+ str +
+                        " con un tamaño de " + tamaño);
+                FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
+                BufferedOutputStream out = new BufferedOutputStream(fos);
+                byte[] buffer = new byte[ tamaño ];
+                for (int j = 0; j < buffer.length; j++) {
+                    buffer[j] = (byte)entrada.read();
+                }
+                out.write( buffer );
+                fos.close();
+                out.close();
+                salida.println("Terminé");
+            }catch (IOException e){
+                System.out.println("No se pudo guardar el archivo");
+            }
+       // }
             //Fin de recepcion de archivos
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
