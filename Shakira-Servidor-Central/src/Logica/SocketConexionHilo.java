@@ -193,7 +193,7 @@ public class SocketConexionHilo extends Thread{
                 FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
                 BufferedOutputStream out = new BufferedOutputStream(fos);
                 byte[] buffer = new byte[ tamaño ];
-                for (int j = 0; j < buffer.length; i++) {
+                for (int j = 0; j < buffer.length; j++) {
                     buffer[j] = (byte)entrada.read();
                 }
                 out.write( buffer );
