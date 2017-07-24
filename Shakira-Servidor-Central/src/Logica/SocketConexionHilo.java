@@ -114,11 +114,15 @@ public class SocketConexionHilo extends Thread{
                     System.out.println("id del Video: " + idVideo);
                     System.out.println("Ip servidores secundarios:");
                     
+                    
                     for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
                         String ip = i.next();
+                        int puerto = puertosAsociados(ip)[0];
                         //System.out.println(i.next());
                         System.out.println(ip);
-                        System.out.println(puertosAsociados(ip)[0]);
+                        
+//(String ipCliente, int puertoCliente, String ipServidor, int puertoServidor, String nombreVid){
+                        enviarVideo(ipCliente,puertoCliente,ip,puerto,nombreVid);
                     }
                     
                     //envio al puerto de cmd, asi serian los strings
@@ -128,50 +132,7 @@ public class SocketConexionHilo extends Thread{
                         
                     //tengo que crear un socket cliente
                         
-                    //Sub-Socket de Prueba    
-                    ///*
-                    BufferedReader entradaSubSocket = null;
-                    PrintWriter salidaSubSocket = null;
-                    Socket subSocket = null;
-                    try{
-                       
-                       subSocket = new Socket(servidores.get(0), puertosAsociados(servidores.get(0))[0]);
-                       System.out.println("Se inicializa el Sub-socket:" + subSocket);
-                       entradaSubSocket = new BufferedReader(new InputStreamReader(subSocket.getInputStream()));
-                       // Obtenemos el canal de salida
-                       salidaSubSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(subSocket.getOutputStream())),true);
-                    }catch(IOException e){
-                        System.out.println(e.getMessage());
-                    }
-                    
-                    
-                    BufferedReader subStdIn = new BufferedReader(new InputStreamReader(System.in));
-                    String subLinea=null;
-                    
-                    try {
-                        while (true) {
-                          // Leo la entrada del usuario
-                          String subStr = "enviarVideo_"+ipCliente + "_" +puertoCliente + "_" + nombreVid;
-                          // La envia al servidor
-                          salidaSubSocket.println(str);
-                          System.out.println("Se envio al sub-socket: "+ str);
-                          // Envía a la salida estándar la respuesta del servidor
-                          subLinea = entradaSubSocket.readLine();
-                          System.out.println("Respuesta servidor: " + subLinea);    
-                          break;
-                        }
-                      } catch (Exception e) {
-                          System.out.println("Problemas de conexión con el servidor secundario, intente más tarde");
-                      } 
-                    
-                            // Libera recursos
-                            salidaSubSocket.close();
-                            entradaSubSocket.close();
-                            subStdIn.close();
-                            subSocket.close();
-                            
-                      //      */
-                        //fin sub socket de prueba    
+                        
                             
                     //con esto podre iterar por las ip y abrir y cerrar los sockets en cada iteracion
                     //for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
@@ -195,6 +156,62 @@ public class SocketConexionHilo extends Thread{
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+    
+    private String enviarVideo(String ipCliente, int puertoCliente, String ipServidor, int puertoServidor, String nombreVid){
+        //Sub-Socket de Prueba    
+                    ///*
+                    String resultado = null;
+                    BufferedReader entradaSubSocket = null;
+                    PrintWriter salidaSubSocket = null;
+                    Socket subSocket = null;
+                    try{
+                       
+                       subSocket = new Socket(ipServidor, puertoServidor);
+                       System.out.println("Se inicializa el Sub-socket:" + subSocket);
+                       entradaSubSocket = new BufferedReader(new InputStreamReader(subSocket.getInputStream()));
+                       // Obtenemos el canal de salida
+                       salidaSubSocket = new PrintWriter(new BufferedWriter(new OutputStreamWriter(subSocket.getOutputStream())),true);
+                    }catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
+                    
+                    
+                    BufferedReader subStdIn = new BufferedReader(new InputStreamReader(System.in));
+                    String subLinea=null;
+                    
+                    try {
+                        while (true) {
+                          // Leo la entrada del usuario
+                          String subStr = "enviarVideo_"+ipCliente + "_" +puertoCliente + "_" + nombreVid;
+                          // La envia al servidor
+                          salidaSubSocket.println(subStr);
+                          System.out.println("Se envio al sub-socket: "+ subStr);
+                          // Envía a la salida estándar la respuesta del servidor
+                          subLinea = entradaSubSocket.readLine();
+                          
+                          resultado = "Respuesta servidor: " + subLinea;    
+                          
+                          break;
+                        }
+                      } catch (Exception e) {
+                          resultado = "Problemas de conexión con el servidor secundario, intente más tarde";
+                      } 
+                    
+                    try{
+                            // Libera recursos
+                            salidaSubSocket.close();
+                            entradaSubSocket.close();
+                            subStdIn.close();
+                            subSocket.close();
+                        }
+                    catch (IOException e) {
+                            System.out.println("IOException: " + e.getMessage());
+                            resultado = "Error cerrando conexion del socket hacia el servidor secundario";
+                            }      
+                      //      */
+                        //fin sub socket de prueba
+                   return resultado;
     }
 
     /**
