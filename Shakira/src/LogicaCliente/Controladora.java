@@ -96,10 +96,16 @@ public class Controladora extends Thread{
             //numeros impares = puerto
             String[] infoServidores = this.extraerIPyPuertos(resultado);
             //esto no deberia dar error, porque para consultarServidoresSecundarios_ip_puerto servidores y clientes deben estar inscritos
-            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[1] + "\n");
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[0] + "\n");
+                System.out.println("Envio a " + infoServidores[0]);
             this.descargarVideo(infoServidores[0], Integer.parseInt(infoServidores[1]), nombreVid);
-            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[3] + "\n");
-            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[5] + "\n");
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[2] + "\n");
+                System.out.println("Envio a " + infoServidores[2]);
+            this.descargarVideo(infoServidores[2], Integer.parseInt(infoServidores[3]), nombreVid);
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[4] + "\n");
+                System.out.println("Envio a " + infoServidores[4]);
+            this.descargarVideo(infoServidores[4], Integer.parseInt(infoServidores[5]), nombreVid);
+            
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             }
