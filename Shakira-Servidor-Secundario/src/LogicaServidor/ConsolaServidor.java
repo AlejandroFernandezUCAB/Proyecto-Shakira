@@ -23,16 +23,16 @@ public class ConsolaServidor extends Thread{
             //data: 1026
             
             //Se crea el socket de comandos en el puerto 1026
-            ServerSocket s = new ServerSocket(1026);
+            ServerSocket s = new ServerSocket(1031);
             while(true){    
-                System.out.print("Servidor Central Escuchando en el puerto " + 1026);
+                System.out.print("Servidor Secundario Escuchando en el puerto " + 1031);
                 System.out.println(", i = " + i);
                 Socket ss =  s.accept();
                 new SocketConexionSecundario(ss,i).start();
                 i++;
             }
         }catch (Exception e){
-            System.out.println("Error inicializando el socket 'ServerSocket s = new ServerSocket(1026);'");
+            System.out.println("Error inicializando el socket 'ServerSocket s = new ServerSocket(1031);'");
             i=0;
             
         }

@@ -31,8 +31,9 @@ public class SocketConexionSecundario extends Thread{
             salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(ss.getOutputStream())),true);
             while (true) {  
                 String str = entrada.readLine();
-                  System.out.println("Recibi del servidor Central: " + entrada);
-                  salida.println("Recibido en el Servidor Secundario");
+                System.out.println("-------------Mensaje de Servidor Central------------");
+                  System.out.println("Recibi del servidor Central: " + str);
+                  salida.println("Recibido en el Servidor Secundario" + ss.getLocalAddress());
                   break;
             }
           }catch (IOException e) {
