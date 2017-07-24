@@ -139,7 +139,7 @@ public static String password = "redes2";
      * @return regresa 0si no se pudo registrar, 1 si fue exitoso
      */
     public int agregarServidorBDD(String ip) {
-        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata) VALUES(?, ?, ?)";
+        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata, estado) VALUES(?, ?, ?, 0)";
         PreparedStatement pst = null;
         Connection con=null;
         String[] campos = extraerIPyPuertos( ip );
@@ -303,7 +303,93 @@ public static String password = "redes2";
         
             return suiche;
     }
+    /**
+     * Verifica si ya hay 3 servidores con el estado en 2 (Si es 2 es que ya enviaron videos)
+     * @return true si a hay 3 servidores, false si hay menos
+     */
+    public boolean verificarServidores() {
+        boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor and estado=2");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                if(rs.getString("servidores").contains( "3" )){
+                    suiche = true;
+                }
+            }
+
+                stmt.close();
+                con.close();
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+    }
+    
+    /**
+     * Metodo que retorna la cantidad de videos alojados en el servidor
+     * @return cantidad de videos alojados en el servidor
+     */
+    public int cantidadVideosAlojados() {
+        int cantidad = 0; 
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) cantidad from video");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                cantidad = rs.getInt("cantidad");
+            }
+            
+
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return cantidad;
+    }
+
+    public String[] videosAlojados( int cantidad ) {
+        String[] videos = new String[ cantidad ];
+        int i = 0;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT nombre from video");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                videos[i] = rs.getString( "nombre" );
+                i++;
+                
+            }
+            
+
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return videos;
+        
+    }
 }
-
-
-

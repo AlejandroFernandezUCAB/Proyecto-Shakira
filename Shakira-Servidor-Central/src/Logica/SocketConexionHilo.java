@@ -18,7 +18,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import BaseDeDatos.BaseDeDatos;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 /**
@@ -149,8 +152,8 @@ public class SocketConexionHilo extends Thread{
                 }
                 
             }
+            //Aqui se procede a recibir los archivos
             
-            //While de espera de el archivo
             //Se recibe el nombre del archivo
             str = entrada.readLine();
             //Se recibe el tamaño
@@ -164,6 +167,45 @@ public class SocketConexionHilo extends Thread{
                 buffer[i] = (byte)entrada.read();
             }
             out.write( buffer );
+            fos.close();
+            out.close();
+            //Fin de recepcion de archivos
+            
+            //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
+            boolean suiche = true;
+            while(suiche == true){
+                
+                if(bd.verificarServidores() == true){
+                    suiche=false;
+                }
+                
+            }
+            //Fin de envio de los 3 servidores
+            
+            //Ahora como ya están los 3 servidores se procede a enviar cada archivo
+            int videosQueEnviare = bd.cantidadVideosAlojados();
+            String[] videos = bd.videosAlojados( videosQueEnviare );
+            for (String video : videos) {
+                File archivoAEnviar = new File("C:/prueba/" + video); //Estoy agregando esta ruta por defecto
+                int tamañoArchivo = ( int ) archivoAEnviar.length();
+                System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
+                //Se envia el nombre del archivo
+                salida.println( archivoAEnviar.getName() );
+                //Se envia el tamaño del archivo
+                salida.println( tamañoArchivo );
+                //Manejo de archivo y sockets
+                FileInputStream fis = new FileInputStream( archivoAEnviar );
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                BufferedOutputStream bos = new BufferedOutputStream( ss.getOutputStream() );
+                //Se crea un buffer con el tamaño del archivo
+                buffer = new byte[ tamañoArchivo ];
+                //Se lee y se introduce en el arrayde bytes
+                bis.read( buffer );
+                //Se realiza el envío
+                for (int j = 0; j < buffer.length; j++) {
+                    bos.write( buffer[j] );
+                }
+            }
         }catch(IOException e){
             
         }

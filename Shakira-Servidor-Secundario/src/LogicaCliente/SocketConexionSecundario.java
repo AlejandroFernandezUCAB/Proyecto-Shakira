@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -67,25 +68,54 @@ public class SocketConexionSecundario {
               }
               //Se envian los archivos por el socket al servidor central
               // Codigo para envio por socket de : http://www.geocities.ws/programmiersprache/envioarchivo.html
-              File archivoAEnviar = new File("C:\\Final_Fantasy_VII_Aeriss_Theme_Violin__Piano_Cover_Duet_Taylor_Davis__Lara_de_Wit(youtube.com).mp4");
-              int tamañoArchivo = ( int ) archivoAEnviar.length();
-              System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
-              //Se envia el nombre del archivo
-              salida.println( archivoAEnviar.getName() );
-              //Se envia el tamaño del archivo
-              salida.println( tamañoArchivo );
-              //Manejo de archivo y sockets
-              FileInputStream fis = new FileInputStream( archivoAEnviar );
-              BufferedInputStream bis = new BufferedInputStream(fis);
-              BufferedOutputStream bos = new BufferedOutputStream( s.getOutputStream() );
-              //Se crea un buffer con el tamaño del archivo
-              byte[] buffer = new byte[ tamañoArchivo ];
-              //Se lee y se introduce en el arrayde bytes
-              bis.read( buffer );
-              //Se realiza el envío
-              for (int i = 0; i < buffer.length; i++) {
-                 bos.write( buffer[i] );
-              }
+              String[] rutaVideos = bd.rutaDeVideos();
+              for ( int i = 0; i < rutaVideos.length ; i++ ) {
+                
+                File archivoAEnviar = new File( rutaVideos[i] );
+                int tamañoArchivo = ( int ) archivoAEnviar.length();
+                System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
+                //Se envia el nombre del archivo
+                salida.println( archivoAEnviar.getName() );
+                //Se envia el tamaño del archivo
+                salida.println( tamañoArchivo );
+                //Manejo de archivo y sockets
+                FileInputStream fis = new FileInputStream( archivoAEnviar );
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                BufferedOutputStream bos = new BufferedOutputStream( s.getOutputStream() );
+                //Se crea un buffer con el tamaño del archivo
+                byte[] buffer = new byte[ tamañoArchivo ];
+                //Se lee y se introduce en el arrayde bytes
+                bis.read( buffer );
+                //Se realiza el envío
+                for (int j = 0; j < buffer.length; j++) {
+                   bos.write( buffer[j] );
+                }
+            }//Fin de enviar los videos
+             
+            //Recepcion de los videos del central
+            //Recibo la cantidad de videos
+            str = entrada.readLine();
+            int videosQueLlegaran = Integer.parseInt(str);
+            //Por cada video que venga hago se hace un ciclo
+            for (int i = 0; i < videosQueLlegaran ; i++) {
+                //Recibo el nombre del video
+                str = entrada.readLine();
+                //Se recibe el tamaño
+                int tamaño = Integer.parseInt( entrada.readLine() );
+                System.out.println("Servidor Central > Recibiendo el archivo "+ str +
+                        " con un tamaño de " + tamaño);
+                FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
+                BufferedOutputStream out = new BufferedOutputStream(fos);
+                byte[] buffer = new byte[ tamaño ];
+                for (int j = 0; i < buffer.length; j++) {
+                    buffer[j] = (byte)entrada.read();
+                }
+                bd.agregarVideoServidorSecundario( entrada.readLine(), 1 ); //Meto uno mientras tanto pero tengo que recibir tambien que parte es
+                out.write( buffer );
+                fos.close();
+                out.close();  
+            }
+            
             break;
             
           }
@@ -101,7 +131,7 @@ public class SocketConexionSecundario {
             return ("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
             
         } catch (Exception e){
-           
+            
             return ("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
             
         }

@@ -19,6 +19,7 @@ CREATE TABLE SERVIDOR(
 	ipServidor varchar(15) not null,
 	puertoCmd int not null,
 	puertoData int not null,
+	estado int not null,
 	CONSTRAINT PK_ipServidor PRIMARY KEY ( ipServidor )
 
 );
