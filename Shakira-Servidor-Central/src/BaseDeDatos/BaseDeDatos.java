@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.StringTokenizer;
-/**INSERT INTO CLIENTE(ipcliente, puertocmd, puertodata) VALUES(?, ?, ?)
+/**
  *
  * @author Alejandro Fernandez
  */
 public class BaseDeDatos {
 
 public static String driver = "org.postgresql.Driver";
-//public static String connectString = "jdbc:postgresql://localhost:5432/Shakira-Servidor-Central";
-public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
+public static String connectString = "jdbc:postgresql://localhost:5432/Shakira-Servidor-Central";
+//public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
 public static String user = "redes2";
 public static String password = "redes2";
     
@@ -72,7 +72,7 @@ public static String password = "redes2";
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
-
+                    
                     System.out.println("No se inscribio al usuario: " + campos[0]);
                     return 0;
 
@@ -140,7 +140,7 @@ public static String password = "redes2";
      * @return regresa 0si no se pudo registrar, 1 si fue exitoso
      */
     public int agregarServidorBDD(String ip) {
-        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata) VALUES(?, ?, ?)";
+        String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata, estado) VALUES(?, ?, ?, 0)";
         PreparedStatement pst = null;
         Connection con=null;
         String[] campos = extraerIPyPuertos( ip );
@@ -159,7 +159,7 @@ public static String password = "redes2";
                     pst.executeUpdate();
 
                     } catch ( SQLException | ClassNotFoundException e ){
-
+                        System.out.println(e.getMessage());        
                         System.out.println("Servidor Central > No se inscribio al servidor: " + campos[0]);
                         return 0;
 
@@ -199,12 +199,57 @@ public static String password = "redes2";
     }
     
     /**
+     * Metodo que agrega a la base de datos el video
+     * @param video Nombre dle video a guardar
+     * @return si es true se guardó correctamente y false hubo error
+     */
+    public boolean agregarVideoSincronizacion(String video){        
+        String stm = "INSERT INTO VIDEO(id_video, nombre) VALUES( nextval('sec_id_video') ,?)";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);
+                pst.setString(1, video);
+                
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.err.println("Servidor Central > No se inscribio el video: " + video);
+                    return false;
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.err.println(ex);                
+                        return true;
+                    }
+
+            }
+           
+            return true;
+    }
+    /**
      * Metodo que verifica si ya hay un servidor secundario registrado.
      * @param ip ip del servidor
      * @return True si ya hay un servior con esa ip, false si no lo hay
      */
     public boolean verificarInscripcionDeServidor(String ip){
-         boolean suiche = false;
+        boolean suiche = false;
         try{
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);
@@ -259,8 +304,65 @@ public static String password = "redes2";
         
             return suiche;
     }
+    /**
+     * Verifica si ya hay 3 servidores con el estado en 2 (Si es 2 es que ya enviaron videos)
+     * @return true si a hay 3 servidores, false si hay menos
+     */
+    public boolean verificarServidores() {
+        boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor WHERE estado=2");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                if(rs.getString("servidores").contains( "3" )){
+                    suiche = true;
+                }
+            }
 
+                stmt.close();
+                con.close();
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+    }
+    
+    /**
+     * Metodo que retorna la cantidad de videos alojados en el servidor
+     * @return cantidad de videos alojados en el servidor
+     */
+    public int cantidadVideosAlojados() {
+        int cantidad = 0; 
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) cantidad from video");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                cantidad = rs.getInt("cantidad");
+            }
+            
 
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return cantidad;
+    }
     /**
      *Metodo que consulta la BD para obtener la IP de los servidores secundarios
      * @return Lista de Strings con las ip de los servidores
@@ -465,5 +567,34 @@ public static String password = "redes2";
             }
         
         return idVid;
+    }
+    public String[] videosAlojados( int cantidad ) {
+        String[] videos = new String[ cantidad ];
+        int i = 0;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT nombre from video");
+            
+            //Ciclo donde busco en el query la cantidad de servidores
+            while (rs.next()){
+                
+                videos[i] = rs.getString( "nombre" );
+                i++;
+                
+            }
+            
+
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return videos;
+        
     }
 }

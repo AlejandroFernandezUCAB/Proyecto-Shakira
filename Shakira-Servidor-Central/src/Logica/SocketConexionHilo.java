@@ -21,6 +21,13 @@ import BaseDeDatos.BaseDeDatos;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -76,6 +83,7 @@ public class SocketConexionHilo extends Thread{
                 if( suiche == 1){
                     
                    salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   sincronizacion(str, entrada, salida);
                    
                 }else if (suiche == 0){
                     
@@ -231,6 +239,154 @@ public class SocketConexionHilo extends Thread{
             BaseDeDatos bdd = new BaseDeDatos();
             return bdd.agregarServidorBDD(entrada);
             
+    }
+
+    /**
+     * Metodo encargado de realizar la sincronización
+     * @param str Aqui entrará todo lo nuevo
+     * @param entrada Canal de entrada
+     * @param salida Canal de salida
+     */
+    private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) throws FileNotFoundException, IOException {
+        try{
+            BaseDeDatos bd = new BaseDeDatos();
+            str = entrada.readLine();
+            int videosQueMeLLegaran = Integer.parseInt(str);
+            for (int i = 0; i < videosQueMeLLegaran; i++) {
+                //Recibo los videos
+                str = entrada.readLine();
+                System.out.println(str);
+                //Se procede a guardar y se verifica si es true se guardo
+                if( bd.agregarVideoSincronizacion(str) == true) {
+                    System.out.println("Servidor central > El Video: " + str
+                            + " se guardo correctamente");
+                }
+                
+            }
+            //Aqui se procede a recibir los archivos
+
+               // Creamos flujo de entrada para leer los datos que envia el cliente 
+               DataInputStream dis = new DataInputStream( ss.getInputStream() );
+        
+               // Obtenemos el nombre del archivo
+               String nombreArchivo = dis.readUTF(); 
+ 
+               // Obtenemos el tamaño del archivo
+               int tam = dis.readInt(); 
+ 
+               System.out.println( "Recibiendo archivo "+nombreArchivo );
+        
+               // Creamos flujo de salida, este flujo nos sirve para 
+               // indicar donde guardaremos el archivo
+               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
+               BufferedOutputStream out = new BufferedOutputStream( fos );
+               BufferedInputStream in = new BufferedInputStream( ss.getInputStream() );
+ 
+               // Creamos el array de bytes para leer los datos del archivo
+               byte[] buffer = new byte[ tam ];
+ 
+               // Obtenemos el archivo mediante la lectura de bytes enviados
+               for( int i = 0; i < buffer.length; i++ )
+               {
+                  buffer[ i ] = ( byte )in.read( ); 
+               }
+ 
+               // Escribimos el archivo 
+               out.write( buffer ); 
+ 
+               // Cerramos flujos
+               out.flush(); 
+               in.close();
+               out.close(); 
+
+    
+            //Fin de recepcion de archivos
+            //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
+            boolean suiche = true;
+            while(suiche == true){
+                
+                if(bd.verificarServidores() == true){
+                    suiche=false;
+                }
+                
+            }
+            //Fin de envio de los 3 servidores
+            //Ahora como ya están los 3 servidores se procede a enviar cada archivo
+            //Fin de envío de archivos
+            
+        }catch(IOException e){
+            e.getStackTrace();
+        }
+    
+    }    
+    /**
+     * Metodo en el cual recibe cada video
+     * @param str Aqui es donde llegará cada item
+     * @param entrada Canal de entrada
+     * @param salida Canal de Salida
+     * @param cantidadVideos Cantidad de videos que recibiré
+     */
+    private void recibirArchivo(String str, BufferedReader entrada, PrintWriter salida, int cantidadVideos){
+        for (int i = 0; i < cantidadVideos; i++) {
+            try{
+                str = entrada.readLine();
+                //Se recibe el tamaño
+                int tamaño = Integer.parseInt( entrada.readLine() );
+                System.out.println("Servidor Central > Recibiendo el archivo "+ str +
+                        " con un tamaño de " + tamaño);
+                FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
+                BufferedOutputStream out = new BufferedOutputStream(fos);
+                byte[] buffer = new byte[ tamaño ];
+                for (int j = 0; j < buffer.length; j++) {
+                    buffer[j] = (byte)entrada.read();
+                }
+                out.write( buffer );
+                fos.close();
+                out.close();
+                salida.println("Terminé");
+            }catch (IOException e){
+                System.out.println("No se pudo guardar el archivo");
+            }
+        }
+    }
+    /**
+     * Enviar cada video alojado en el servidor
+     * @param str String de entrada
+     * @param entrada canal de entrada
+     * @param salida canal de salida
+     */
+    private void enviarArchivos(String str, BufferedReader entrada, PrintWriter salida){
+        
+        try{
+            BaseDeDatos bd = new BaseDeDatos();
+            int videosQueEnviare = bd.cantidadVideosAlojados();
+            String[] videos = bd.videosAlojados( videosQueEnviare );
+            for (String video : videos) {
+                File archivoAEnviar = new File("C:\\prueba\\" + video); //Estoy agregando esta ruta por defecto
+                int tamañoArchivo = ( int ) archivoAEnviar.length();
+                System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
+                //Se envia el nombre del archivo
+                salida.println( archivoAEnviar.getName() );
+                //Se envia el tamaño del archivo
+                salida.println( tamañoArchivo );
+                //Manejo de archivo y sockets
+                FileInputStream fis = new FileInputStream( archivoAEnviar );
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                BufferedOutputStream bos = new BufferedOutputStream( ss.getOutputStream() );
+                //Se crea un buffer con el tamaño del archivo
+                byte[] buffer = new byte[ tamañoArchivo ];
+                //Se lee y se introduce en el arrayde bytes
+                bis.read( buffer );
+                //Se realiza el envío
+                for (int j = 0; j < buffer.length; j++) {
+                    bos.write( buffer[j] );
+                }
+            }
+        }catch(IOException e){
+            
+            System.out.println( e.getMessage() );
+            
+        }
     }
     
     
