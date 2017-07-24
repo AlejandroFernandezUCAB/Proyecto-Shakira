@@ -155,22 +155,8 @@ public class SocketConexionHilo extends Thread{
             //Aqui se procede a recibir los archivos
             
             //Se recibe el nombre del archivo
-            str = entrada.readLine();
-            //Se recibe el tamaño
-            int tamaño = Integer.parseInt( entrada.readLine() );
-            System.out.println("Servidor Central > Recibiendo el archivo "+ str +
-                    " con un tamaño de " + tamaño);
-            FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
-            BufferedOutputStream out = new BufferedOutputStream(fos);
-            byte[] buffer = new byte[ tamaño ];
-            for (int i = 0; i < buffer.length; i++) {
-                buffer[i] = (byte)entrada.read();
-            }
-            out.write( buffer );
-            fos.close();
-            out.close();
+            recibirArchivo(str, entrada, salida, videosQueMeLLegaran);
             //Fin de recepcion de archivos
-            
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
             while(suiche == true){
@@ -181,12 +167,57 @@ public class SocketConexionHilo extends Thread{
                 
             }
             //Fin de envio de los 3 servidores
-            
             //Ahora como ya están los 3 servidores se procede a enviar cada archivo
+            enviarArchivos(str, entrada, salida);
+            
+        }catch(IOException e){
+            
+        }
+    }
+    
+    /**
+     * Metodo en el cual recibe cada video
+     * @param str Aqui es donde llegará cada item
+     * @param entrada Canal de entrada
+     * @param salida Canal de Salida
+     * @param cantidadVideos Cantidad de videos que recibiré
+     */
+    private void recibirArchivo(String str, BufferedReader entrada, PrintWriter salida, int cantidadVideos){
+        for (int i = 0; i < cantidadVideos; i++) {
+            try{
+                str = entrada.readLine();
+                //Se recibe el tamaño
+                int tamaño = Integer.parseInt( entrada.readLine() );
+                System.out.println("Servidor Central > Recibiendo el archivo "+ str +
+                        " con un tamaño de " + tamaño);
+                FileOutputStream fos = new FileOutputStream("C:\\prueba\\" + str);
+                BufferedOutputStream out = new BufferedOutputStream(fos);
+                byte[] buffer = new byte[ tamaño ];
+                for (int j = 0; j < buffer.length; i++) {
+                    buffer[j] = (byte)entrada.read();
+                }
+                out.write( buffer );
+                fos.close();
+                out.close();
+            }catch (IOException e){
+                System.out.println("No se pudo guardar el archivo");
+            }
+        }
+    }
+    /**
+     * Enviar cada video alojado en el servidor
+     * @param str String de entrada
+     * @param entrada canal de entrada
+     * @param salida canal de salida
+     */
+    private void enviarArchivos(String str, BufferedReader entrada, PrintWriter salida){
+        
+        try{
+            BaseDeDatos bd = new BaseDeDatos();
             int videosQueEnviare = bd.cantidadVideosAlojados();
             String[] videos = bd.videosAlojados( videosQueEnviare );
             for (String video : videos) {
-                File archivoAEnviar = new File("C:/prueba/" + video); //Estoy agregando esta ruta por defecto
+                File archivoAEnviar = new File("C:\\prueba\\" + video); //Estoy agregando esta ruta por defecto
                 int tamañoArchivo = ( int ) archivoAEnviar.length();
                 System.out.println("Servidor Central > Enviando Archivo: " + archivoAEnviar.getName() );
                 //Se envia el nombre del archivo
@@ -198,7 +229,7 @@ public class SocketConexionHilo extends Thread{
                 BufferedInputStream bis = new BufferedInputStream(fis);
                 BufferedOutputStream bos = new BufferedOutputStream( ss.getOutputStream() );
                 //Se crea un buffer con el tamaño del archivo
-                buffer = new byte[ tamañoArchivo ];
+                byte[] buffer = new byte[ tamañoArchivo ];
                 //Se lee y se introduce en el arrayde bytes
                 bis.read( buffer );
                 //Se realiza el envío
@@ -207,6 +238,8 @@ public class SocketConexionHilo extends Thread{
                 }
             }
         }catch(IOException e){
+            
+            System.out.println( e.getMessage() );
             
         }
     }
