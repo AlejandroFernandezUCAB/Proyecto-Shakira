@@ -197,7 +197,7 @@ public class SocketConexionHilo extends Thread{
             //Fin de envío de archivos
             
         }catch(IOException e){
-            
+            e.getStackTrace();
         }
     }
     
