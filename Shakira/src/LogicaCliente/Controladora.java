@@ -25,11 +25,10 @@ public class Controladora extends Thread{
     private JTextArea output;
     private String nombreUsuario, inputString;
         
-    //puertos del cliente {cmd,Data}
-    String[] puertos = {"1030","1029"};
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
-    //String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
-    String[] datosServidorCentral = {"192.168.0.2","1026","1025"};
+    String[] datosServidorCentral = {"192.168.0.2","1026"};
+    String puertoCliente = "500";
+    
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
         this.input = input;
@@ -135,7 +134,7 @@ public class Controladora extends Thread{
                 //InetAddress adress = InetAddress.getLocalHost();
                 SocketConexion s = new SocketConexion();
                 resultado = s.inscribirUsuario
-        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), puertoCliente );
                 //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());

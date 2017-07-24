@@ -59,7 +59,7 @@ public class SocketConexion {
      * @return SI está o no registrado correctamente
      * @throws IOException 
      */
-    public String inscribirUsuario(String ipServidorCentral, int puertoServidor, String[] puertos) throws IOException{
+    public String inscribirUsuario(String ipServidorCentral, int puertoServidor, String puertoCliente) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
@@ -82,7 +82,7 @@ public class SocketConexion {
         try {
           while (true) {
             // Leo la entrada del usuario
-            String str = "inscribirU_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
+            String str = "inscribirU_"+s.getLocalAddress() + "_" + puertoCliente;
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
