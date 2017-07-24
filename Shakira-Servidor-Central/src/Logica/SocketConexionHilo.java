@@ -92,21 +92,22 @@ public class SocketConexionHilo extends Thread{
             else if ( str.trim().contains("descarga")) {
                 System.out.println("---------------DESCARGA--------------");
                 String ipCliente = ss.getInetAddress().toString().substring(1);
-                int puertoCliente = this.puertosAsociados(ipCliente)[1];
+                //int puertoCliente = this.puertoAsociadoIP(ipCliente);
                 System.out.println("entrada: " + str);
-                System.out.println("Direccion IP del cliente: " + ipCliente + " : " + puertoCliente);
+                //System.out.println("Direccion IP del cliente: " + ipCliente + " : " + puertoCliente);
+                System.out.println("Direccion IP del cliente: " + ipCliente );
                 //verifico si el usuario esta inscrito
                     //verifico que el nombre del video existe
                 String nombreVid = this.extraerNombreVideo(str);
                 
-                
+                int idVideo = obtenerIDVideo(nombreVid);
                 //
                 if (this.verificarInscripcionUsuario(ipCliente)  == true    && 
-                    this.verificarExistenciaVideo(nombreVid) == true) 
+                    idVideo != 0) 
                 {
                     System.out.println("usuario Inscrito");
-                    salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
-                    int idVideo = this.obtenerIDVideo(nombreVid);
+                    //salida.println( "Servidor Central > Usuario registrado!....Peticion de descarga aprobada");
+                   
                     //ya habiendo verificado que el cliente existe y tengo el video
                     //le digo a los servidores secundarios que se lo envien...
                     List<String> servidores = this.obtenerListaDeServidores();
@@ -114,32 +115,23 @@ public class SocketConexionHilo extends Thread{
                     System.out.println("id del Video: " + idVideo);
                     System.out.println("Ip servidores secundarios:");
                     
-                    
+                    String infoServidores = "";
                     for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
                         String ip = i.next();
                         int puerto = puertosAsociados(ip)[0];
                         //System.out.println(i.next());
                         System.out.println(ip);
+                        infoServidores += ip + "_" + puerto;
                         
-//(String ipCliente, int puertoCliente, String ipServidor, int puertoServidor, String nombreVid){
-                       // enviarVideo(ipCliente,puertoCliente,ip,puerto,nombreVid);
-                       
+                        if (i.hasNext()) {
+                            infoServidores += "_";
+                        }
                     }
+                     salida.println(infoServidores);
                     
-                    //envio al puerto de cmd, asi serian los strings
-                    //String comandoServidor1 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(0))[0] + "_" + idVideo;
-                    //String comandoServidor2 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(1))[0] + "_" + idVideo;
-                    //String comandoServidor3 = "enviarVideo_" + ipCliente + "_" + puertosAsociados(servidores.get(2))[0] + "_" + idVideo;
-                        
-                    //tengo que crear un socket cliente
-                        
-                        
-                            
-                    //con esto podre iterar por las ip y abrir y cerrar los sockets en cada iteracion
-                    //for (Iterator<String> i = servidores.iterator(); i.hasNext();) {
-                       //enviar 
-                    //}
-                    
+                }
+                else{
+                    salida.println("Video no existe o usuario no registrado...");
                 }
                 System.out.println("-------------FIN PROCESO DESCARGA-----------");
               }
@@ -158,10 +150,10 @@ public class SocketConexionHilo extends Thread{
             System.out.println(e.getMessage());
         }
     }
-    
+    /*
     private String enviarVideo(String ipCliente, int puertoCliente, String ipServidor, int puertoServidor, String nombreVid){
         //Sub-Socket de Prueba    
-                    ///*
+                   
                     String resultado = null;
                     BufferedReader entradaSubSocket = null;
                     PrintWriter salidaSubSocket = null;
@@ -210,11 +202,11 @@ public class SocketConexionHilo extends Thread{
                             System.out.println("IOException: " + e.getMessage());
                             resultado = "Error cerrando conexion del socket hacia el servidor secundario";
                             }      
-                      //      */
+                     
                         //fin sub socket de prueba
                    return resultado;
     }
-
+*/
     /**
      * Metodo encargado de inscribir el usuario en la base de datos, el metodo quita la paabra inscribir
      * @param entrada 
@@ -247,13 +239,6 @@ public class SocketConexionHilo extends Thread{
         return bdd.verificarInscripcionUsuario(entrada);
     }
     
-    private boolean verificarExistenciaVideo(String nombreVid){
-        System.out.println("Verificando la existencia del video: " + nombreVid);
-        BaseDeDatos bdd = new BaseDeDatos();
-        //esto devuelve true si el resultado es 1
-            //de lo contrario si hubo un error o el video no existe devuelve false
-        return (  bdd.videoExiste(nombreVid) == 1 );
-    }
     
     private String extraerNombreVideo(String mensaje){
         return mensaje.substring(9);
@@ -269,7 +254,12 @@ public class SocketConexionHilo extends Thread{
         BaseDeDatos bdd = new BaseDeDatos();
         return bdd.listaDePuertos(IpServidor);
     }
-
+    /*
+    private int puertoAsociadoIP(String ipCliente){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.puertoDeIP(ipCliente);
+    }
+    */
     private int obtenerIDVideo(String nombreVid) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         BaseDeDatos bdd = new BaseDeDatos();

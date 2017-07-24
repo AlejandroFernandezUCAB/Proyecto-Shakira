@@ -260,60 +260,6 @@ public static String password = "redes2";
             return suiche;
     }
 
-    /**
-     *Metodo para verificar si un video existe en la base de datos central
-     * @param nombreVid nombre del video que l cliente quiere descargar
-     * @return 1 si hay 1 incidencia, 0 si no existe y 2 si hay un error
-     */
-    public int videoExiste(String nombreVid) {
-        //declaro las variables
-        int status = 0;        
-        PreparedStatement pst = null;
-        Connection con=null;
-        //armo el string con el query        
-        String stm = "SELECT count(*) videoExiste FROM video where nombre = ?";
-        try{
-            Class.forName(driver);
-            con = DriverManager.getConnection(connectString, user , password);
-            //preparo el comando de sql
-            pst = con.prepareStatement(stm);
-            pst.setString(1, nombreVid);
-                //Statement stmt = con.createStatement();
-            ResultSet rs;
-                    rs = pst.executeQuery();
-            
-            //Ciclo donde busco en el query si el video existe
-            while (rs.next()){
-                
-                if(rs.getString("videoExiste").contains( "1" )){
-                    status = 1;
-                }
-            }
-
-                //stmt.close();
-                con.close();
-            }catch ( SQLException | ClassNotFoundException e ){
-                
-                 System.out.println(e.getMessage());
-            } finally {
-                // Con el finally se cierran todas las conexiones los con, pst;
-                    try {
-
-                        if (pst != null) {
-                            pst.close();
-                        }
-                        if (con != null) {
-                            con.close();
-                        }
-
-                    }catch (SQLException ex) {
-
-                        System.out.println(ex); 
-                        status = 2;
-                    }
-            }
-            return status;
-    }
 
     /**
      *Metodo que consulta la BD para obtener la IP de los servidores secundarios
@@ -369,6 +315,54 @@ public static String password = "redes2";
             }
         return ListaDeIP;
     }
+    
+    /*
+    public int puertoDeIP(String ipCliente){
+        //declaro las variables
+        int puerto = 0;             
+        PreparedStatement pst = null;
+        Connection con=null;
+        //armo el string con el query  
+        String stm = "SELECT puerto from cliente where ipcliente = ?";
+        try{
+        Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            //preparo el comando de sql
+            pst = con.prepareStatement(stm);
+            pst.setString(1, ipCliente);
+            //Statement stmt = con.createStatement();
+            ResultSet rs;
+            //ejecuto el query
+            rs = pst.executeQuery();
+            //guardo los resultados
+            if(rs.next()){
+                puerto = rs.getInt("puerto");
+            }
+        }
+        catch ( SQLException | ClassNotFoundException e ){
+                
+                 System.out.println(e.getMessage());
+            } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    }catch (SQLException ex) {
+
+                        System.out.println(ex); 
+                    }
+            }
+        
+    return puerto;
+    }
+    */
+    
     
     /**
      *Metodo que consulta la BD para obtener los puertos correspondientes a una IP

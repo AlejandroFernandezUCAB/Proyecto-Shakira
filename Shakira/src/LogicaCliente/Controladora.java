@@ -27,7 +27,7 @@ public class Controladora extends Thread{
         
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
     String[] datosServidorCentral = {"192.168.0.2","1026"};
-    String puertoCliente = "500";
+    String puertoCliente = "1024";
     
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
