@@ -199,6 +199,7 @@ public class SocketConexionHilo extends Thread{
                 out.write( buffer );
                 fos.close();
                 out.close();
+                salida.println("Terminé");
             }catch (IOException e){
                 System.out.println("No se pudo guardar el archivo");
             }
