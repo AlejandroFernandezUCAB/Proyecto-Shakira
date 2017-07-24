@@ -87,9 +87,15 @@ public class SocketConexionSecundario {
                   //Se lee y se introduce en el arrayde bytes
                   bis.read( buffer );
                   //Se realiza el envío
-                  for (int j = 0; j < buffer.length; j++) {
+                  int count;
+                  while ((count = fis.read(buffer)) > 0) {
+                      bos.write(buffer, 0, count);
+                      Thread.sleep(50);
+                  }
+                  /*for (int j = 0; j < buffer.length; j++) {
                       bos.write( buffer[j] );
                   }
+                  */
                   System.out.println(entrada.readLine()); 
               } //Fin de enviar los videos
              
