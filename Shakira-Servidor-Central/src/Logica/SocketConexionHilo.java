@@ -156,9 +156,9 @@ public class SocketConexionHilo extends Thread{
             //Aqui se procede a recibir los archivos
             DataInputStream dis = new DataInputStream( ss.getInputStream() );
             //Se recibe el nombre del archivo
-            String nombreArchivo = dis.readUTF();
+            String nombreArchivo = entrada.readLine();
             //Tamaño del archivo
-            int tam = dis.readInt(); 
+            int tam = Integer.parseInt(entrada.readLine());
             System.out.println( "Recibiendo archivo "+nombreArchivo );
             // Creamos flujo de salida, este flujo nos sirve para 
             // indicar donde guardaremos el archivo

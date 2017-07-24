@@ -83,10 +83,10 @@ public class SocketConexionSecundario {
             System.out.println( "Enviando Archivo: "+archivo.getName() );
          
             // Enviamos el nombre del archivo 
-            dos.writeUTF( archivo.getName() );
+            salida.println( archivo.getName() ); 
          
             // Enviamos el tamaño del archivo
-            dos.writeInt( tamañoArchivo );
+            salida.println( tamañoArchivo );
          
             // Creamos flujo de entrada para realizar la lectura del archivo en bytes
             FileInputStream fis = new FileInputStream( nombreArchivo );
