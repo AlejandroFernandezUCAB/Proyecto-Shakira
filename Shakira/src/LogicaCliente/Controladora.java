@@ -92,12 +92,12 @@ public class Controladora extends Thread{
             //servidores secunadrios
             String resultado = consultarServidoresSecundarios_ip_puerto(nombreVid);
             
-            //numeros impares = ip servidores
-            //numeros pares = puerto
+            //numeros pares = ip servidores
+            //numeros impares = puerto
             String[] infoServidores = this.extraerIPyPuertos(resultado);
             //esto no deberia dar error, porque para consultarServidoresSecundarios_ip_puerto servidores y clientes deben estar inscritos
             output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[1] + "\n");
-            
+            this.descargarVideo(infoServidores[0], Integer.parseInt(infoServidores[1]), nombreVid);
             output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[3] + "\n");
             output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[5] + "\n");
             output.setLineWrap(true);
