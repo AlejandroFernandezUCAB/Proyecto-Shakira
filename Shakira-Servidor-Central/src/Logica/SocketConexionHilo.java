@@ -83,7 +83,7 @@ public class SocketConexionHilo extends Thread{
                 if( suiche == 1){
                     
                    salida.println( "Servidor Central > Servidor inscrito correctamente");                   
-                   sincronizacion(str, entrada, salida);
+                  // sincronizacion(str, entrada, salida);
                    
                 }else if (suiche == 0){
                     
@@ -247,6 +247,7 @@ public class SocketConexionHilo extends Thread{
      * @param entrada Canal de entrada
      * @param salida Canal de salida
      */
+    /*
     private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) throws FileNotFoundException, IOException {
         try{
             BaseDeDatos bd = new BaseDeDatos();
@@ -319,6 +320,8 @@ public class SocketConexionHilo extends Thread{
         }
     
     }    
+    */
+    
     /**
      * Metodo en el cual recibe cada video
      * @param str Aqui es donde llegará cada item
