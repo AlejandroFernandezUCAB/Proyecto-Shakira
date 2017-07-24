@@ -31,15 +31,13 @@ public class SocketConexionSecundario extends Thread{
             salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(ss.getOutputStream())),true);
             while (true) {  
                 String str = entrada.readLine();
-                System.out.println("-------------Mensaje de Servidor Central------------");
-                  System.out.println("Recibi del servidor Central: " + str);
-                  salida.println("Recibido en el Servidor Secundario" + ss.getLocalAddress());
+                System.out.println(str);
                   break;
             }
           }catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } 
-          
+
         try{
             salida.close();
             entrada.close();
@@ -48,7 +46,7 @@ public class SocketConexionSecundario extends Thread{
             System.out.println(e.getMessage());
         }
     }
-    
-    
+
+
     
 }

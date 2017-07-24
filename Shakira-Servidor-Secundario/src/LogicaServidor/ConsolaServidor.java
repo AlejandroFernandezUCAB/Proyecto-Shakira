@@ -8,8 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- *
- * @author Alejandro Fernandez
+ *Socket para enviar los videos al cliente
+ * @author pedro & gian
  */
 public class ConsolaServidor extends Thread{
     
