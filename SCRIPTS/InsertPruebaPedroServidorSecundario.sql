@@ -1,0 +1,5 @@
+﻿insert into video values(nextval('sec_id_video'),'Final_Fantasy_VII_Aeriss_Theme_Violin__Piano_Cover_Duet_Taylor_Davis__Lara_de_Wit(youtube.com).mp4','C:/Videos/Final_Fantasy_VII_Aeriss_Theme_Violin__Piano_Cover_Duet_Taylor_Davis__Lara_de_Wit(youtube.com).mp4',1);
+insert into video values(nextval('sec_id_video'),'Star_Wars_Medley_Violin_Cover_-_Taylor_Davis(youtube.com).mp4','C:/Videos/Star_Wars_Medley_Violin_Cover_-_Taylor_Davis(youtube.com).mp4',1);
+insert into video values(nextval('sec_id_video'),'Sword_Art_Online_Theme_Swordland_Violin_Cover_Taylor_Davis(youtube.com).mp4','C:/Videos/Sword_Art_Online_Theme_Swordland_Violin_Cover_Taylor_Davis(youtube.com).mp4',1);
+insert into video values(nextval('sec_id_video'),'Thriller_Michael_Jackson_-_Violin_Cover_-_Taylor_Davis(youtube.com).mp4','C:/Videos/Thriller_Michael_Jackson_-_Violin_Cover_-_Taylor_Davis(youtube.com).mp4',1);
+delete from servidor
