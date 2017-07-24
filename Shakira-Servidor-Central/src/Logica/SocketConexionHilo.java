@@ -23,6 +23,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
@@ -137,7 +138,7 @@ public class SocketConexionHilo extends Thread{
      * @param entrada Canal de entrada
      * @param salida Canal de salida
      */
-    private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) {
+    private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) throws FileNotFoundException, IOException {
         try{
             BaseDeDatos bd = new BaseDeDatos();
             str = entrada.readLine();
@@ -154,18 +155,25 @@ public class SocketConexionHilo extends Thread{
                 
             }
             //Aqui se procede a recibir los archivos
-            DataInputStream dis = new DataInputStream( ss.getInputStream() );
-            //Se recibe el nombre del archivo
-            String nombreArchivo = entrada.readLine();
-            //Tamaño del archivo
-            int tam = Integer.parseInt(entrada.readLine());
-            System.out.println( "Recibiendo archivo "+nombreArchivo );
-            // Creamos flujo de salida, este flujo nos sirve para 
-            // indicar donde guardaremos el archivo
-            FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
-            BufferedOutputStream out = new BufferedOutputStream( fos );
-            BufferedInputStream in = new BufferedInputStream( ss.getInputStream() );
-                           // Creamos el array de bytes para leer los datos del archivo
+
+               // Creamos flujo de entrada para leer los datos que envia el cliente 
+               DataInputStream dis = new DataInputStream( ss.getInputStream() );
+        
+               // Obtenemos el nombre del archivo
+               String nombreArchivo = dis.readUTF(); 
+ 
+               // Obtenemos el tamaño del archivo
+               int tam = dis.readInt(); 
+ 
+               System.out.println( "Recibiendo archivo "+nombreArchivo );
+        
+               // Creamos flujo de salida, este flujo nos sirve para 
+               // indicar donde guardaremos el archivo
+               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
+               BufferedOutputStream out = new BufferedOutputStream( fos );
+               BufferedInputStream in = new BufferedInputStream( ss.getInputStream() );
+ 
+               // Creamos el array de bytes para leer los datos del archivo
                byte[] buffer = new byte[ tam ];
  
                // Obtenemos el archivo mediante la lectura de bytes enviados
@@ -181,7 +189,8 @@ public class SocketConexionHilo extends Thread{
                out.flush(); 
                in.close();
                out.close(); 
-               System.out.println("Se termino la descarga");
+
+    
             //Fin de recepcion de archivos
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
@@ -199,8 +208,8 @@ public class SocketConexionHilo extends Thread{
         }catch(IOException e){
             e.getStackTrace();
         }
-    }
     
+    }    
     /**
      * Metodo en el cual recibe cada video
      * @param str Aqui es donde llegará cada item

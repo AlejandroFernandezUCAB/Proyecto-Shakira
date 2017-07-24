@@ -28,7 +28,7 @@ public class Cliente {
           {
          
             // Creamos la direccion IP de la maquina que recibira el archivo
-            InetAddress direccion = InetAddress.getByName( "192.168.0.2" );
+            InetAddress direccion = InetAddress.getByName( "192.168.0.1" );
          
             // Creamos el Socket con la direccion y elpuerto de comunicacion
             Socket socket = new Socket( direccion, 500);

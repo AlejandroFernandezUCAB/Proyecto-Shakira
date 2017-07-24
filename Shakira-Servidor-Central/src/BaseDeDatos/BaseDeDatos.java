@@ -313,7 +313,7 @@ public static String password = "redes2";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor and estado=2");
+            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor WHERE estado=2");
             
             //Ciclo donde busco en el query la cantidad de servidores
             while (rs.next()){

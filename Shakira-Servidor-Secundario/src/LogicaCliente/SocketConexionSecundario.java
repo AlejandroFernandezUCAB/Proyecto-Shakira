@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,13 +65,14 @@ public class SocketConexionSecundario {
             //El digo la cantidad de vídeos que voy a enviar
             salida.println( nombreVideos.length );
               //Realizo el for para enviar el nombre de cada video automatico
-              for (String nombreVideo : nombreVideos) {
+            for (String nombreVideo : nombreVideos) {
                   salida.println(nombreVideo);                  
-              }
+            }
             //Se envian los archivos por el socket al servidor central
             // Codigo para envio por socket de : http://www.geocities.ws/programmiersprache/envioarchivo.html
-             String nombreArchivo = "C:\\Videos\\Sword_Art_Online_Theme_Swordland_Violin_Cover_Taylor_Davis(youtube.com).mp4";
-             File archivo = new File( nombreArchivo );
+            // Creamos el archivo que vamos a enviar
+            String nombreArchivo = "C:\\Videos\\Sword_Art_Online_Theme_Swordland_Violin_Cover_Taylor_Davis(youtube.com).mp4";
+            File archivo = new File( nombreArchivo );
          
             // Obtenemos el tamaño del archivo
             int tamañoArchivo = ( int )archivo.length();
@@ -83,17 +85,17 @@ public class SocketConexionSecundario {
             System.out.println( "Enviando Archivo: "+archivo.getName() );
          
             // Enviamos el nombre del archivo 
-            salida.println( archivo.getName() ); 
+            dos.writeUTF( archivo.getName() );
          
             // Enviamos el tamaño del archivo
-            salida.println( tamañoArchivo );
+            dos.writeInt( tamañoArchivo );
          
             // Creamos flujo de entrada para realizar la lectura del archivo en bytes
             FileInputStream fis = new FileInputStream( nombreArchivo );
             BufferedInputStream bis = new BufferedInputStream( fis );
          
             // Creamos el flujo de salida para enviar los datos del archivo en bytes
-            BufferedOutputStream bos = new BufferedOutputStream( s.getOutputStream());
+            BufferedOutputStream bos = new BufferedOutputStream( s.getOutputStream()          );
          
             // Creamos un array de tipo byte con el tamaño del archivo 
             byte[] buffer = new byte[ tamañoArchivo ];
@@ -111,6 +113,8 @@ public class SocketConexionSecundario {
             // Cerramos socket y flujos
             bis.close();
             bos.close();
+    
+            //Fin de recepcion de videos
             //Recepcion de los videos del central
             //Recibo la cantidad de videos
             break;
