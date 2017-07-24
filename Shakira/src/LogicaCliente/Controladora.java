@@ -8,6 +8,7 @@ package LogicaCliente;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -86,7 +87,19 @@ public class Controladora extends Thread{
             String nombreVid = inputString.substring(6);
             System.out.println("nombreVid = " + nombreVid);
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
-            output.setText( output.getText() + descargar(nombreVid) + "\n");
+            
+            //envio el comando al servidor central y recivo ip y puertos de los
+            //servidores secunadrios
+            String resultado = consultarServidoresSecundarios_ip_puerto(nombreVid);
+            
+            //numeros impares = ip servidores
+            //numeros pares = puerto
+            String[] infoServidores = this.extraerIPyPuertos(resultado);
+            //esto no deberia dar error, porque para consultarServidoresSecundarios_ip_puerto servidores y clientes deben estar inscritos
+            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[1] + "\n");
+            
+            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[3] + "\n");
+            output.setText( output.getText() + "Enviando solicitud de descarga a" + infoServidores[5] + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             }
@@ -116,10 +129,25 @@ public class Controladora extends Thread{
             for (int i = 0; i < size; i++) {
             
                 comando = comando + inputString.charAt(i); 
-                System.out.println(comando);
+                //System.out.println(comando);
             }
         }
         return comando;
+    }
+    
+        public String[] extraerIPyPuertos(String str){
+        String[] campos = new String[6];
+        int i = 0;
+        StringTokenizer tokens = new StringTokenizer(str,"_");
+        while(tokens.hasMoreTokens()){
+             campos[i] = tokens.nextToken();
+             System.out.println(campos[i]);
+             i++;
+             campos[i] = tokens.nextToken();
+             System.out.println(campos[i]);
+             i++;
+        }
+        return campos;
     }
     
     /**
@@ -146,18 +174,18 @@ public class Controladora extends Thread{
     
     /**
      *Envio el nombre del video al servidor principal, este verifica
-     * si estoy inscrito, de ser asi, aprueba la peticion y continua con
-     * la siguiente fase de la descarga.
-     * @param nombreVid nombre del video a descargar
+     * si estoy inscrito y si el video existe, de ser asi, aprueba la
+     * peticion y continua con la siguiente fase de la descarga.
+     * @param nombreVid nombre del video a consultarServidoresSecundarios_ip_puerto
      * @return mensaje del servidor
      */
-    public String descargar(String nombreVid){
+    public String consultarServidoresSecundarios_ip_puerto(String nombreVid){
             String resultado = null;
             try{
-                SocketConexionSecundario s = new SocketConexionSecundario();
+                SocketConexionPrincipal s = new SocketConexionPrincipal();
                 //resultado = s.inscribirUsuario
         //(datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
-                resultado = s.descargarVid
+                resultado = s.enviarComandoDescarga
         (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]),nombreVid);
                 
             }catch(IOException e){
@@ -168,6 +196,16 @@ public class Controladora extends Thread{
             
     }
     
-    
+    public String descargarVideo(String ipServidorSec,int puertoServidorSec ,String nombreVid){
+        String resultado = null;
+        try{
+            SocketConexionSecundario s = new SocketConexionSecundario();
+            resultado = s.descargarVideo(ipServidorSec,puertoServidorSec, nombreVid);
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+        return resultado;
+    }
     
 }
