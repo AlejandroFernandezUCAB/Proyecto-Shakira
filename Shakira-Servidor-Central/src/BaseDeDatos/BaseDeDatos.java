@@ -43,7 +43,7 @@ public static String password = "redes2";
  */
 
     public String[] extraerIPyPuertos(String str){
-        String[] campos = new String[3];
+        String[] campos = new String[2];
         int i = 0;
         StringTokenizer tokens = new StringTokenizer(str,"_");
         while(tokens.hasMoreTokens()){
@@ -54,11 +54,11 @@ public static String password = "redes2";
         return campos;
     }
     
-    public int agregarUsuarioBDD(String ipYpuertos){
+    public int agregarUsuarioBDD(String ipYpuerto){
         
-        String[] campos = extraerIPyPuertos(ipYpuertos);
+        String[] campos = extraerIPyPuertos(ipYpuerto);
         
-        String stm = "INSERT INTO CLIENTE(ipcliente, puertocmd, puertodata) VALUES(?, ?, ?)";
+        String stm = "INSERT INTO CLIENTE(ipcliente, puerto) VALUES(?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario,
@@ -68,8 +68,7 @@ public static String password = "redes2";
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
                 pst.setString(1, campos[0]);
-                pst.setInt(2, Integer.parseInt( campos[1]) );    
-                pst.setInt(3, Integer.parseInt( campos[2]) );                 
+                pst.setInt(2, Integer.parseInt( campos[1]) );                    
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
