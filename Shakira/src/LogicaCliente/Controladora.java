@@ -142,7 +142,7 @@ public class Controladora extends Thread{
     }
     
         public String[] extraerIPyPuertos(String str){
-        String[] campos = new String[6];
+        String[] campos = new String[7];
         int i = 0;
         StringTokenizer tokens = new StringTokenizer(str,"_");
         while(tokens.hasMoreTokens()){
