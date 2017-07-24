@@ -23,7 +23,7 @@ public class Controladora extends Thread{
     //puertos del cliente {cmd,Data}
     String[] puertos = {"1031","1032"};
     //Puertos ip y puertos servidor central
-    String[] datosServidorCentral = {"192.168.0.1","1021","1025"};
+    String[] datosServidorCentral = {"127.0.0.1","1021","1025"};
     
   /**
     * Constructor para inicializar el objeto

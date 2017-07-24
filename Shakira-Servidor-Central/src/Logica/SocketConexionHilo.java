@@ -255,52 +255,14 @@ public class SocketConexionHilo extends Thread{
             for (int i = 0; i < videosQueMeLLegaran; i++) {
                 //Recibo los videos
                 str = entrada.readLine();
-                System.out.println(str);
                 //Se procede a guardar y se verifica si es true se guardo
-                if( bd.agregarVideoSincronizacion(str) == true) {
+                if( bd.agregarVideoSincronizacion( ss.getLocalAddress().getHostAddress() ,str) == true) {
                     System.out.println("Servidor central > El Video: " + str
                             + " se guardo correctamente");
                 }
                 
             }
-            //Aqui se procede a recibir los archivos
-
-               // Creamos flujo de entrada para leer los datos que envia el cliente 
-               DataInputStream dis = new DataInputStream( ss.getInputStream() );
-        
-               // Obtenemos el nombre del archivo
-               String nombreArchivo = dis.readUTF(); 
- 
-               // Obtenemos el tamaño del archivo
-               int tam = dis.readInt(); 
- 
-               System.out.println( "Recibiendo archivo "+nombreArchivo );
-        
-               // Creamos flujo de salida, este flujo nos sirve para 
-               // indicar donde guardaremos el archivo
-               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
-               BufferedOutputStream out = new BufferedOutputStream( fos );
-               BufferedInputStream in = new BufferedInputStream( ss.getInputStream() );
- 
-               // Creamos el array de bytes para leer los datos del archivo
-               byte[] buffer = new byte[ tam ];
- 
-               // Obtenemos el archivo mediante la lectura de bytes enviados
-               for( int i = 0; i < buffer.length; i++ )
-               {
-                  buffer[ i ] = ( byte )in.read( ); 
-               }
- 
-               // Escribimos el archivo 
-               out.write( buffer ); 
- 
-               // Cerramos flujos
-               out.flush(); 
-               in.close();
-               out.close(); 
-
-    
-            //Fin de recepcion de archivos
+            bd.actualizarEstadoServidorSecundario( ss.getLocalAddress().getHostAddress());
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
             while(suiche == true){
@@ -308,8 +270,9 @@ public class SocketConexionHilo extends Thread{
                 if(bd.verificarServidores() == true){
                     suiche=false;
                 }
-                
+            
             }
+            salida.println("Servidor Central > Servidores secundarios ya sincronizados");
             //Fin de envio de los 3 servidores
             //Ahora como ya están los 3 servidores se procede a enviar cada archivo
             //Fin de envío de archivos

@@ -200,10 +200,11 @@ public static String password = "redes2";
     
     /**
      * Metodo que agrega a la base de datos el video
+     * @param ipServidor Ip Del dueño del video
      * @param video Nombre dle video a guardar
      * @return si es true se guardó correctamente y false hubo error
      */
-    public boolean agregarVideoSincronizacion(String video){        
+    public boolean agregarVideoSincronizacion(String ipServidor ,String video){        
         String stm = "INSERT INTO VIDEO(id_video, nombre) VALUES( nextval('sec_id_video') ,?)";
         PreparedStatement pst = null;
         Connection con=null;
@@ -214,11 +215,13 @@ public static String password = "redes2";
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
                 pst.setString(1, video);
-                
                 pst.executeUpdate();
-
+                stm="INSERT INTO VIDEOS_SERVIDOR VALUES(true,true,true,"+ idVideo(video)+",'"+ipServidor+"')";
+                pst = con.prepareStatement(stm);
+                pst.executeUpdate();
+                
                 } catch ( SQLException | ClassNotFoundException e ){
-
+                    System.out.println(e.getMessage());
                     System.err.println("Servidor Central > No se inscribio el video: " + video);
                     return false;
 
@@ -318,12 +321,11 @@ public static String password = "redes2";
             
             //Ciclo donde busco en el query la cantidad de servidores
             while (rs.next()){
-                
-                if(rs.getString("servidores").contains( "3" )){
+                if(rs.getString("servidores").contains( "2" )){ //Debería ser 3, pero esto comienza a contar desde 0
                     suiche = true;
                 }
             }
-
+                
                 stmt.close();
                 con.close();
             }catch ( Exception e ){
@@ -596,5 +598,42 @@ public static String password = "redes2";
         
         return videos;
         
+    }
+
+    public void actualizarEstadoServidorSecundario(String hostAddress) {
+        String stm = "UPDATE SERVIDOR SET estado=1 WHERE ipservidor='"+ hostAddress+"'";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);            
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.err.println("Servidor Central > No se actualizó al servidor: " + hostAddress);
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.err.println(ex);                
+
+                    }
+
+            }
+
     }
 }
