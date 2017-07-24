@@ -92,9 +92,9 @@ public class SocketConexionHilo extends Thread{
             else if ( str.trim().contains("descarga")) {
                 System.out.println("---------------DESCARGA--------------");
                 String ipCliente = ss.getInetAddress().toString().substring(1);
-                int puertoCliente = ss.getPort();
+                int puertoCliente = this.puertosAsociados(ipCliente)[1];
                 System.out.println("entrada: " + str);
-                System.out.println("Direccion IP del cliente: " + ipCliente);
+                System.out.println("Direccion IP del cliente: " + ipCliente + " : " + puertoCliente);
                 //verifico si el usuario esta inscrito
                     //verifico que el nombre del video existe
                 String nombreVid = this.extraerNombreVideo(str);
@@ -122,7 +122,8 @@ public class SocketConexionHilo extends Thread{
                         System.out.println(ip);
                         
 //(String ipCliente, int puertoCliente, String ipServidor, int puertoServidor, String nombreVid){
-                        enviarVideo(ipCliente,puertoCliente,ip,puerto,nombreVid);
+                       // enviarVideo(ipCliente,puertoCliente,ip,puerto,nombreVid);
+                       
                     }
                     
                     //envio al puerto de cmd, asi serian los strings
