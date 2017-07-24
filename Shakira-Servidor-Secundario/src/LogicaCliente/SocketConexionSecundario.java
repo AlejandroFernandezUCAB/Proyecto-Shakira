@@ -38,7 +38,7 @@ public class SocketConexionSecundario {
         
          //Inicializo la conexion con el socket
          try{
-            s = new Socket( ipServidorCentral , puertoCentral);
+            s = new Socket("192.168.0.2", 1026);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Obtenemos el canal de salida

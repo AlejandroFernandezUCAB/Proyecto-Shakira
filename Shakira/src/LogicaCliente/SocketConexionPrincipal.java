@@ -24,7 +24,7 @@ import java.util.Scanner;
  *
  * @author Alejandro Fernandez
  */
-public class SocketConexion {
+public class SocketConexionPrincipal {
 
     /**
      * Probando Hilo
@@ -59,7 +59,7 @@ public class SocketConexion {
      * @return SI está o no registrado correctamente
      * @throws IOException 
      */
-    public String inscribirUsuario(String ipServidorCentral, int puertoServidor, String[] puertos) throws IOException{
+    public String inscribirUsuario(String ipServidorCentral, int puertoServidor, String puertoCliente) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
@@ -81,7 +81,7 @@ public class SocketConexion {
         try {
           while (true) {
             // Leo la entrada del usuario
-            String str = "inscribirU_"+s.getLocalAddress() + "_" + puertos[0] + "_" + puertos[1];
+            String str = "inscribirU_"+s.getLocalAddress() + "_" + puertoCliente;
             // La envia al servidor
             salida.println(str);
             System.out.println("Se envio: "+ str);
@@ -105,9 +105,15 @@ public class SocketConexion {
         
   }
     
-    
-    
-    public String descargarVid(String ipServidorCentral, int puertoServidor, String nombreVid) throws IOException{
+    /**
+     *Envia el comando 'descarga_nombreVid' al servidor principal
+     * @param ipServidorCentral
+     * @param puertoServidor
+     * @param nombreVid
+     * @return direcciones de los servidores secundarios en el formato: ipServidor_puerto...
+     * @throws IOException
+     */
+    public String enviarComandoDescarga(String ipServidorCentral, int puertoServidor, String nombreVid) throws IOException{
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;

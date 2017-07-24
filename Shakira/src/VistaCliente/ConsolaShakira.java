@@ -155,7 +155,9 @@ public class ConsolaShakira extends javax.swing.JFrame {
     }//GEN-LAST:event_enviarBotonKeyPressed
 
     private void inputComandoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputComandoKeyPressed
-       
+       if(inputComando.getText().equalsIgnoreCase("Inserte comando aquí"))
+        inputComando.setText("");
+       else
         enviarInformacion(evt);
        
     }//GEN-LAST:event_inputComandoKeyPressed

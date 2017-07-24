@@ -8,6 +8,7 @@ package LogicaCliente;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,11 +26,10 @@ public class Controladora extends Thread{
     private JTextArea output;
     private String nombreUsuario, inputString;
         
-    //puertos del cliente {cmd,Data}
-    String[] puertos = {"1030","1029"};
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
-    String[] datosServidorCentral = {"192.168.0.1","1026","1025"};
-
+    String[] datosServidorCentral = {"192.168.0.2","1026"};
+    String puertoCliente = "1024";
+    
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
         this.input = input;
@@ -68,12 +68,12 @@ public class Controladora extends Thread{
  * El Else es en caso de que el comando este mal escrito 
  */    
     public void run (){
-
+        
         if(inputString.isEmpty() || inputString == null || inputString.equalsIgnoreCase("inserte comando aquí") ){
             
             JOptionPane.showMessageDialog( consola , "El comando que introdujo es erroneo. \nIntente nuevamente" , "¡Error de comando!", JOptionPane.ERROR_MESSAGE);
            
-        }else if( extraerComando(inputString,8).equalsIgnoreCase("inscribir") ){
+        }else if( extraerComando(inputString, 9).equalsIgnoreCase("inscribir") ){
             
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setText( output.getText() + inscribirUsuario() + "\n");
@@ -82,14 +82,36 @@ public class Controladora extends Thread{
             
         }else if( extraerComando(inputString,5).equalsIgnoreCase("video") ){
             
-            String nombreVid = inputString.substring(8);
+            System.out.println("comando para descargar videos");
+            try{
+            String nombreVid = inputString.substring(6);
             System.out.println("nombreVid = " + nombreVid);
-            
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
-            output.setText( output.getText() + descargar(nombreVid) + "\n");
+            
+            //envio el comando al servidor central y recivo ip y puertos de los
+            //servidores secunadrios
+            String resultado = consultarServidoresSecundarios_ip_puerto(nombreVid);
+            
+            //numeros pares = ip servidores
+            //numeros impares = puerto
+            String[] infoServidores = this.extraerIPyPuertos(resultado);
+            //esto no deberia dar error, porque para consultarServidoresSecundarios_ip_puerto servidores y clientes deben estar inscritos
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[0] + "\n");
+                System.out.println("Envio a " + infoServidores[0]);
+            this.descargarVideo(infoServidores[0], Integer.parseInt(infoServidores[1]), nombreVid);
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[2] + "\n");
+                System.out.println("Envio a " + infoServidores[2]);
+            this.descargarVideo(infoServidores[2], Integer.parseInt(infoServidores[3]), nombreVid);
+            output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[4] + "\n");
+                System.out.println("Envio a " + infoServidores[4]);
+            this.descargarVideo(infoServidores[4], Integer.parseInt(infoServidores[5]), nombreVid);
+            
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
-            
+            }
+            catch(StringIndexOutOfBoundsException e){
+                output.setText(output.getText() + "Cliente > Debe especificar el nombre del video" + "\n");
+            }            
         }else{
             output.setText( output.getText() + nombreUsuario + " > " + inputString + "\n");
             output.setLineWrap(true);
@@ -104,18 +126,34 @@ public class Controladora extends Thread{
     /**
      * Metodo que verifica si está escrito el comando inscribir
      * @param inputString recibe el comando completo
-     * @return devuelve las primeras 9 letras para ver si es inscribir
+     * @param size Tamaño de la cadena (empezando a contar desde 1)
+     * @return devuelve las primeras n=(size) letras para ver si es un comando
      */
     public String extraerComando(String inputString, int size){
         String comando = "";
-        if (inputString.length() > size){
-            for (int i = 0; i < size+1; i++) {
+        if (inputString.length() >= size){
+            for (int i = 0; i < size; i++) {
             
                 comando = comando + inputString.charAt(i); 
-                System.out.println(comando);
+                //System.out.println(comando);
             }
         }
         return comando;
+    }
+    
+        public String[] extraerIPyPuertos(String str){
+        String[] campos = new String[7];
+        int i = 0;
+        StringTokenizer tokens = new StringTokenizer(str,"_");
+        while(tokens.hasMoreTokens()){
+             campos[i] = tokens.nextToken();
+             System.out.println(campos[i]);
+             i++;
+             campos[i] = tokens.nextToken();
+             System.out.println(campos[i]);
+             i++;
+        }
+        return campos;
     }
     
     /**
@@ -128,9 +166,9 @@ public class Controladora extends Thread{
             String resultado = null;
             try{
                 //InetAddress adress = InetAddress.getLocalHost();
-                SocketConexion s = new SocketConexion();
+                SocketConexionPrincipal s = new SocketConexionPrincipal();
                 resultado = s.inscribirUsuario
-        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), puertoCliente );
                 //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());
@@ -142,18 +180,18 @@ public class Controladora extends Thread{
     
     /**
      *Envio el nombre del video al servidor principal, este verifica
-     * si estoy inscrito, de ser asi, aprueba la peticion y continua con
-     * la siguiente fase de la descarga.
-     * @param nombreVid nombre del video a descargar
+     * si estoy inscrito y si el video existe, de ser asi, aprueba la
+     * peticion y continua con la siguiente fase de la descarga.
+     * @param nombreVid nombre del video a consultarServidoresSecundarios_ip_puerto
      * @return mensaje del servidor
      */
-    public String descargar(String nombreVid){
+    public String consultarServidoresSecundarios_ip_puerto(String nombreVid){
             String resultado = null;
             try{
-                SocketConexion s = new SocketConexion();
+                SocketConexionPrincipal s = new SocketConexionPrincipal();
                 //resultado = s.inscribirUsuario
         //(datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.puertos );
-                resultado = s.descargarVid
+                resultado = s.enviarComandoDescarga
         (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]),nombreVid);
                 
             }catch(IOException e){
@@ -162,6 +200,18 @@ public class Controladora extends Thread{
         
             return resultado;
             
+    }
+    
+    public String descargarVideo(String ipServidorSec,int puertoServidorSec ,String nombreVid){
+        String resultado = null;
+        try{
+            SocketConexionSecundario s = new SocketConexionSecundario();
+            resultado = s.descargarVideo(ipServidorSec,puertoServidorSec, nombreVid);
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+        return resultado;
     }
     
 }

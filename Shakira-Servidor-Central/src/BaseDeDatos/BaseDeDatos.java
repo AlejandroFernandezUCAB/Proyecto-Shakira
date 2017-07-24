@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.StringTokenizer;
@@ -46,17 +48,17 @@ public static String password = "redes2";
         StringTokenizer tokens = new StringTokenizer(str,"_");
         while(tokens.hasMoreTokens()){
              campos[i] = tokens.nextToken();
-             //System.out.println(campos[i]);
+             System.out.println(campos[i]);
              i++;
         }
         return campos;
     }
     
-    public int agregarUsuarioBDD(String ipYpuertos){
+    public int agregarUsuarioBDD(String ipYpuerto){
         
-        String[] campos = extraerIPyPuertos(ipYpuertos);
+        String[] campos = extraerIPyPuertos(ipYpuerto);
         
-        String stm = "INSERT INTO CLIENTE(ipcliente, puertocmd, puertodata) VALUES(?, ?, ?)";
+        String stm = "INSERT INTO CLIENTE(ipcliente, puerto) VALUES(?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario,
@@ -66,8 +68,7 @@ public static String password = "redes2";
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
                 pst.setString(1, campos[0]);
-                pst.setInt(2, Integer.parseInt( campos[1]) );    
-                pst.setInt(3, Integer.parseInt( campos[2]) );                 
+                pst.setInt(2, Integer.parseInt( campos[1]) );                    
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
@@ -362,7 +363,211 @@ public static String password = "redes2";
         
         return cantidad;
     }
+    /**
+     *Metodo que consulta la BD para obtener la IP de los servidores secundarios
+     * @return Lista de Strings con las ip de los servidores
+     */
+    public List<String> listaServidoresSecundarios() {
+        //declaro las variables
+        List<String> ListaDeIP = new ArrayList<String>();
+        int status = 0;        
+        PreparedStatement pst = null;
+        Connection con=null;
+        
+        //armo el string con el query
+        String stm = "SELECT ipservidor ip FROM servidor";
+       
+        try{
+        Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            //preparo el comando de sql
+            pst = con.prepareStatement(stm);
+                //Statement stmt = con.createStatement();
+            ResultSet rs;
+            //ejecuto el Query
+            rs = pst.executeQuery();
+            
+            //recorro el conjunt y agrego los elementos a la lista
+            while (rs.next()){
+                ListaDeIP.add(rs.getString("ip"));
+            }
+            //cierro la conexion
+                con.close();
+                
+                
+        }catch ( SQLException | ClassNotFoundException e ){
+                
+                 System.out.println(e.getMessage());
+            } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
 
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    }catch (SQLException ex) {
+
+                        System.out.println(ex); 
+                        return null;
+                    }
+            }
+        return ListaDeIP;
+    }
+    
+    /*
+    public int puertoDeIP(String ipCliente){
+        //declaro las variables
+        int puerto = 0;             
+        PreparedStatement pst = null;
+        Connection con=null;
+        //armo el string con el query  
+        String stm = "SELECT puerto from cliente where ipcliente = ?";
+        try{
+        Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            //preparo el comando de sql
+            pst = con.prepareStatement(stm);
+            pst.setString(1, ipCliente);
+            //Statement stmt = con.createStatement();
+            ResultSet rs;
+            //ejecuto el query
+            rs = pst.executeQuery();
+            //guardo los resultados
+            if(rs.next()){
+                puerto = rs.getInt("puerto");
+            }
+        }
+        catch ( SQLException | ClassNotFoundException e ){
+                
+                 System.out.println(e.getMessage());
+            } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    }catch (SQLException ex) {
+
+                        System.out.println(ex); 
+                    }
+            }
+        
+    return puerto;
+    }
+    */
+    
+    
+    /**
+     *Metodo que consulta la BD para obtener los puertos correspondientes a una IP
+     * @param ipServidor
+     * @return puertos del servidor secundario, data = 0, cmd = 1
+     */
+    public int[] listaDePuertos(String ipServidor){
+        //declaro las variables
+        int[] puertos = new int[2];             
+        PreparedStatement pst = null;
+        Connection con=null;
+        //armo el string con el query  
+        String stm = "SELECT puertocmd as cmd, puertodata as data from servidor where ipservidor = ?";
+        try{
+        Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            //preparo el comando de sql
+            pst = con.prepareStatement(stm);
+            pst.setString(1, ipServidor);
+            //Statement stmt = con.createStatement();
+            ResultSet rs;
+            //ejecuto el query
+            rs = pst.executeQuery();
+            //guardo los resultados
+        if(rs.next()){
+            puertos[0] = Integer.parseInt(rs.getString("cmd"));
+            puertos[1] = Integer.parseInt(rs.getString("data"));}
+        }
+        catch ( SQLException | ClassNotFoundException e ){
+                
+                 System.out.println(e.getMessage());
+            } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    }catch (SQLException ex) {
+
+                        System.out.println(ex); 
+                    }
+            }
+        
+    return puertos;
+    }
+    
+    /**
+     *Metodo que consulta la BD para obtener el id de un video dado
+     * @param nombreVid
+     * @return 0 si hubo un error, de lo contrario devuelve un entero que es el id del video
+     */
+    public int idVideo(String nombreVid) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //declaro las variables
+        int idVid = 0;          
+        PreparedStatement pst = null;
+        Connection con=null;
+        //armo el string con el query  
+        String stm = "select id_video id from video where nombre = ?";
+                
+        try{
+                    Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            //preparo el comando de sql
+            pst = con.prepareStatement(stm);
+            pst.setString(1, nombreVid);
+                //Statement stmt = con.createStatement();
+            ResultSet rs;
+            //ejecuto el query
+            rs = pst.executeQuery();
+            //guardo el resultado
+            if (rs.next()) {
+                idVid = rs.getInt("id");
+            }
+            
+        }
+        catch ( SQLException | ClassNotFoundException e ){
+                
+                 System.out.println(e.getMessage());
+            } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    }catch (SQLException ex) {
+
+                        System.out.println(ex); 
+                    }
+            }
+        
+        return idVid;
+    }
     public String[] videosAlojados( int cantidad ) {
         String[] videos = new String[ cantidad ];
         int i = 0;
