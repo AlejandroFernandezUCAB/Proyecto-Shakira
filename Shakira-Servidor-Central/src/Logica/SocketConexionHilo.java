@@ -263,6 +263,7 @@ public class SocketConexionHilo extends Thread{
                 if( bd.agregarVideoSincronizacion( ipParaDescarga ,str) == true) {
                     System.out.println("Servidor central > El Video: " + str
                             + " se guardo correctamente");
+                    
                 }
                 
             }
@@ -277,8 +278,8 @@ public class SocketConexionHilo extends Thread{
             
             }
             salida.println("Servidor Central > Servidores secundarios ya sincronizados");
-            //Procedo a enviar el nombre del video + ip + el puerto que necesita el serv.secundario para descargar el video
-            String[] listaDeVideosConSuIp = bd.videoIpPuerto(ipParaDescarga );
+            //Procedo a enviar el nombre del video + ip + el puerto + que parte me  que necesita el serv.secundario para descargar el video
+            String[] listaDeVideosConSuIp = bd.videoIpPuerto( ipParaDescarga );
             //Envío el tamaño dle string
             salida.println( listaDeVideosConSuIp.length);
             //Envio las respectivas direcciones con el puerto

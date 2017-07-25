@@ -232,7 +232,41 @@ public class BaseDeDatos {
         }
                 System.out.println("Servidor Central > Se inscribio el video: " + campo);
                 
+   
+    }
+
+    public void agregarVideoNuevo(String nombre, String ipLocal, String parte) {
+        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'),  ?,?,?)" ;
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.setString( 1, nombre);
+            pst.setString( 2 , ipLocal);
+            pst.setInt( 3, Integer.parseInt( parte ));
+            pst.executeUpdate();
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se inscribio el video: "+ nombre);
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+                System.out.println("Servidor Central > Se inscribio el video: " + nombre);
                 
-                   
+                
     }
 }

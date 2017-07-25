@@ -30,6 +30,7 @@ import java.util.StringTokenizer;
 public class SocketConexionSecundario {
     private String ipservidorC;
     private int puerto;
+    private String ipLocal;
   /**
    * Metodo para incribir el servidor secundario en el servidor central
    * @param ipServidorCentral 
@@ -46,11 +47,13 @@ public class SocketConexionSecundario {
         String[] nombreVideos = null;
         this.ipservidorC = ipServidorCentral;
         this.puerto = puertoCentral;
+        
          //Inicializo la conexion con el socket
          try{
             s = new Socket( ipServidorCentral, puertoCentral);
             System.out.println("Se inicializa el socket:" + s);
             entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            this.ipLocal = s.getLocalAddress().getHostAddress();
             // Obtenemos el canal de salida
             salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
          }catch(IOException e){
@@ -123,8 +126,8 @@ public class SocketConexionSecundario {
      * @param videosIpPuerto Aqui hay un array con todos los nombres puertos e ips a donde va a descargar
      */
     private void peticionDeDescargaAServidoresSecundarios(String[] videosIpPuerto) {
-       
-        String[] campos = new String[3];
+        BaseDeDatos bd = new BaseDeDatos();
+        String[] campos = new String[4];
         int i = 0;
         for (int j = 0; j < videosIpPuerto.length ; j++) { 
             StringTokenizer tokens = new StringTokenizer(videosIpPuerto[j],"_");
@@ -134,7 +137,7 @@ public class SocketConexionSecundario {
                  i++;
             }
             descarga(campos);
-            envioInformacionNuevaAlServidorCentral(campos);
+            bd.agregarVideoNuevo( campos[0] , ipLocal, campos[3] );
             i=0;
         }
     }
@@ -209,38 +212,5 @@ public class SocketConexionSecundario {
           }
          
     }
-    /**
-     * Metodo encargado de decirle al servidor central mi nuevo video
-     * @param campo Ip
-     */
-    private void envioInformacionNuevaAlServidorCentral(String[] campo) {
-        BufferedReader entrada = null;
-        PrintWriter salida = null;
-        Socket s = null;
-        BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
-        String linea=null;
-        BaseDeDatos bd = new BaseDeDatos();
-            try{
-                s = new Socket( this.ipservidorC , this.puerto);
-                System.out.println("Se inicializa el socket:" + s);
-                entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                // Obtenemos el canal de salida
-                salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
-             }catch(IOException e){
-                 System.out.println(e.getMessage());
-             }
-        try {
-            
-          while (true) {
-              String str = "agregarvideon"+campo[0];
-              salida.println(str);
-              System.out.println("Se envio: "+ str);
-              linea = entrada.readLine(); //Aqui recibo que parte me tocó y actualizo
-              bd.actualizarParte( linea, campo[0] ); //Aqui guardo que parte me tocó
-          }
-        }catch(IOException e ){
-            System.out.println( e.getMessage() );
-        }
-    }
-    
+
 }

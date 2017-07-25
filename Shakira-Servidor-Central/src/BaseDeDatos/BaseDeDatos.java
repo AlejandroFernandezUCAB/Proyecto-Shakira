@@ -216,7 +216,7 @@ public static String password = "redes2";
                 pst = con.prepareStatement(stm);
                 pst.setString(1, video);
                 pst.executeUpdate();
-                stm="INSERT INTO VIDEOS_SERVIDOR VALUES(true,true,true,"+ idVideo(video)+",'"+ipServidor+"')";
+                stm="INSERT INTO VIDEOS_SERVIDOR VALUES(true,false,false,"+ idVideo(video)+",'"+ipServidor+"')";
                 pst = con.prepareStatement(stm);
                 pst.executeUpdate();
                 
@@ -235,7 +235,7 @@ public static String password = "redes2";
                         if (con != null) {
                             con.close();
                         }
-
+                
                     } catch (SQLException ex) {
 
                         System.err.println(ex);                
@@ -676,7 +676,9 @@ public static String password = "redes2";
             
             //Se agregan al query las diferentes direcciones separadas por un _
              while (rs.next()){
-                videos[i] = rs.getString("nombre")+"_"+rs.getString("servidor")+"_"+rs.getString("puerto");
+                
+                videos[i] = rs.getString("nombre")+"_"+rs.getString("servidor")+"_"+rs.getString("puerto")+"_"
+                        + queParteMeToco("nombre");
                 System.out.println(videos[i]);
                 i++;
             }
@@ -693,8 +695,7 @@ public static String password = "redes2";
     }
 
     public String queParteMeToco(String str) {
-        str = str.substring(13);
-        boolean[] parte = new boolean[1]; // si es 01 guardará como 3era parte, si es 11 guardará como 2da parte
+        boolean[] parte = new boolean[2]; // si es 01 guardará como 3era parte, si es 11 guardará como 2da parte
         int id = idVideo(str);
         int i=1;
         try{
@@ -706,25 +707,92 @@ public static String password = "redes2";
             //Ciclo donde busco en el query la cantidad de videos para inicializar la variable
             while (rs.next()){
                 
-                if( rs.getBoolean("parte1") == false && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == false ){
+                if( rs.getBoolean("parte1") == true && rs.getBoolean("parte2") == false && rs.getBoolean("parte4") == false ){
+                    parte[0]=false;
+                    parte[1]=false;
+                    parte[2]=true;
+                }else if(rs.getBoolean("parte1") == false && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == false){
                     parte[0]=false;
                     parte[1]=true;
-                }else if(rs.getBoolean("parte1") == true && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == true){
-                    parte[0]=true;
-                    parte[1]=true;
+                    parte[2]=false;
+                }else{
+                    parte[0]=false;
+                    parte[1]=false;
+                    parte[2]=true;
                 }
+                
             }
+            
             stmt.close();
             con.close();
             
-            if(parte[0] == false && parte[1]== true){
+            if(parte[0] == true && parte[1]== false && parte[2]==false){
                 
-            }else if (parte[0] ==true && parte[1]==true){
+                return insertarParte(str, id, 2);
                 
+            }else if (parte[0] ==false && parte[1]==true && parte[2]==false){
+                
+                return insertarParte(str, id, 3);
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
-        return "hola";
+        return "ÑO";
+    }
+
+    private String insertarParte(String str, int id, int i) {
+        String stm = "INSERT INTO VIDEOS_SERVIDOR VALUES(?,?,?,"+id+","+ str+")";
+        PreparedStatement pst = null;
+        Connection con=null;
+        String retorno=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);  
+                
+                if(i==2){
+                    
+                    pst.setBoolean(1, false);
+                    pst.setBoolean(2, true);
+                    pst.setBoolean(3, false);
+                    retorno="2";
+                    
+                }else if(i == 3){
+                    
+                    pst.setBoolean(1, false);
+                    pst.setBoolean(2, false);
+                    pst.setBoolean(3, true);
+                    retorno = "3";
+                    
+                }
+                
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.err.println("Servidor Central > No se actualizó al servidor: " + str);
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+                        
+
+                    } catch (SQLException ex) {
+
+                        System.err.println(ex);                
+
+                    }
+                    
+            }
+        return retorno;
     }
 }
