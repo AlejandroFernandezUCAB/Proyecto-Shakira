@@ -1,28 +1,11 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Alejandro%20Fernandez/Documents/Universidad/Redes%20de%20Computadores%202/Proyecto-Shakira/Shakira-Servidor-Secundario/src/BaseDeDatos/BaseDeDatos.java</file>
             <file>file:/C:/Users/Alejandro%20Fernandez/Documents/Universidad/Redes%20de%20Computadores%202/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaCliente/SocketConexionSecundario.java</file>
+            <file>file:/C:/Users/Alejandro%20Fernandez/Documents/Universidad/Redes%20de%20Computadores%202/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaCliente/Controladora.java</file>
+            <file>file:/C:/Users/Alejandro%20Fernandez/Documents/Universidad/Redes%20de%20Computadores%202/Proyecto-Shakira/Shakira-Servidor-Secundario/src/BaseDeDatos/BaseDeDatos.java</file>
         </group>
     </open-files>
 </project-private>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/InterfazCliente/ConsolaShakiraSecundario.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaServidor/ConsolaServidor.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/Main/ShakiraServidorSecundario.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaServidor/SocketConexionSecundario.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaCliente/ConsolaCliente.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaCliente/SocketConexionSecundario.java</file>
-            <file>file:/home/gian/Documents/proyectos%20GitHub/Proyecto-Shakira/Shakira-Servidor-Secundario/src/LogicaCliente/Controladora.java</file>
-        </group>
-    </open-files>
-</project-private>
->>>>>>> Developer

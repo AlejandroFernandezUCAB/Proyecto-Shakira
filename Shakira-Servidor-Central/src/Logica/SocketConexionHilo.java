@@ -37,6 +37,7 @@ public class SocketConexionHilo extends Thread{
        
     private Socket ss;
     private int counter;
+    private String ipParaDescarga;
     
     public SocketConexionHilo( Socket i, int c){
         ss = i;
@@ -79,10 +80,11 @@ public class SocketConexionHilo extends Thread{
                 
             }else if( str.trim().contains("inscribirS")){
                 System.out.println("---------------Inscribiendo Servidor Secundario--------------");
-                suiche = inscribirServidorSecundario(str);                                
+                extraerIPyPuertos(str.substring(12));
+                suiche = inscribirServidorSecundario(str);
                 if( suiche == 1){
                     
-                   salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   salida.println( "Servidor Central > Servidor inscrito correctamente");     
                    sincronizacion(str, entrada, salida);
                    
                 }else if (suiche == 0){
@@ -142,6 +144,8 @@ public class SocketConexionHilo extends Thread{
                     salida.println("Video no existe o usuario no registrado...");
                 }
                 System.out.println("-------------FIN PROCESO DESCARGA-----------");
+              } else if(str.trim().contains("agregarvideon")){ //Aqui se procede a guardar que parte le tocó
+                  guardarparte(str, entrada, salida);
               }
             break;
           }
@@ -255,52 +259,15 @@ public class SocketConexionHilo extends Thread{
             for (int i = 0; i < videosQueMeLLegaran; i++) {
                 //Recibo los videos
                 str = entrada.readLine();
-                System.out.println(str);
                 //Se procede a guardar y se verifica si es true se guardo
-                if( bd.agregarVideoSincronizacion(str) == true) {
+                if( bd.agregarVideoSincronizacion( ipParaDescarga ,str) == true) {
                     System.out.println("Servidor central > El Video: " + str
                             + " se guardo correctamente");
+                    
                 }
                 
             }
-            //Aqui se procede a recibir los archivos
-
-               // Creamos flujo de entrada para leer los datos que envia el cliente 
-               DataInputStream dis = new DataInputStream( ss.getInputStream() );
-        
-               // Obtenemos el nombre del archivo
-               String nombreArchivo = dis.readUTF(); 
- 
-               // Obtenemos el tamaño del archivo
-               int tam = dis.readInt(); 
- 
-               System.out.println( "Recibiendo archivo "+nombreArchivo );
-        
-               // Creamos flujo de salida, este flujo nos sirve para 
-               // indicar donde guardaremos el archivo
-               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
-               BufferedOutputStream out = new BufferedOutputStream( fos );
-               BufferedInputStream in = new BufferedInputStream( ss.getInputStream() );
- 
-               // Creamos el array de bytes para leer los datos del archivo
-               byte[] buffer = new byte[ tam ];
- 
-               // Obtenemos el archivo mediante la lectura de bytes enviados
-               for( int i = 0; i < buffer.length; i++ )
-               {
-                  buffer[ i ] = ( byte )in.read( ); 
-               }
- 
-               // Escribimos el archivo 
-               out.write( buffer ); 
- 
-               // Cerramos flujos
-               out.flush(); 
-               in.close();
-               out.close(); 
-
-    
-            //Fin de recepcion de archivos
+            bd.actualizarEstadoServidorSecundario( ipParaDescarga );
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
             while(suiche == true){
@@ -308,14 +275,23 @@ public class SocketConexionHilo extends Thread{
                 if(bd.verificarServidores() == true){
                     suiche=false;
                 }
-                
+            
             }
-            //Fin de envio de los 3 servidores
-            //Ahora como ya están los 3 servidores se procede a enviar cada archivo
-            //Fin de envío de archivos
+            salida.println("Servidor Central > Servidores secundarios ya sincronizados");
+            //Procedo a enviar el nombre del video + ip + el puerto + que parte me  que necesita el serv.secundario para descargar el video
+            String[] listaDeVideosConSuIp = bd.videoIpPuerto( ipParaDescarga );
+            //Envío el tamaño dle string
+            salida.println( listaDeVideosConSuIp.length);
+            //Envio las respectivas direcciones con el puerto
+            for (String listasDeVideosConSuIp : listaDeVideosConSuIp) {
+                salida.println(listasDeVideosConSuIp);
+            }
+            //Se termina la interacción con el servidor central
             
         }catch(IOException e){
+            
             e.getStackTrace();
+            
         }
     
     }    
@@ -421,6 +397,32 @@ public class SocketConexionHilo extends Thread{
         BaseDeDatos bdd = new BaseDeDatos();
         return bdd.idVideo(nombreVid);
     }
+    
+    /**
+     * Extrae la ip y los puertos
+     * @param str comando 
+     */
+    public void extraerIPyPuertos(String str){
+        String[] campos = new String[3];
+        int i = 0;
+        StringTokenizer tokens = new StringTokenizer(str,"_");
+        while(tokens.hasMoreTokens()){
+             campos[i] = tokens.nextToken();
+             i++;
+        }
+        this.ipParaDescarga = campos[0];
+        System.out.println("Esta:"+ipParaDescarga);
+    }
 
+    private void guardarparte(String str, BufferedReader entrada, PrintWriter salida) {
+        BaseDeDatos bd = new BaseDeDatos();
+        try{
+            
+            str = entrada.readLine();
+            salida.println( bd.queParteMeToco(str) );
+        }catch(IOException e){
+            
+        }
+    }
     
 }

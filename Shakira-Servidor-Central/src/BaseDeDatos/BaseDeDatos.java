@@ -200,10 +200,11 @@ public static String password = "redes2";
     
     /**
      * Metodo que agrega a la base de datos el video
+     * @param ipServidor Ip Del dueño del video
      * @param video Nombre dle video a guardar
      * @return si es true se guardó correctamente y false hubo error
      */
-    public boolean agregarVideoSincronizacion(String video){        
+    public boolean agregarVideoSincronizacion(String ipServidor ,String video){        
         String stm = "INSERT INTO VIDEO(id_video, nombre) VALUES( nextval('sec_id_video') ,?)";
         PreparedStatement pst = null;
         Connection con=null;
@@ -214,11 +215,13 @@ public static String password = "redes2";
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
                 pst.setString(1, video);
-                
                 pst.executeUpdate();
-
+                stm="INSERT INTO VIDEOS_SERVIDOR VALUES(true,false,false,"+ idVideo(video)+",'"+ipServidor+"')";
+                pst = con.prepareStatement(stm);
+                pst.executeUpdate();
+                
                 } catch ( SQLException | ClassNotFoundException e ){
-
+                    System.out.println(e.getMessage());
                     System.err.println("Servidor Central > No se inscribio el video: " + video);
                     return false;
 
@@ -232,7 +235,7 @@ public static String password = "redes2";
                         if (con != null) {
                             con.close();
                         }
-
+                
                     } catch (SQLException ex) {
 
                         System.err.println(ex);                
@@ -314,16 +317,15 @@ public static String password = "redes2";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor WHERE estado=2");
+            ResultSet rs = stmt.executeQuery("SELECT count(*) servidores FROM servidor WHERE estado=1");
             
             //Ciclo donde busco en el query la cantidad de servidores
             while (rs.next()){
-                
-                if(rs.getString("servidores").contains( "3" )){
+                if(rs.getString("servidores").contains( "3" )){ //Debería ser 3, pero esto comienza a contar desde 0
                     suiche = true;
                 }
             }
-
+                
                 stmt.close();
                 con.close();
             }catch ( Exception e ){
@@ -568,6 +570,12 @@ public static String password = "redes2";
         
         return idVid;
     }
+    
+    /**
+     * Que videos hay alojados
+     * @param cantidad cantidad de videos
+     * @return 
+     */
     public String[] videosAlojados( int cantidad ) {
         String[] videos = new String[ cantidad ];
         int i = 0;
@@ -596,5 +604,195 @@ public static String password = "redes2";
         
         return videos;
         
+    }
+
+    /**
+     * Actualiza el estado del servidor secundario a listo
+     * @param hostAddress DIreccion ip a actualizar
+     */
+    public void actualizarEstadoServidorSecundario(String hostAddress) {
+        String stm = "UPDATE SERVIDOR SET estado=1 WHERE ipservidor='"+ hostAddress+"'";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);            
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.err.println("Servidor Central > No se actualizó al servidor: " + hostAddress);
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+
+                        System.err.println(ex);                
+
+                    }
+
+            }
+
+    }
+    /**
+     * Metodo que extrae el video, la ip y el puerto por donde se va a descargar
+     * @param ipServidor ip del servidor actual
+     * @return vector de string
+     */
+    public String[] videoIpPuerto(String ipServidor) {
+        String[] videos = null;
+        int i = 0;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select count(*) cantidad from video, videos_servidor,servidor where servidor=ipservidor and videofk = id_video and ipservidor != '"+ipServidor+"'");
+            
+            //Ciclo donde busco en el query la cantidad de videos para inicializar la variable
+            while (rs.next()){
+                videos = new String[ rs.getInt("cantidad")];
+                System.out.println(rs.getString("cantidad"));
+            }
+            stmt.close();
+            con.close();
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT v.nombre nombre,s.ipservidor servidor, s.puertocmd puerto " +
+                                    "FROM video as v, videos_servidor as vs, servidor as s "  +
+                                    "WHERE v.id_video = vs.videofk AND vs.servidor = s.ipservidor AND vs.servidor NOT LIKE '"+ipServidor+"' AND vs.servidor = s.ipservidor ");
+            
+            //Se agregan al query las diferentes direcciones separadas por un _
+             while (rs.next()){
+                
+                videos[i] = rs.getString("nombre")+"_"+rs.getString("servidor")+"_"+rs.getString("puerto")+"_"
+                        + queParteMeToco("nombre");
+                System.out.println(videos[i]);
+                i++;
+            }
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return videos;
+        
+    }
+
+    public String queParteMeToco(String str) {
+        boolean[] parte = new boolean[2]; // si es 01 guardará como 3era parte, si es 11 guardará como 2da parte
+        int id = idVideo(str);
+        int i=1;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select parte1, parte2, parte3 from videos_servidor where "+id+"=videofk");
+            
+            //Ciclo donde busco en el query la cantidad de videos para inicializar la variable
+            while (rs.next()){
+                
+                if( rs.getBoolean("parte1") == true && rs.getBoolean("parte2") == false && rs.getBoolean("parte4") == false ){
+                    parte[0]=false;
+                    parte[1]=false;
+                    parte[2]=true;
+                }else if(rs.getBoolean("parte1") == false && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == false){
+                    parte[0]=false;
+                    parte[1]=true;
+                    parte[2]=false;
+                }else{
+                    parte[0]=false;
+                    parte[1]=false;
+                    parte[2]=true;
+                }
+                
+            }
+            
+            stmt.close();
+            con.close();
+            
+            if(parte[0] == true && parte[1]== false && parte[2]==false){
+                
+                return insertarParte(str, id, 2);
+                
+            }else if (parte[0] ==false && parte[1]==true && parte[2]==false){
+                
+                return insertarParte(str, id, 3);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return "ÑO";
+    }
+
+    private String insertarParte(String str, int id, int i) {
+        String stm = "INSERT INTO VIDEOS_SERVIDOR VALUES(?,?,?,"+id+","+ str+")";
+        PreparedStatement pst = null;
+        Connection con=null;
+        String retorno=null;
+        //Se abren las conexiones a la BDD y se guarda el video
+        
+            try{
+                Class.forName(driver);
+                con = DriverManager.getConnection(connectString, user , password);
+                pst = con.prepareStatement(stm);  
+                
+                if(i==2){
+                    
+                    pst.setBoolean(1, false);
+                    pst.setBoolean(2, true);
+                    pst.setBoolean(3, false);
+                    retorno="2";
+                    
+                }else if(i == 3){
+                    
+                    pst.setBoolean(1, false);
+                    pst.setBoolean(2, false);
+                    pst.setBoolean(3, true);
+                    retorno = "3";
+                    
+                }
+                
+                pst.executeUpdate();
+
+                } catch ( SQLException | ClassNotFoundException e ){
+
+                    System.err.println("Servidor Central > No se actualizó al servidor: " + str);
+
+                } finally {
+                // Con el finally se cierran todas las conexiones los con, pst;
+                    try {
+
+                        if (pst != null) {
+                            pst.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+                        
+
+                    } catch (SQLException ex) {
+
+                        System.err.println(ex);                
+
+                    }
+                    
+            }
+        return retorno;
     }
 }
