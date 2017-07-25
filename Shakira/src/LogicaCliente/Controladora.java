@@ -107,6 +107,9 @@ public class Controladora extends Thread{
                 System.out.println("Envio a " + infoServidores[4]);
             this.descargarVideo(infoServidores[4], Integer.parseInt(infoServidores[5]), nombreVid);
             }
+            else{
+                output.setText( output.getText() + "Servidor Secundario" + " > " + resultado + "\n");
+            }
             
             output.setLineWrap(true);
             output.setWrapStyleWord(true);

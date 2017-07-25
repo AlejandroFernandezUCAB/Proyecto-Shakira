@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -24,7 +25,7 @@ import java.net.Socket;
  * @author Alejandro Fernandez
  */
 public class SocketConexionSecundario extends Thread{
-
+    
     SocketConexionSecundario(Socket ss, int i) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 BufferedReader entrada = null;
@@ -41,20 +42,22 @@ public class SocketConexionSecundario extends Thread{
                 salida.println("Servidor Secundario > enviando video");
                 
                 //--------------envio el archivo------------
+                try{
                         //IP de la maquina que recibira el archivo
                         InetAddress direccion = ss.getInetAddress();
                         //No hace falta que creemos otro socket
                         //usamos esta misma conexion
 
-                        String nombreArchivo = str.substring(9);//quito: descargar_
-
+                        String nombreArchivo = str.substring(10);//quito: descargar_
+                        
                         // Creamos el archivo que vamos a enviar
-                        File archivo = new File( nombreArchivo );
+                        String ruta = "/home/gian/Desktop/"+ nombreArchivo;
+                        File archivo = new File( ruta );
 
                         // Obtenemos el tamaño del archivo
                         int tamañoArchivo = ( int )archivo.length(); 
 
-                        /*
+                        
                         
                         // Creamos el flujo de salida, este tipo de flujo nos permite 
                         // hacer la escritura de diferentes tipos de datos tales como
@@ -62,16 +65,26 @@ public class SocketConexionSecundario extends Thread{
                         DataOutputStream dos = new DataOutputStream( ss.getOutputStream() );
 
                         System.out.println( "Enviando Archivo: "+archivo.getName() );
-
+                        
+                        
                         // Enviamos el nombre del archivo 
                         dos.writeUTF( archivo.getName() );
 
                         // Enviamos el tamaño del archivo
                         dos.writeInt( tamañoArchivo );
-
+                        
 
                          // Creamos flujo de entrada para realizar la lectura del archivo en bytes
-                        FileInputStream fis = new FileInputStream( nombreArchivo );
+                        try{
+                            /*
+                            este parametro fue lo que me fregaba la vida
+                            el archivo lo enviaba pero con basura...aunque del tamaño correcto
+                            habia cambiado el nombre del archivo que recibo en 'file',
+                            colocando toda la ruta.
+                            pero aca no, y solo recibia el nombre y no la ruta...
+                            */
+                         FileInputStream fis = new FileInputStream( ruta );
+                        
                         BufferedInputStream bis = new BufferedInputStream( fis );
 
                         // Creamos el flujo de salida para enviar los datos del archivo en bytes
@@ -92,8 +105,15 @@ public class SocketConexionSecundario extends Thread{
                         System.out.println( "Archivo Enviado: "+archivo.getName() );
                         // Cerramos socket y flujos
                         bis.close();
-                        bos.close();    
-                    */
+                        bos.close(); }
+                        catch(FileNotFoundException e){
+                            System.out.println("No se encontro e archivo");
+                        }
+                }
+                catch(Exception e){
+                    System.out.println(e.toString());
+                }
+                    
                 
                 //--------------termino envio---------------
                 
