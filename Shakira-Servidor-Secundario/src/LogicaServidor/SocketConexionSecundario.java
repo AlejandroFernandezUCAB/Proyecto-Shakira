@@ -28,7 +28,11 @@ public class SocketConexionSecundario extends Thread{
     
     SocketConexionSecundario(Socket ss, int i) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                BufferedReader entrada = null;
+        enviarArchivo(ss,i);
+    }
+    
+    public synchronized void enviarArchivo(Socket ss, int i){
+                    BufferedReader entrada = null;
         PrintWriter salida = null;
         //System.out.println("Escuchando: al socket" + ss);
           try{  
@@ -131,7 +135,8 @@ public class SocketConexionSecundario extends Thread{
             System.out.println(e.getMessage());
         }
     }
-
-
     
 }
+
+//use este mismo ejemplo
+//http://www.geocities.ws/programmiersprache/envioarchivo.html
