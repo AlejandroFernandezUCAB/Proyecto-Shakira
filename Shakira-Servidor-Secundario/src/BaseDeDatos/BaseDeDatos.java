@@ -157,4 +157,45 @@ public class BaseDeDatos {
                 
                      
         }
+    
+    /**
+     *Devuelve la parte del video asignada a este servidor
+     * @return parte
+     */
+    public int parteAsignadaDeVideo(String nombreVid){
+        int parte = 0;
+        String stm = "select parteasignada parte from video where nombre = ?";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.setString(1, nombreVid );
+                  
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                parte = rs.getInt("parte");
+            }
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se pudo obtener la parte del video " + nombreVid );
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+        
+       return parte;
+        }
 }

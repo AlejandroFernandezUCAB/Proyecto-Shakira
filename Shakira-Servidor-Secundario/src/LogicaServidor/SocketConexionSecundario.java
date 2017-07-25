@@ -88,7 +88,7 @@ public class SocketConexionSecundario extends Thread{
                             pero aca no, y solo recibia el nombre y no la ruta...
                             */
                          FileInputStream fis = new FileInputStream( ruta );
-                        
+                        //AQUI HAGO EL SKIPPP
                         BufferedInputStream bis = new BufferedInputStream( fis );
 
                         // Creamos el flujo de salida para enviar los datos del archivo en bytes
