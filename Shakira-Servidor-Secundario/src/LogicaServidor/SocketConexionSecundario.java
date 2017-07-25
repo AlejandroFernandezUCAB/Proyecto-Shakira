@@ -98,7 +98,11 @@ public class SocketConexionSecundario extends Thread{
              System.out.println(e.getMessage());
         }
     }
-
+    /**
+     * Se envia el video al servidor secundario
+     * @param nombreVideo Nombre del video a buscar
+     * @return 1 si es eitoso, 0 si fallo
+     */
     private int enviarVideoSecundario(String nombreVideo) {
             BaseDeDatos bd = new BaseDeDatos();
             String rutaArchivo = bd.rutaVideo(nombreVideo);

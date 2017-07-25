@@ -395,6 +395,10 @@ public class SocketConexionHilo extends Thread{
         return bdd.idVideo(nombreVid);
     }
     
+    /**
+     * Extrae la ip y los puertos
+     * @param str comando 
+     */
     public void extraerIPyPuertos(String str){
         String[] campos = new String[3];
         int i = 0;

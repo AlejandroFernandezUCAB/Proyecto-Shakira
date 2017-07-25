@@ -29,7 +29,13 @@ import java.util.StringTokenizer;
  */
 public class SocketConexionSecundario {
 
-    
+  /**
+   * Metodo para incribir el servidor secundario en el servidor central
+   * @param ipServidorCentral 
+   * @param puertoCentral
+   * @param puertos
+   * @return Linea de comando que retorne el servidor
+   */
     public String inscribirServidor(String ipServidorCentral, int puertoCentral, String[] puertos) {
         BufferedReader entrada = null;
         PrintWriter salida = null;
@@ -110,6 +116,10 @@ public class SocketConexionSecundario {
         
     }
 
+    /**
+     * Metodo encargado de separar en el While más interno las palabras
+     * @param videosIpPuerto Aqui hay un array con todos los nombres puertos e ips a donde va a descargar
+     */
     private void peticionDeDescargaAServidoresSecundarios(String[] videosIpPuerto) {
        
         String[] campos = new String[3];
@@ -126,6 +136,10 @@ public class SocketConexionSecundario {
         }
     }
 
+    /**
+     * Procede a descargar video
+     * @param campos 
+     */
     private void descarga(String[] campos) {
         BufferedReader entrada = null;
         PrintWriter salida = null;

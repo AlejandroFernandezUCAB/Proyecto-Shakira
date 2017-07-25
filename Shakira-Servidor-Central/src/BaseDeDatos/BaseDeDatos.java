@@ -570,6 +570,12 @@ public static String password = "redes2";
         
         return idVid;
     }
+    
+    /**
+     * Que videos hay alojados
+     * @param cantidad cantidad de videos
+     * @return 
+     */
     public String[] videosAlojados( int cantidad ) {
         String[] videos = new String[ cantidad ];
         int i = 0;
@@ -600,6 +606,10 @@ public static String password = "redes2";
         
     }
 
+    /**
+     * Actualiza el estado del servidor secundario a listo
+     * @param hostAddress DIreccion ip a actualizar
+     */
     public void actualizarEstadoServidorSecundario(String hostAddress) {
         String stm = "UPDATE SERVIDOR SET estado=1 WHERE ipservidor='"+ hostAddress+"'";
         PreparedStatement pst = null;

@@ -92,7 +92,11 @@ public class BaseDeDatos {
        return cantidad;
        
     }
-
+    /**
+     * Este metodo me devuelve las rutas de cada video
+     * @return Array con rutas de cadavideo
+     * 
+     */
     public String[] rutaDeVideos() {
         String[] rutas = new String[ cantidadDeVideos() ];
         int i = 0;
@@ -122,7 +126,12 @@ public class BaseDeDatos {
        return rutas;
        
     }
-
+    
+    /**
+     * Se agrega el video a la bdd del servidor secundario
+     * @param readLine Nombre del video
+     * @param posicion posicion
+     */
     public void agregarVideoServidorSecundario(String readLine, int posicion) {
         String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?)";
         PreparedStatement pst = null;
@@ -157,7 +166,12 @@ public class BaseDeDatos {
                 
                      
         }
-
+    
+    /**
+     * Devuelve la ruta de un video
+     * @param nombreVideo Nombre del video
+     * @return Ruta del video
+     */
     public String rutaVideo(String nombreVideo) {
         String retorno=null;
         nombreVideo = nombreVideo.substring(10);
