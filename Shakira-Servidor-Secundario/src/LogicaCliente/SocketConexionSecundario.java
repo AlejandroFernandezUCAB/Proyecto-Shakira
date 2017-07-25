@@ -28,7 +28,8 @@ import java.util.StringTokenizer;
  * @author Alejandro Fernandez
  */
 public class SocketConexionSecundario {
-
+    private String ipservidorC;
+    private int puerto;
   /**
    * Metodo para incribir el servidor secundario en el servidor central
    * @param ipServidorCentral 
@@ -43,7 +44,8 @@ public class SocketConexionSecundario {
         BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
         String linea=null;
         String[] nombreVideos = null;
-        
+        this.ipservidorC = ipServidorCentral;
+        this.puerto = puertoCentral;
          //Inicializo la conexion con el socket
          try{
             s = new Socket( ipServidorCentral, puertoCentral);
@@ -132,6 +134,7 @@ public class SocketConexionSecundario {
                  i++;
             }
             descarga(campos);
+            envioInformacionNuevaAlServidorCentral(campos);
             i=0;
         }
     }
@@ -144,6 +147,7 @@ public class SocketConexionSecundario {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null; 
+        BaseDeDatos bd  = new BaseDeDatos();
         try
           {
                // Creamos el Socket con la direccion y elpuerto de comunicacion
@@ -194,6 +198,7 @@ public class SocketConexionSecundario {
                entrada.close();
                salida.close();
                System.out.println( "Archivo Recibido "+nombreArchivo );
+               bd.agregarVideoServidorSecundario(nombreArchivo, 1);
           }
           catch( Exception e )
           {
@@ -203,6 +208,39 @@ public class SocketConexionSecundario {
               
           }
          
+    }
+    /**
+     * Metodo encargado de decirle al servidor central mi nuevo video
+     * @param campo Ip
+     */
+    private void envioInformacionNuevaAlServidorCentral(String[] campo) {
+        BufferedReader entrada = null;
+        PrintWriter salida = null;
+        Socket s = null;
+        BufferedReader stdIn =	new BufferedReader(new InputStreamReader(System.in));
+        String linea=null;
+        BaseDeDatos bd = new BaseDeDatos();
+            try{
+                s = new Socket( this.ipservidorC , this.puerto);
+                System.out.println("Se inicializa el socket:" + s);
+                entrada = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                // Obtenemos el canal de salida
+                salida = new PrintWriter(new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),true);
+             }catch(IOException e){
+                 System.out.println(e.getMessage());
+             }
+        try {
+            
+          while (true) {
+              String str = "agregarvideon"+campo[0];
+              salida.println(str);
+              System.out.println("Se envio: "+ str);
+              linea = entrada.readLine(); //Aqui recibo que parte me tocó y actualizo
+              bd.actualizarParte( linea, campo[0] ); //Aqui guardo que parte me tocó
+          }
+        }catch(IOException e ){
+            System.out.println( e.getMessage() );
+        }
     }
     
 }

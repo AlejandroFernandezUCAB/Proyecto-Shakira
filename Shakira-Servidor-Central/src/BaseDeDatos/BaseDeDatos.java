@@ -691,4 +691,40 @@ public static String password = "redes2";
         return videos;
         
     }
+
+    public String queParteMeToco(String str) {
+        str = str.substring(13);
+        boolean[] parte = new boolean[1]; // si es 01 guardará como 3era parte, si es 11 guardará como 2da parte
+        int id = idVideo(str);
+        int i=1;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select parte1, parte2, parte3 from videos_servidor where "+id+"=videofk");
+            
+            //Ciclo donde busco en el query la cantidad de videos para inicializar la variable
+            while (rs.next()){
+                
+                if( rs.getBoolean("parte1") == false && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == false ){
+                    parte[0]=false;
+                    parte[1]=true;
+                }else if(rs.getBoolean("parte1") == true && rs.getBoolean("parte2") == true && rs.getBoolean("parte4") == true){
+                    parte[0]=true;
+                    parte[1]=true;
+                }
+            }
+            stmt.close();
+            con.close();
+            
+            if(parte[0] == false && parte[1]== true){
+                
+            }else if (parte[0] ==true && parte[1]==true){
+                
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return "hola";
+    }
 }

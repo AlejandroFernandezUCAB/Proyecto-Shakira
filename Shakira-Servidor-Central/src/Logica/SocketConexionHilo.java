@@ -144,6 +144,8 @@ public class SocketConexionHilo extends Thread{
                     salida.println("Video no existe o usuario no registrado...");
                 }
                 System.out.println("-------------FIN PROCESO DESCARGA-----------");
+              } else if(str.trim().contains("agregarvideon")){ //Aqui se procede a guardar que parte le tocó
+                  guardarparte(str, entrada, salida);
               }
             break;
           }
@@ -409,6 +411,17 @@ public class SocketConexionHilo extends Thread{
         }
         this.ipParaDescarga = campos[0];
         System.out.println("Esta:"+ipParaDescarga);
+    }
+
+    private void guardarparte(String str, BufferedReader entrada, PrintWriter salida) {
+        BaseDeDatos bd = new BaseDeDatos();
+        try{
+            
+            str = entrada.readLine();
+            salida.println( bd.queParteMeToco(str) );
+        }catch(IOException e){
+            
+        }
     }
     
 }

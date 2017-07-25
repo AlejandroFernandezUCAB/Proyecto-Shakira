@@ -23,6 +23,7 @@ public class BaseDeDatos {
     //public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
     public static String user = "redes2";
     public static String password = "redes2";
+    public static String ruta = "C:/Prueba";
     
     /**
      * Metodo que se encarga de agarrar todos los videos que hay en el servidor
@@ -133,7 +134,7 @@ public class BaseDeDatos {
      * @param posicion posicion
      */
     public void agregarVideoServidorSecundario(String readLine, int posicion) {
-        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?)";
+        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se verifica que no haya un servidor con la misma Ip
@@ -142,7 +143,8 @@ public class BaseDeDatos {
             con = DriverManager.getConnection(connectString, user , password);
             pst = con.prepareStatement(stm);
             pst.setString(1, readLine );
-            pst.setInt(2, posicion );                    
+            pst.setString(2, ruta + readLine);    
+            pst.setInt(3, posicion);
             pst.executeUpdate();
         } catch ( SQLException | ClassNotFoundException e ){
            System.out.println(e.getMessage());        
@@ -199,5 +201,38 @@ public class BaseDeDatos {
             }        
         
         return retorno;
+    }
+
+    public void actualizarParte(String linea, String campo) {
+        String stm = "UPDATE VIDEO set parteasignada="+ linea + " where nombre LIKE'" +campo+ "'" ;
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.executeUpdate();
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se inscribio el video: "+ campo);
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+                System.out.println("Servidor Central > Se inscribio el video: " + campo);
+                
+                
+                   
     }
 }
