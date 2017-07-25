@@ -636,4 +636,49 @@ public static String password = "redes2";
             }
 
     }
+    /**
+     * Metodo que extrae el video, la ip y el puerto por donde se va a descargar
+     * @param ipServidor ip del servidor actual
+     * @return vector de string
+     */
+    public String[] videoIpPuerto(String ipServidor) {
+        String[] videos = null;
+        int i = 0;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select count(*) cantidad from video, videos_servidor,servidor where servidor=ipservidor and videofk = id_video and ipservidor != '"+ipServidor+"'");
+            
+            //Ciclo donde busco en el query la cantidad de videos para inicializar la variable
+            while (rs.next()){
+                videos = new String[ rs.getInt("cantidad")];
+                System.out.println(rs.getString("cantidad"));
+            }
+            stmt.close();
+            con.close();
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT v.nombre nombre,s.ipservidor servidor, s.puertodata puerto " +
+                                    "FROM video as v, videos_servidor as vs, servidor as s "  +
+                                    "WHERE v.id_video = vs.videofk AND vs.servidor = s.ipservidor AND vs.servidor NOT LIKE '"+ipServidor+"' AND vs.servidor = s.ipservidor ");
+            
+            //Se agregan al query las diferentes direcciones separadas por un _
+             while (rs.next()){
+                videos[i] = rs.getString("nombre")+"_"+rs.getString("servidor")+"_"+rs.getString("puerto");
+                System.out.println(videos[i]);
+                i++;
+            }
+                stmt.close();
+                con.close();
+                
+            }catch ( Exception e ){
+                
+                 System.out.println(e.getMessage());
+            }
+        
+        return videos;
+        
+    }
 }

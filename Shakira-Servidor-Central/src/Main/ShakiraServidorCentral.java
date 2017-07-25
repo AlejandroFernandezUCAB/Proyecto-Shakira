@@ -27,7 +27,7 @@ public class ShakiraServidorCentral {
             //data: 1026
             
             //Se crea el socket de comandos en el puerto 1026
-            ServerSocket s = new ServerSocket(1021);
+            ServerSocket s = new ServerSocket(1022);
             while(true){    
                 System.out.print("Servidor Central Escuchando en el puerto " + 1026);
                 System.out.println(", i = " + i);

@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -72,16 +74,27 @@ public class SocketConexionSecundario {
             //Se espera respuesta del servidor para saber donde se encuentra cada video
             linea = entrada.readLine();
             System.out.println( linea );
-            //Recibo la cantidad de videos
+            //Se recibe cuantos videos se van a descargar
+            String[] videosIpPuerto = new String[ Integer.parseInt(entrada.readLine())];
+            //Se reciben el nombre del video, la ip y el puerto
+            //y su puerto para descargarlo
+            for (int i = 0; i < videosIpPuerto.length; i++) {
+                  videosIpPuerto[i] = entrada.readLine();       
+            }
+            
+            peticionDeDescargaAServidoresSecundarios( videosIpPuerto );
+                        
             break;
             
           }
-          
+           
            // Libera recursos
            salida.close();
            entrada.close();
            stdIn.close();
            s.close();
+           //Hago la peticion de descargas
+           
            
         } catch (IOException e) {
             
@@ -95,6 +108,87 @@ public class SocketConexionSecundario {
         
         return linea;
         
+    }
+
+    private void peticionDeDescargaAServidoresSecundarios(String[] videosIpPuerto) {
+       
+        String[] campos = new String[videosIpPuerto.length];
+        int i = 0;
+        for (int j = 0; j < videosIpPuerto.length ; j++) { 
+            StringTokenizer tokens = new StringTokenizer(videosIpPuerto[j],"_");
+            while(tokens.hasMoreTokens()){
+                 campos[i] = tokens.nextToken();
+                 System.out.println(campos[i]);
+                 i++;
+            }
+            descarga(campos);
+            i=0;
+        }
+    }
+
+    private void descarga(String[] campos) {
+        BufferedReader entrada = null;
+        PrintWriter salida = null;
+        Socket s = null; 
+        try
+          {
+               // Creamos el Socket con la direccion y elpuerto de comunicacion
+               s = new Socket( campos[1], Integer.parseInt( campos[2]) );
+               s.setSoTimeout( 2000 );
+               s.setKeepAlive( true );
+               //Canal de Entrada
+               entrada = new BufferedReader(new InputStreamReader( s.getInputStream() ) );
+               // Obtenemos el canal de salida
+               salida = new PrintWriter(new BufferedWriter( new OutputStreamWriter( s.getOutputStream() ) ),true);
+               //Envio por el canal el video que quiero
+               salida.println( "descargars"+campos[1] );
+               
+               // Creamos flujo de entrada para leer los datos que envia el cliente 
+               DataInputStream dis = new DataInputStream( s.getInputStream() );
+        
+               // Obtenemos el nombre del archivo
+               String nombreArchivo = dis.readUTF(); 
+ 
+               // Obtenemos el tamaño del archivo
+               int tam = dis.readInt(); 
+ 
+               System.out.println( "Recibiendo archivo: "+ nombreArchivo );
+        
+               // Creamos flujo de salida, este flujo nos sirve para 
+               // indicar donde guardaremos el archivo
+               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
+               BufferedOutputStream out = new BufferedOutputStream( fos );
+               BufferedInputStream in = new BufferedInputStream( s.getInputStream() );
+ 
+               // Creamos el array de bytes para leer los datos del archivo
+               byte[] buffer = new byte[ tam ];
+ 
+               // Obtenemos el archivo mediante la lectura de bytes enviados
+               for( int i = 0; i < buffer.length; i++ )
+               {
+                  buffer[ i ] = ( byte )in.read( ); 
+               }
+ 
+               // Escribimos el archivo 
+               out.write( buffer ); 
+ 
+               // Cerramos flujos
+               out.flush(); 
+               in.close();
+               out.close(); 
+               s.close();
+               entrada.close();
+               salida.close();
+               System.out.println( "Archivo Recibido "+nombreArchivo );
+          }
+          catch( Exception e )
+          {
+            System.out.println( e.getMessage() );
+            
+          }finally{
+              
+          }
+         
     }
     
 }

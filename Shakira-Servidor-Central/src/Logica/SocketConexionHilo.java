@@ -273,12 +273,20 @@ public class SocketConexionHilo extends Thread{
             
             }
             salida.println("Servidor Central > Servidores secundarios ya sincronizados");
-            //Fin de envio de los 3 servidores
-            //Ahora como ya están los 3 servidores se procede a enviar cada archivo
-            //Fin de envío de archivos
+            //Procedo a enviar el nombre del video + ip + el puerto que necesita el serv.secundario para descargar el video
+            String[] listaDeVideosConSuIp = bd.videoIpPuerto(ss.getLocalAddress().getHostAddress() );
+            //Envío el tamaño dle string
+            salida.println( listaDeVideosConSuIp.length);
+            //Envio las respectivas direcciones con el puerto
+            for (String listasDeVideosConSuIp : listaDeVideosConSuIp) {
+                salida.println(listasDeVideosConSuIp);
+            }
+            //Se termina la interacción con el servidor central
             
         }catch(IOException e){
+            
             e.getStackTrace();
+            
         }
     
     }    
