@@ -12,9 +12,10 @@ import java.net.Socket;
  * @author pedro & gian
  */
 public class ConsolaServidor extends Thread{
-    
+    //synchronized
+    //https://stackoverflow.com/questions/20001886/multiple-threads-access-the-same-file
     @Override
-    public void run(){
+    public synchronized void run(){
         System.out.println("Soy el hilo del cliente secundario");
                 int i=0;
         try {
