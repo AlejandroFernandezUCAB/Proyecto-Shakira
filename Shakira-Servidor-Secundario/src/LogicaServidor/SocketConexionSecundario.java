@@ -64,7 +64,7 @@ public class SocketConexionSecundario extends Thread{
     
     @Override
     public void run(){
-         BufferedReader entrada = null;
+        BufferedReader entrada = null;
         PrintWriter salida = null;
         //System.out.println("Escuchando: al socket" + ss);
         int suiche;

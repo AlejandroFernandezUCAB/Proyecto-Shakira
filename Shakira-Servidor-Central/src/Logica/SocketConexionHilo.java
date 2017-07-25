@@ -37,6 +37,7 @@ public class SocketConexionHilo extends Thread{
        
     private Socket ss;
     private int counter;
+    private String ipParaDescarga;
     
     public SocketConexionHilo( Socket i, int c){
         ss = i;
@@ -79,10 +80,11 @@ public class SocketConexionHilo extends Thread{
                 
             }else if( str.trim().contains("inscribirS")){
                 System.out.println("---------------Inscribiendo Servidor Secundario--------------");
-                suiche = inscribirServidorSecundario(str);                                
+                extraerIPyPuertos(str.substring(12));
+                suiche = inscribirServidorSecundario(str);
                 if( suiche == 1){
                     
-                   salida.println( "Servidor Central > Servidor inscrito correctamente");                   
+                   salida.println( "Servidor Central > Servidor inscrito correctamente");     
                    sincronizacion(str, entrada, salida);
                    
                 }else if (suiche == 0){
@@ -256,13 +258,13 @@ public class SocketConexionHilo extends Thread{
                 //Recibo los videos
                 str = entrada.readLine();
                 //Se procede a guardar y se verifica si es true se guardo
-                if( bd.agregarVideoSincronizacion( ss.getLocalAddress().getHostAddress() ,str) == true) {
+                if( bd.agregarVideoSincronizacion( ipParaDescarga ,str) == true) {
                     System.out.println("Servidor central > El Video: " + str
                             + " se guardo correctamente");
                 }
                 
             }
-            bd.actualizarEstadoServidorSecundario( ss.getLocalAddress().getHostAddress());
+            bd.actualizarEstadoServidorSecundario( ipParaDescarga );
             //Se verifica que hayan 3 servidores inscritos y que ya hayan enviado los archivos
             boolean suiche = true;
             while(suiche == true){
@@ -274,7 +276,7 @@ public class SocketConexionHilo extends Thread{
             }
             salida.println("Servidor Central > Servidores secundarios ya sincronizados");
             //Procedo a enviar el nombre del video + ip + el puerto que necesita el serv.secundario para descargar el video
-            String[] listaDeVideosConSuIp = bd.videoIpPuerto(ss.getLocalAddress().getHostAddress() );
+            String[] listaDeVideosConSuIp = bd.videoIpPuerto(ipParaDescarga );
             //Envío el tamaño dle string
             salida.println( listaDeVideosConSuIp.length);
             //Envio las respectivas direcciones con el puerto
@@ -392,6 +394,17 @@ public class SocketConexionHilo extends Thread{
         BaseDeDatos bdd = new BaseDeDatos();
         return bdd.idVideo(nombreVid);
     }
-
+    
+    public void extraerIPyPuertos(String str){
+        String[] campos = new String[3];
+        int i = 0;
+        StringTokenizer tokens = new StringTokenizer(str,"_");
+        while(tokens.hasMoreTokens()){
+             campos[i] = tokens.nextToken();
+             i++;
+        }
+        this.ipParaDescarga = campos[0];
+        System.out.println("Esta:"+ipParaDescarga);
+    }
     
 }

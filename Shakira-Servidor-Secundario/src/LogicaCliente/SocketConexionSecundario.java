@@ -117,8 +117,8 @@ public class SocketConexionSecundario {
         for (int j = 0; j < videosIpPuerto.length ; j++) { 
             StringTokenizer tokens = new StringTokenizer(videosIpPuerto[j],"_");
             while(tokens.hasMoreTokens()){
-                 campos[i] = tokens.nextToken();
-                 System.out.println(campos[i]);
+                 campos[j] = tokens.nextToken();
+                 System.out.println(campos[j]);
                  i++;
             }
             descarga(campos);
