@@ -75,11 +75,11 @@ public class SocketConexionSecundario extends Thread{
                         // Strings, boolean, caracteres y la familia de enteros, etc.
                         DataOutputStream dos = new DataOutputStream( ss.getOutputStream() );
 
-                        System.out.println( "Enviando Archivo: "+archivo.getName() );
+                        System.out.println( "Enviando Archivo: "+archivo.getName()+".parte" + parteAsignada );
                         
                         
                         // Enviamos el nombre del archivo 
-                        dos.writeUTF( archivo.getName() );
+                        dos.writeUTF( archivo.getName() + ".parte" + parteAsignada);
 
                         // Enviamos el tamaño del archivo
                         dos.writeInt( tamañoArchivo );
