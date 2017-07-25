@@ -71,6 +71,7 @@ public class SocketConexionSecundario {
             // Recibe la respuesta del servidor
             linea = entrada.readLine();
             System.out.println("Respuesta servidor: " + linea);   
+            /*
             //A partir de aquí comienza el proceso de sincronización
             BaseDeDatos bd = new BaseDeDatos();
             //Aqui recibe un array de string con el nombre de cada video;

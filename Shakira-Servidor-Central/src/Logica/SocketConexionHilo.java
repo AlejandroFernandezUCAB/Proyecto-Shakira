@@ -251,6 +251,7 @@ public class SocketConexionHilo extends Thread{
      * @param entrada Canal de entrada
      * @param salida Canal de salida
      */
+    /*
     private void sincronizacion(String str, BufferedReader entrada, PrintWriter salida) throws FileNotFoundException, IOException {
         try{
             BaseDeDatos bd = new BaseDeDatos();
@@ -295,6 +296,8 @@ public class SocketConexionHilo extends Thread{
         }
     
     }    
+    */
+    
     /**
      * Metodo en el cual recibe cada video
      * @param str Aqui es donde llegará cada item

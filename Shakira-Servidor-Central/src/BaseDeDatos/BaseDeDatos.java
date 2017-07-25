@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 public class BaseDeDatos {
 
 public static String driver = "org.postgresql.Driver";
-public static String connectString = "jdbc:postgresql://localhost:5432/Shakira-Servidor-Central";
+public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
 //public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
 public static String user = "redes2";
 public static String password = "redes2";
