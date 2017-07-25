@@ -157,4 +157,33 @@ public class BaseDeDatos {
                 
                      
         }
+
+    public String rutaVideo(String nombreVideo) {
+        String retorno=null;
+        nombreVideo = nombreVideo.substring(11);
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT rutaendisco FROM video where nombre LIKE '"+nombreVideo+"'");
+            
+            while (rs.next()){
+                
+                retorno = rs.getString("rutaendisco");
+                
+            }
+            
+            con.close();
+            stmt.close();
+            
+            }catch ( SQLException e ){
+                System.out.println("Error en la ejecución del SQL buscando la cantidad");
+            }catch ( ClassNotFoundException e){
+                System.out.println("Error, no se encuentra la clase Driver");
+            }catch ( Exception e){
+                System.out.println(e.getMessage());
+            }        
+        
+        return retorno;
+    }
 }
