@@ -198,4 +198,42 @@ public class BaseDeDatos {
         
        return parte;
         }
+    
+     public String rutaDeVideo(String nombreVid){
+        String rutaVid = null;
+        String stm = "select rutaendisco ruta from video where nombre = ?";
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.setString(1, nombreVid );
+                  
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                rutaVid = rs.getString("ruta");
+            }
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se pudo obtener la ruta del video " + nombreVid );
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+        
+       return rutaVid;
+        }
+    
 }

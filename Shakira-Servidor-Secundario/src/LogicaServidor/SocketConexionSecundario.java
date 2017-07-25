@@ -5,6 +5,7 @@
  */
 package LogicaServidor;
 
+import BaseDeDatos.BaseDeDatos;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -55,7 +56,13 @@ public class SocketConexionSecundario extends Thread{
                         String nombreArchivo = str.substring(10);//quito: descargar_
                         
                         // Creamos el archivo que vamos a enviar
-                        String ruta = "/home/gian/Desktop/"+ nombreArchivo;
+                       // String ruta = "/home/gian/Desktop/"+ nombreArchivo; // esto se va a quitar
+                        int parteAsignada = parteAsignadaVideo(nombreArchivo);
+                        System.out.println("parte del video asignada: "+ parteAsignada);
+                        
+                        //si devolvio 0 es porque o no existe el video o hubo algun error
+                        if(parteAsignada != 0){
+                        String ruta = this.rutaVideo(nombreArchivo);
                         File archivo = new File( ruta );
 
                         // Obtenemos el tamaño del archivo
@@ -113,6 +120,8 @@ public class SocketConexionSecundario extends Thread{
                         catch(FileNotFoundException e){
                             System.out.println("No se encontro e archivo");
                         }
+                        
+                    }
                 }
                 catch(Exception e){
                     System.out.println(e.toString());
@@ -134,6 +143,16 @@ public class SocketConexionSecundario extends Thread{
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+    
+    private int parteAsignadaVideo(String nombreVid){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.parteAsignadaDeVideo(nombreVid);
+    }
+    
+    private String rutaVideo(String nombreVid){
+        BaseDeDatos bdd = new BaseDeDatos();
+        return bdd.rutaDeVideo(nombreVid);
     }
     
 }
