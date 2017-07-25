@@ -112,7 +112,7 @@ public class SocketConexionSecundario {
 
     private void peticionDeDescargaAServidoresSecundarios(String[] videosIpPuerto) {
        
-        String[] campos = new String[videosIpPuerto.length];
+        String[] campos = new String[3];
         int i = 0;
         for (int j = 0; j < videosIpPuerto.length ; j++) { 
             StringTokenizer tokens = new StringTokenizer(videosIpPuerto[j],"_");
