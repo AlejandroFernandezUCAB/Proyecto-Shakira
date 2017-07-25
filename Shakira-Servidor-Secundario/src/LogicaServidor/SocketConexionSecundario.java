@@ -237,12 +237,12 @@ public class SocketConexionSecundario extends Thread{
                             case 2:
                                 inicio = parte;
                                 tope = parte*2;
-                                dos.writeInt( tope - inicio );
+                                dos.writeInt( inicio-tope );
                                 break;
                             case 3:
                                 inicio = parte*2;
                                 tope = tamañoArchivo;
-                                dos.writeInt( tope-inicio );
+                                dos.writeInt( inicio-tope );
                                 break;
                             default:
                                 return;

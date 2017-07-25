@@ -5,14 +5,9 @@
  */
 package LogicaCliente;
 
-import java.util.List;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -114,7 +109,6 @@ public class Controladora extends Thread{
             output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[4] + "\n");
                 System.out.println("Envio a " + infoServidores[4]);
             this.descargarVideo(infoServidores[4], Integer.parseInt(infoServidores[5]), nombreVid);
-            mergeFiles("/home/gian/videosDescargados/"+nombreVid);
             }
             else{
                 output.setText( output.getText() + "Servidor Secundario" + " > " + resultado + "\n");
@@ -158,40 +152,6 @@ public class Controladora extends Thread{
             }
         }
         return comando;
-    }
-    
-    public boolean mergeFiles(String nombreVid){
-        File ofile = new File(nombreVid);
-		FileOutputStream fos;
-		FileInputStream fis;
-		byte[] fileBytes;
-		int bytesRead = 0;
-		List<File> list;
-                list = new ArrayList<File>();
-		list.add(new File(nombreVid+".parte1"));
-		list.add(new File(nombreVid+".parte2"));
-		list.add(new File(nombreVid+".parte3"));
-
-		try {
-		    fos = new FileOutputStream(ofile,true);
-		    for (File file : list) {
-		        fis = new FileInputStream(file);
-		        fileBytes = new byte[(int) file.length()];
-		        bytesRead = fis.read(fileBytes, 0,(int)  file.length());
-		        assert(bytesRead == fileBytes.length);
-		        assert(bytesRead == (int) file.length());
-		        fos.write(fileBytes);
-		        fos.flush();
-		        fileBytes = null;
-		        fis.close();
-		        fis = null;
-		    }
-		    fos.close();
-		    fos = null;
-		}catch (Exception exception){
-			exception.printStackTrace();
-		}
-        return true;
     }
     
         public String[] extraerIPyPuertos(String str){
