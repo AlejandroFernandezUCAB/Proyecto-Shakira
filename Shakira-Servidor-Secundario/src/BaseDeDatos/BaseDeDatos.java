@@ -24,6 +24,7 @@ public class BaseDeDatos {
     //public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
     public static String user = "redes2";
     public static String password = "redes2";
+    public static String ruta = "C:/Prueba";
     
     /**
      * Metodo que se encarga de agarrar todos los videos que hay en el servidor
@@ -93,7 +94,11 @@ public class BaseDeDatos {
        return cantidad;
        
     }
-
+    /**
+     * Este metodo me devuelve las rutas de cada video
+     * @return Array con rutas de cadavideo
+     * 
+     */
     public String[] rutaDeVideos() {
         String[] rutas = new String[ cantidadDeVideos() ];
         int i = 0;
@@ -123,9 +128,14 @@ public class BaseDeDatos {
        return rutas;
        
     }
-
+    
+    /**
+     * Se agrega el video a la bdd del servidor secundario
+     * @param readLine Nombre del video
+     * @param posicion posicion
+     */
     public void agregarVideoServidorSecundario(String readLine, int posicion) {
-        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?)";
+        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se verifica que no haya un servidor con la misma Ip
@@ -134,7 +144,8 @@ public class BaseDeDatos {
             con = DriverManager.getConnection(connectString, user , password);
             pst = con.prepareStatement(stm);
             pst.setString(1, readLine );
-            pst.setInt(2, posicion );                    
+            pst.setString(2, ruta + readLine);    
+            pst.setInt(3, posicion);
             pst.executeUpdate();
         } catch ( SQLException | ClassNotFoundException e ){
            System.out.println(e.getMessage());        
@@ -158,6 +169,107 @@ public class BaseDeDatos {
                 
                      
         }
+    
+    /**
+     * Devuelve la ruta de un video
+     * @param nombreVideo Nombre del video
+     * @return Ruta del video
+     */
+    public String rutaVideo(String nombreVideo) {
+        String retorno=null;
+        nombreVideo = nombreVideo.substring(10);
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT rutaendisco FROM video where nombre LIKE '"+nombreVideo+"'");
+            
+            while (rs.next()){
+                
+                retorno = rs.getString("rutaendisco");
+                
+            }
+            
+            con.close();
+            stmt.close();
+            
+            }catch ( SQLException e ){
+                System.out.println("Error en la ejecución del SQL buscando la cantidad");
+            }catch ( ClassNotFoundException e){
+                System.out.println("Error, no se encuentra la clase Driver");
+            }catch ( Exception e){
+                System.out.println(e.getMessage());
+            }        
+        
+        return retorno;
+    }
+
+    public void actualizarParte(String linea, String campo) {
+        String stm = "UPDATE VIDEO set parteasignada="+ linea + " where nombre LIKE'" +campo+ "'" ;
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.executeUpdate();
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se inscribio el video: "+ campo);
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+                System.out.println("Servidor Central > Se inscribio el video: " + campo);
+                
+   
+    }
+
+    public void agregarVideoNuevo(String nombre, String ipLocal, String parte) {
+        String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'),  ?,?,?)" ;
+        PreparedStatement pst = null;
+        Connection con=null;
+        //Se verifica que no haya un servidor con la misma Ip
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(connectString, user , password);
+            pst = con.prepareStatement(stm);
+            pst.setString( 1, nombre);
+            pst.setString( 2 , ipLocal);
+            pst.setInt( 3, Integer.parseInt( parte ));
+            pst.executeUpdate();
+        } catch ( SQLException | ClassNotFoundException e ){
+           System.out.println(e.getMessage());        
+           System.out.println("Servidor Central > No se inscribio el video: "+ nombre);
+       } finally {
+           // Con el finally se cierran todas las conexiones los con, pst;
+                 try {
+                      if (pst != null) {
+                          pst.close();
+                       }
+                       if (con != null) {
+                          con.close();
+                       }
+                } catch (SQLException ex) {
+                        System.out.println(ex);                
+                }
+
+        }
+                System.out.println("Servidor Central > Se inscribio el video: " + nombre);
+                
+                
+    }
     
     /**
      *Devuelve la parte del video asignada a este servidor
