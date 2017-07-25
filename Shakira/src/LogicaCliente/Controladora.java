@@ -94,8 +94,11 @@ public class Controladora extends Thread{
             
             //numeros pares = ip servidores
             //numeros impares = puerto
+            try{
+                //---------------inicio try-------------
             if(!resultado.contains("Video no existe o usuario")){
             String[] infoServidores = this.extraerIPyPuertos(resultado);
+            
             //esto no deberia dar error, porque para consultarServidoresSecundarios_ip_puerto servidores y clientes deben estar inscritos
             output.setText( output.getText() + "Enviando solicitud de descarga a " + infoServidores[0] + "\n");
                 System.out.println("Envio a " + infoServidores[0]);
@@ -113,6 +116,11 @@ public class Controladora extends Thread{
             
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
+            
+            }catch(NumberFormatException e){
+                    System.out.println("Excepcion: " + e);
+                    }
+            //---------------fin try-------------
             }
             catch(StringIndexOutOfBoundsException e){
                 output.setText(output.getText() + "Cliente > Debe especificar el nombre del video" + "\n");

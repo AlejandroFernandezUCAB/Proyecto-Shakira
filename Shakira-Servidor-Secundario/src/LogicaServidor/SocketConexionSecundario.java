@@ -62,7 +62,7 @@ public class SocketConexionSecundario extends Thread{
                         
                         //si devolvio 0 es porque o no existe el video o hubo algun error
                         if(parteAsignada != 0){
-                        String ruta = this.rutaVideo(nombreArchivo);
+                        String ruta = this.rutaVideo(nombreArchivo)+nombreArchivo;
                         File archivo = new File( ruta );
 
                         // Obtenemos el tamaño del archivo
@@ -133,7 +133,8 @@ public class SocketConexionSecundario extends Thread{
                         bis.read( buffer ); 
 
                         // Realizamos el envio de los bytes que conforman el archivo
-                        for( int x = 0; x < buffer.length; x++ )
+                       // for( int x = 0; x < buffer.length; x++ )
+                       for( int x = 0; x < tope; x++ )
                         {
                             bos.write( buffer[ x ] ); 
                         } 
