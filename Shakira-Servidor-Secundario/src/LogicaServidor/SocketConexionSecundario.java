@@ -96,6 +96,31 @@ public class SocketConexionSecundario extends Thread{
                             */
                          FileInputStream fis = new FileInputStream( ruta );
                         //AQUI HAGO EL SKIPPP
+                        int parte = Math.round(tamañoArchivo/3);
+                        int inicio = 0;
+                        int tope = 0;
+                        
+                        switch(parteAsignada){
+                            case 1:
+                                //fis.skip(tamañoArchivo);
+                                inicio = 0;
+                                tope = parte;
+                                
+                                break;
+                            case 2:
+                                inicio = parte;
+                                tope = parte*2;
+                                break;
+                            case 3:
+                                inicio = parte*2;
+                                tope = tamañoArchivo;
+                                break;
+                            default:
+                                return;
+                        }
+                        
+                        fis.skip(inicio);
+                        
                         BufferedInputStream bis = new BufferedInputStream( fis );
 
                         // Creamos el flujo de salida para enviar los datos del archivo en bytes
