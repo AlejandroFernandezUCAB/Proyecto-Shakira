@@ -82,7 +82,7 @@ public class SocketConexionSecundario extends Thread{
                         dos.writeUTF( archivo.getName() + ".parte" + parteAsignada);
 
                         // Enviamos el tamaño del archivo
-                        dos.writeInt( tamañoArchivo );
+                       // dos.writeInt( tamañoArchivo );
                         
 
                          // Creamos flujo de entrada para realizar la lectura del archivo en bytes
@@ -105,21 +105,24 @@ public class SocketConexionSecundario extends Thread{
                                 //fis.skip(tamañoArchivo);
                                 inicio = 0;
                                 tope = parte;
-                                
+                                dos.writeInt( tamañoArchivo );
                                 break;
                             case 2:
                                 inicio = parte;
                                 tope = parte*2;
+                                dos.writeInt( inicio-tope );
                                 break;
                             case 3:
                                 inicio = parte*2;
                                 tope = tamañoArchivo;
+                                dos.writeInt( inicio-tope );
                                 break;
                             default:
                                 return;
                         }
                         
                         fis.skip(inicio);
+                         
                         
                         BufferedInputStream bis = new BufferedInputStream( fis );
 
