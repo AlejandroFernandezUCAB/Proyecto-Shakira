@@ -141,7 +141,7 @@ public class SocketConexionSecundario {
                // Obtenemos el canal de salida
                salida = new PrintWriter(new BufferedWriter( new OutputStreamWriter( s.getOutputStream() ) ),true);
                //Envio por el canal el video que quiero
-               salida.println( "descargars"+campos[1] );
+               salida.println( "descargars"+campos[0] );
                
                // Creamos flujo de entrada para leer los datos que envia el cliente 
                DataInputStream dis = new DataInputStream( s.getInputStream() );

@@ -660,7 +660,7 @@ public static String password = "redes2";
             Class.forName(driver);
             con = DriverManager.getConnection(connectString, user , password);
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT v.nombre nombre,s.ipservidor servidor, s.puertodata puerto " +
+            rs = stmt.executeQuery("SELECT v.nombre nombre,s.ipservidor servidor, s.puertocmd puerto " +
                                     "FROM video as v, videos_servidor as vs, servidor as s "  +
                                     "WHERE v.id_video = vs.videofk AND vs.servidor = s.ipservidor AND vs.servidor NOT LIKE '"+ipServidor+"' AND vs.servidor = s.ipservidor ");
             
