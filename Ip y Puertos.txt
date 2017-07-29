@@ -1,0 +1,6 @@
+ 
+Servidor Central
+192.168.0.2 : 1030
+
+Servidor Secundario
+192.168.0.X : 1026

@@ -22,21 +22,21 @@ public class ShakiraServidorCentral {
     public static void main(String[] args) {
         int i=0;
         try {
-            //puertos de comandos y de datos respectivamente:
-            //cmd:  1026
-            //data: 1026
+            //puerto del servidor:
+                //1030
             
-            //Se crea el socket de comandos en el puerto 1026
-            ServerSocket s = new ServerSocket(1031);
+            //Se crea el socket del servidor en el puerto 1030
+            ServerSocket s = new ServerSocket(1030);
             while(true){    
-                System.out.print("Servidor Central Escuchando en el puerto " + 1031);
+                System.out.print("Servidor Central Escuchando en el puerto " + 1030);
                 System.out.println(", i = " + i);
                 Socket ss = s.accept();
                 new SocketConexionHilo(ss,i).start();
                 i++;
             }
         }catch (Exception e){
-            System.out.println("Error inicializando el socket 'ServerSocket s = new ServerSocket(1026);'");
+            System.out.println("Error inicializando el socket en el puerto 1030:");
+            System.out.println(e.toString());
             i=0;
             
         }

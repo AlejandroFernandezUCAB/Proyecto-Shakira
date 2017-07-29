@@ -20,10 +20,11 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String inputString;
-    //puertos del cliente {cmd,Data}
-    String[] puertos = {"1031","1032"};
-    //Puertos ip y puertos servidor central
-    String[] datosServidorCentral = {"192.168.0.1","1031","1025"};
+    //puertos del servidor secundario {}
+    public static String[] puertosServSecundario = {"1026","1027"};
+    //los servidores secundarios tiene conocimiento previo
+    //de la ip del servidor central y su puerto
+    String[] datosServidorCentral = {"192.168.0.2","1030"};
     
   /**
     * Constructor para inicializar el objeto
@@ -82,7 +83,7 @@ public class Controladora extends Thread{
     private String inscribirServidor() {
         
         SocketConexionSecundario socket = new SocketConexionSecundario();
-        return socket.inscribirServidor( datosServidorCentral[0] , 
-                Integer.parseInt( datosServidorCentral[1]) ,puertos );
+        return socket.inscribirServidor(datosServidorCentral[0] , 
+                Integer.parseInt( datosServidorCentral[1]) ,Controladora.puertosServSecundario );
     }
 }
