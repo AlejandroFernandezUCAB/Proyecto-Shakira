@@ -118,7 +118,7 @@ public static String password = "redes2";
 
             while (rs.next()){
                 
-                if(rs.getString("ipcliente").contains(ip) && rs.getString("nombre").equals(Nombre)){
+                if(!rs.getString("ipcliente").contains(ip) || !rs.getString("nombre").equals(Nombre)){
                     suiche = true;
                 }
                 
