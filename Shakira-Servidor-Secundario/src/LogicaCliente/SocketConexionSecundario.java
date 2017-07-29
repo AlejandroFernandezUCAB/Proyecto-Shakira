@@ -31,6 +31,13 @@ public class SocketConexionSecundario {
     private String ipservidorC;
     private int puerto;
     private String ipLocal;
+    private String nombreBaseDeDatos;
+
+    public SocketConexionSecundario(String nombreBaseDeDatos) {
+        this.nombreBaseDeDatos = nombreBaseDeDatos;
+    }
+    
+    
   /**
    * Metodo para incribir el servidor secundario en el servidor central
    * @param ipServidorCentral 
@@ -73,7 +80,7 @@ public class SocketConexionSecundario {
             System.out.println("Respuesta servidor: " + linea);   
             
             //A partir de aquí comienza el proceso de sincronización
-            BaseDeDatos bd = new BaseDeDatos();
+            BaseDeDatos bd = new BaseDeDatos(this.nombreBaseDeDatos);
             //Aqui recibe un array de string con el nombre de cada video;
             nombreVideos = bd.nombreDeVideos();
             //El digo la cantidad de vídeos que voy a enviar
@@ -127,7 +134,7 @@ public class SocketConexionSecundario {
      * @param videosIpPuerto Aqui hay un array con todos los nombres puertos e ips a donde va a descargar
      */
     private void peticionDeDescargaAServidoresSecundarios(String[] videosIpPuerto) {
-        BaseDeDatos bd = new BaseDeDatos();
+        BaseDeDatos bd = new BaseDeDatos(this.nombreBaseDeDatos);
         String[] campos = new String[4];
         int i = 0;
         for (int j = 0; j < videosIpPuerto.length ; j++) { 
@@ -151,7 +158,7 @@ public class SocketConexionSecundario {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null; 
-        BaseDeDatos bd  = new BaseDeDatos();
+        BaseDeDatos bd  = new BaseDeDatos(this.nombreBaseDeDatos);
         try
           {
                // Creamos el Socket con la direccion y elpuerto de comunicacion

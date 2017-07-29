@@ -19,12 +19,30 @@ import java.sql.Statement;
 public class BaseDeDatos {
 
     public static String driver = "org.postgresql.Driver";
-//    public static String connectString = "jdbc:postgresql://localhost:5432/Shakira-Servidor-Secundario";
-    public static String connectString = "jdbc:postgresql://localhost:5432/servidorSecundario";
-    //public static String connectString = "jdbc:postgresql://localhost:5432/servidorCentral";
+    public String connectString = "jdbc:postgresql://localhost:5432/";
     public static String user = "redes2";
     public static String password = "redes2";
     public static String ruta = "C:/Prueba";
+
+    public BaseDeDatos(String BaseDeDatos) {
+        if (BaseDeDatos != null) {
+            this.connectString += connectString;
+        }
+    }
+
+    public BaseDeDatos() {
+        this.connectString += "servidorSecundario";
+    }
+    
+    
+    public boolean elegirBaseDeDatos(String nombre){
+        if(nombre != null){
+            this.connectString += nombre;
+            return true;
+        }
+        else
+            return false;
+    }
     
     /**
      * Metodo que se encarga de agarrar todos los videos que hay en el servidor

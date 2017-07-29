@@ -20,6 +20,7 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String inputString;
+    private String nombreBaseDeDatos;
     //puertos del servidor secundario {}
     public static String[] puertosServSecundario = {"1026","1027"};
     //los servidores secundarios tiene conocimiento previo
@@ -61,7 +62,14 @@ public class Controladora extends Thread{
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
-        }else if( inputString.trim().contains( "videos_descargando" ) ){
+        }else if (inputString.trim().contains("basedd")) {
+            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+            nombreBaseDeDatos = inputString.substring(7);
+            output.setText(output.getText() + "Base de Datos Elegida: " + nombreBaseDeDatos + "\n");
+            output.setLineWrap(true);
+            output.setWrapStyleWord(true);
+        }
+        else if( inputString.trim().contains( "videos_descargando" ) ){
             
         }else if ( inputString.trim().contains( "videos_descargados" ) ){
             
@@ -82,7 +90,7 @@ public class Controladora extends Thread{
      */
     private String inscribirServidor() {
         
-        SocketConexionSecundario socket = new SocketConexionSecundario();
+        SocketConexionSecundario socket = new SocketConexionSecundario(this.nombreBaseDeDatos);
         return socket.inscribirServidor(datosServidorCentral[0] , 
                 Integer.parseInt( datosServidorCentral[1]) ,Controladora.puertosServSecundario );
     }
