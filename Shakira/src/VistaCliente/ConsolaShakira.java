@@ -20,6 +20,7 @@ import LogicaCliente.Controladora;
 */
 public class ConsolaShakira extends javax.swing.JFrame {
     private String nombreUsuario;
+    private String rutaArchivos;
     /**
      * Creates new form ConsolaShakira
      */
@@ -34,6 +35,9 @@ public class ConsolaShakira extends javax.swing.JFrame {
             this,
             "Inserte nombre de usuario",
             "SHAKIRA DOWNLOADER", 
+            JOptionPane.INFORMATION_MESSAGE);
+        this.rutaArchivos = JOptionPane.showInputDialog(this,
+                "Inserte ruta para almacenar archivos","SHAKIRA DOWNLOADER", 
             JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -171,7 +175,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             String inputComandoString = inputComando.getText();
-            new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+            new Controladora(rutaArchivos,nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
             inputComando.setText("");
             
         }
@@ -184,7 +188,7 @@ public class ConsolaShakira extends javax.swing.JFrame {
      public void enviarInformacion(){
         
         String inputComandoString = inputComando.getText();
-        new Controladora(nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
+        new Controladora(rutaArchivos,nombreUsuario,panel , inputComando , consolaTextArea, inputComandoString).start();
         inputComando.setText("");
         
     }

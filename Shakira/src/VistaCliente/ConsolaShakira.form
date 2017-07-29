@@ -58,7 +58,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" pref="780" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Component id="inputComando" pref="664" max="32767" attributes="0"/>
+                          <Component id="inputComando" pref="676" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="enviarBoton" min="-2" pref="106" max="-2" attributes="0"/>
                       </Group>
@@ -77,7 +77,7 @@
                       <Component id="inputComando" max="32767" attributes="0"/>
                       <Component id="enviarBoton" pref="44" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

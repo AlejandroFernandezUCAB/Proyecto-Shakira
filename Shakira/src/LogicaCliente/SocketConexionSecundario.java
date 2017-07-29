@@ -23,7 +23,7 @@ import java.net.Socket;
  */
 public class SocketConexionSecundario {
 
-    String descargarVideo(String ipServidorSec, int puertoServidorSec, String nombreVid) throws IOException {
+    String descargarVideo(String ipServidorSec, int puertoServidorSec, String nombreVid, String rutaSeleccionada) throws IOException {
          BufferedReader entrada = null;
          PrintWriter salida = null;
          Socket s = null;
@@ -67,7 +67,7 @@ public class SocketConexionSecundario {
                
                 // Creamos flujo de salida, este flujo nos sirve para 
                // indicar donde guardaremos el archivo
-               FileOutputStream fos = new FileOutputStream( "/home/gian/videosDescargados/"+nombreArchivo );
+               FileOutputStream fos = new FileOutputStream( rutaSeleccionada +nombreArchivo );
                BufferedOutputStream out = new BufferedOutputStream( fos );
                BufferedInputStream in = new BufferedInputStream( s.getInputStream() );
  

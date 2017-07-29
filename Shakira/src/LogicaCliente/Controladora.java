@@ -25,11 +25,12 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String nombreUsuario, inputString;
-        
+    private String rutaArchivos;
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
     String[] datosServidorCentral = {"192.168.0.2","1030"};
     //defino el puerto de los clientes (luego se puede parametrizar)
     String puertoCliente = "1054";
+
     
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
         this.consola = consola;
@@ -55,6 +56,15 @@ public class Controladora extends Thread{
     }   
 
     public Controladora(String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputString) {
+        this.consola = panel;
+        this.input = inputComando;
+        this.output = consolaTextArea;
+        this.nombreUsuario = nombreUsuario;
+        this.inputString = inputString;
+    }
+    
+        public Controladora(String rutaArchivos, String nombreUsuario, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputString) {
+        this.rutaArchivos = rutaArchivos;
         this.consola = panel;
         this.input = inputComando;
         this.output = consolaTextArea;
@@ -112,7 +122,7 @@ public class Controladora extends Thread{
             this.descargarVideo(infoServidores[4], Integer.parseInt(infoServidores[5]), nombreVid);
             }
             else{
-                output.setText( output.getText() + "Servidor Secundario" + " > " + resultado + "\n");
+                output.setText( output.getText() + "Servidor Principal" + " > " + resultado + "\n");
             }
             
             output.setLineWrap(true);
@@ -220,7 +230,7 @@ public class Controladora extends Thread{
         String resultado = null;
         try{
             SocketConexionSecundario s = new SocketConexionSecundario();
-            resultado = s.descargarVideo(ipServidorSec,puertoServidorSec, nombreVid);
+            resultado = s.descargarVideo(ipServidorSec,puertoServidorSec, nombreVid,this.rutaArchivos);
         }
         catch(IOException e){
             System.out.println(e.getMessage());
