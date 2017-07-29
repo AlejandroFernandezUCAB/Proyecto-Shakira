@@ -29,7 +29,7 @@ public class Controladora extends Thread{
     //el cliente tiene conocimientos previos de la ip del servidor y sus puertos
     String[] datosServidorCentral = {"192.168.0.2","1030"};
     //defino el puerto de los clientes (luego se puede parametrizar)
-    String puertoCliente = "1054";
+   // String puertoCliente = "1054";
 
     
     public Controladora(JPanel consola,JTextField input, JTextArea output) {
@@ -192,7 +192,7 @@ public class Controladora extends Thread{
                 //InetAddress adress = InetAddress.getLocalHost();
                 SocketConexionPrincipal s = new SocketConexionPrincipal();
                 resultado = s.inscribirUsuario
-        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), puertoCliente );
+        (datosServidorCentral[0] , Integer.parseInt(datosServidorCentral[1]), this.nombreUsuario );
                 //s.conexionPrueba(puertos);
             }catch(IOException e){
                 System.out.println(e.getMessage());

@@ -2,7 +2,8 @@
 
 	ipCliente varchar(15) not null,
 	--puertoEscucha int not null,
-	puerto int not null,
+	--puerto int not null,
+	nombre text not null,
 	CONSTRAINT pk_ipCliente PRIMARY KEY ( ipCliente )
 
 );
