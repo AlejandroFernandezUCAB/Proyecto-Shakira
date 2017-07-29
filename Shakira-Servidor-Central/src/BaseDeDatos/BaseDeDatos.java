@@ -108,6 +108,7 @@ public static String password = "redes2";
      * @return 
      */
     public boolean verificarInscripcionUsuario(String ip, String Nombre){
+        System.out.println("Verificando Inscripcion para: " + ip + " " + Nombre);
         boolean suiche = false;
         try{
             Class.forName(driver);
