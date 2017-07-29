@@ -68,7 +68,7 @@ public static String password = "redes2";
                 con = DriverManager.getConnection(connectString, user , password);
                 pst = con.prepareStatement(stm);
                 pst.setString(1, campos[0]);
-                pst.setInt(2, Integer.parseInt( campos[1]) );                    
+                pst.setString(2, campos[1] );                    
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
