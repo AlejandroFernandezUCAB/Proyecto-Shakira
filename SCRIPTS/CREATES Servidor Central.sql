@@ -4,8 +4,9 @@
 	--puertoEscucha int not null,
 	--puerto int not null,
 	nombre text not null,
-	CONSTRAINT pk_ipCliente PRIMARY KEY ( ipCliente )
-
+	CONSTRAINT pk_ipCliente PRIMARY KEY ( ipCliente, nombre )
+--Composite primary keys:
+--https://stackoverflow.com/questions/217945/can-i-have-multiple-primary-keys-in-a-single-table
 );
 
 CREATE TABLE VIDEO(

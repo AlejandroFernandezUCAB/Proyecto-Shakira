@@ -72,8 +72,9 @@ public static String password = "redes2";
                 pst.executeUpdate();
 
                 } catch ( SQLException | ClassNotFoundException e ){
-                    
+                    System.out.println("Entre en el catch de agregarUsuarioBD");
                     System.out.println("No se inscribio al usuario: " + campos[0]);
+                    System.out.println("Error: " + e.toString());
                     return 0;
 
                 } finally {
@@ -118,7 +119,7 @@ public static String password = "redes2";
 
             while (rs.next()){
                 
-                if(!rs.getString("ipcliente").contains(ip) || !rs.getString("nombre").equals(Nombre)){
+                if(rs.getString("ipcliente").contains(ip) && rs.getString("nombre").equals(Nombre)){
                     suiche = true;
                 }
                 
@@ -130,7 +131,7 @@ public static String password = "redes2";
             }catch ( Exception e ){
                  System.out.println(e.getMessage());
             }
-        
+        System.out.println("Verificacion retorna: " + suiche);
             return suiche;
         }
 
