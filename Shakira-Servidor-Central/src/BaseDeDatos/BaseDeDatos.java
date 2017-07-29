@@ -62,7 +62,7 @@ public static String password = "redes2";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario,
-        if(verificarInscripcionUsuario(campos[0]) == false){
+        if(verificarInscripcionUsuario(campos[0],campos[1]) == false){
             try{
                 Class.forName(driver);
                 con = DriverManager.getConnection(connectString, user , password);
@@ -107,17 +107,17 @@ public static String password = "redes2";
      * @param ip
      * @return 
      */
-    public boolean verificarInscripcionUsuario(String ip){
+    public boolean verificarInscripcionUsuario(String ip, String Nombre){
         boolean suiche = false;
         try{
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT ipcliente FROM cliente");
+            ResultSet rs = stmt.executeQuery("SELECT ipcliente, nombre FROM cliente");
 
             while (rs.next()){
                 
-                if(rs.getString("ipcliente").contains(ip)){
+                if(rs.getString("ipcliente").contains(ip) && rs.getString("nombre").equals(Nombre)){
                     suiche = true;
                 }
                 
@@ -133,6 +133,39 @@ public static String password = "redes2";
             return suiche;
         }
 
+    
+        /**
+     * Aqui se verifica que el cliente no haya estado inscrito
+     * @param ip
+     * @return 
+     */
+    public boolean verificarInscripcionUsuario(String ip){
+        boolean suiche = false;
+        try{
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(connectString, user , password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ipcliente FROM cliente");
+
+            while (rs.next()){
+                
+                if(rs.getString("ipcliente").contains(ip) ){
+                    suiche = true;
+                }
+                
+            }
+
+                stmt.close();
+                con.close();
+
+            }catch ( Exception e ){
+                 System.out.println(e.getMessage());
+            }
+        
+            return suiche;
+        }
+    
+    
      /**
      * Agrega a la bdd un servidor secundario
      * @param direccionIp 
