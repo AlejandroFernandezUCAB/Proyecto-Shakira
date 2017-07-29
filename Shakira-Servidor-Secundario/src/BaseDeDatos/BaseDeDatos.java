@@ -26,7 +26,7 @@ public class BaseDeDatos {
 
     public BaseDeDatos(String BaseDeDatos) {
         if (BaseDeDatos != null) {
-            this.connectString += connectString;
+            this.connectString += BaseDeDatos;
         }
     }
 
