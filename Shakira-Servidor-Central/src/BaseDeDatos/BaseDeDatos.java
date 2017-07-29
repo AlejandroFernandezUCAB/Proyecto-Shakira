@@ -42,7 +42,7 @@ public static String password = "redes2";
      * @return devuelve 1 si se registró correctamente, si hay error 0
  */
 
-    public String[] extraerIPyPuertos(String str){
+    public String[] extraer(String str){
         String[] campos = new String[3];
         int i = 0;
         StringTokenizer tokens = new StringTokenizer(str,"_");
@@ -54,11 +54,11 @@ public static String password = "redes2";
         return campos;
     }
     
-    public int agregarUsuarioBDD(String ipYpuerto){
+    public int agregarUsuarioBDD(String ipYnombre){
         
-        String[] campos = extraerIPyPuertos(ipYpuerto);
+        String[] campos = extraer(ipYnombre);
         
-        String stm = "INSERT INTO CLIENTE(ipcliente, puerto) VALUES(?, ?)";
+        String stm = "INSERT INTO CLIENTE(ipcliente, nombre) VALUES(?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
         //Se abren las conexiones a la BDD y e guarda el usuario,
@@ -94,10 +94,10 @@ public static String password = "redes2";
                     }
 
             }
-            System.out.println("Se inscribio al usuario: " + campos[0]);
+            System.out.println("Se inscribio al usuario: " + campos[0] + " --> " + campos[1] );
             return 1;
         }else{
-            System.out.println("El usuario: " + campos[0] + " ya existe");
+            System.out.println("El usuario: " + campos[0] + " --> " + campos[1]  + " ya existe");
             return 0;
         }
     }
@@ -143,7 +143,7 @@ public static String password = "redes2";
         String stm = "INSERT INTO SERVIDOR (ipservidor, puertocmd, puertodata, estado) VALUES(?, ?, ?, 0)";
         PreparedStatement pst = null;
         Connection con=null;
-        String[] campos = extraerIPyPuertos( ip );
+        String[] campos = extraer( ip );
         //Se verifica que no haya un servidor con la misma Ip
         if( verificarInscripcionDeServidor( campos[0] ) == false ){
             //Se verifica que no haya más de 3 servidores
