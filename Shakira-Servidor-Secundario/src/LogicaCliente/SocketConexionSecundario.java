@@ -37,7 +37,8 @@ public class SocketConexionSecundario {
     public SocketConexionSecundario(String nombreBaseDeDatos, String ruta) {
         
         this.nombreBaseDeDatos = nombreBaseDeDatos;
-        this.ruta =ruta;
+        if(!ruta.isEmpty() || ruta != null)
+            this.ruta =ruta;
         System.out.println("Servidor Secundario > LogicaCliente > Socket...Secundario > " + "Nombre de la base de datos: " + this.nombreBaseDeDatos);
         System.out.println("Servidor Secundario > LogicaCliente > Socket...Secundario > " + "Ruta para almacenar los archivos: " + this.ruta);
     }
