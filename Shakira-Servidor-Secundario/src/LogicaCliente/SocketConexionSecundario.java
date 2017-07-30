@@ -126,6 +126,7 @@ public class SocketConexionSecundario {
             return ("Servidor Secundario > Problemas de conexión con el servidor, intente más tarde"); 
             
         } catch (Exception e){
+            System.out.println("Error Inscribiendo Servidor: " + e.toString() );
             
             return ("Servidor Secundario > Ha sucedido un error inesperado, intente nuevamente");
             
