@@ -205,7 +205,7 @@ public class BaseDeDatos {
      */
     public String rutaVideo(String nombreVideo) {
         String retorno=null;
-        nombreVideo = nombreVideo.substring(10);
+        //nombreVideo = nombreVideo.substring(10);
         try{
             Class.forName(driver);
             Connection con = DriverManager.getConnection(connectString, user , password);

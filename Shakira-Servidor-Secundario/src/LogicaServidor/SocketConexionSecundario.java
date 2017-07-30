@@ -73,7 +73,7 @@ public class SocketConexionSecundario extends Thread{
             //-------Enviando Video a Servidor Secundario---------- 
                 if( str.contains("descargars")){
                     System.out.println("---------------Enviando Archivo a Servidor Secundario--------------");
-                    suiche = enviarVideoSecundario(str);                                
+                    suiche = enviarVideoSecundario(str.substring(10));                                
                     if( suiche == 1){
                        salida.println( "Servidor Secundario > Enviado correctamente");                   
                     }else{
@@ -97,8 +97,10 @@ public class SocketConexionSecundario extends Thread{
      * @return 1 si es eitoso, 0 si fallo
      */
     private int enviarVideoSecundario(String nombreVideo) {
+        System.out.println("Funcion 'enviarVideoSecundario', nombreVideo = " + nombreVideo );
             BaseDeDatos bd = new BaseDeDatos();
-            String rutaArchivo = bd.rutaVideo(nombreVideo);
+            String rutaArchivo = bd.rutaVideo(nombreVideo) + nombreVideo;
+            System.out.println("Ruta del video que voy a abrir: " + rutaArchivo);
             try{
                 // Creamos el archivo que vamos a enviar
                 File archivo = new File( rutaArchivo );
