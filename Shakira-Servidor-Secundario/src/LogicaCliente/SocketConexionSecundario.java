@@ -32,9 +32,11 @@ public class SocketConexionSecundario {
     private int puerto;
     private String ipLocal;
     private String nombreBaseDeDatos;
+    private String ruta;
 
-    public SocketConexionSecundario(String nombreBaseDeDatos) {
+    public SocketConexionSecundario(String nombreBaseDeDatos, String ruta) {
         this.nombreBaseDeDatos = nombreBaseDeDatos;
+        this.ruta =ruta;
     }
     
     
@@ -158,7 +160,7 @@ public class SocketConexionSecundario {
         BufferedReader entrada = null;
         PrintWriter salida = null;
         Socket s = null; 
-        BaseDeDatos bd  = new BaseDeDatos(this.nombreBaseDeDatos);
+        BaseDeDatos bd  = new BaseDeDatos(this.nombreBaseDeDatos,this.ruta);
         try
           {
                // Creamos el Socket con la direccion y elpuerto de comunicacion
@@ -185,7 +187,7 @@ public class SocketConexionSecundario {
         
                // Creamos flujo de salida, este flujo nos sirve para 
                // indicar donde guardaremos el archivo
-               FileOutputStream fos = new FileOutputStream( "C:\\prueba\\"+nombreArchivo );
+               FileOutputStream fos = new FileOutputStream( this.ruta + nombreArchivo );
                BufferedOutputStream out = new BufferedOutputStream( fos );
                BufferedInputStream in = new BufferedInputStream( s.getInputStream() );
  

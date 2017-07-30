@@ -21,6 +21,7 @@ public class Controladora extends Thread{
     private JTextArea output;
     private String inputString;
     private String nombreBaseDeDatos;
+    private String ruta = "/home/gian/videosDescargados";
     //puertos del servidor secundario {}
     public static String[] puertosServSecundario = {"1026","1027"};
     //los servidores secundarios tiene conocimiento previo
@@ -46,6 +47,16 @@ public class Controladora extends Thread{
         this.input = inputComando;
         this.output = consolaTextArea;
         this.inputString = inputComandoString;
+    }
+
+    public Controladora(String ruta, JPanel panel, JTextField inputComando, JTextArea consolaTextArea, String inputComandoString) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!ruta.isEmpty() && ruta != null)
+            this.ruta = ruta;
+        this.panel = panel;
+        this.input = inputComando;
+        this.output = consolaTextArea;
+        this.comando = inputComandoString;
     }
 
       
@@ -90,7 +101,7 @@ public class Controladora extends Thread{
      */
     private String inscribirServidor() {
         
-        SocketConexionSecundario socket = new SocketConexionSecundario(this.nombreBaseDeDatos);
+        SocketConexionSecundario socket = new SocketConexionSecundario(this.nombreBaseDeDatos,this.ruta);
         return socket.inscribirServidor(datosServidorCentral[0] , 
                 Integer.parseInt( datosServidorCentral[1]) ,Controladora.puertosServSecundario );
     }

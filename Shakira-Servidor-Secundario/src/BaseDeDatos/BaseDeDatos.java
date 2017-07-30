@@ -22,16 +22,26 @@ public class BaseDeDatos {
     public String connectString = "jdbc:postgresql://localhost:5432/";
     public static String user = "redes2";
     public static String password = "redes2";
-    public static String ruta = "C:/Prueba";
+    public static String ruta = "/home/gian/videosDescargados/"; //ruta por defecto
 
     public BaseDeDatos(String BaseDeDatos) {
         if (BaseDeDatos != null) {
             this.connectString += BaseDeDatos;
         }
+        System.out.println("String de conexion: " + this.connectString);
+    }
+    
+    public BaseDeDatos(String BaseDeDatos, String ruta) {
+        if (BaseDeDatos != null && ruta != null) {
+            this.connectString += BaseDeDatos;
+            this.ruta = ruta;
+        }
+        System.out.println("String de conexion: " + this.connectString);
     }
 
     public BaseDeDatos() {
         this.connectString += "servidorSecundario";
+        System.out.println("String de conexion: " + this.connectString);
     }
     
     
@@ -149,10 +159,10 @@ public class BaseDeDatos {
     
     /**
      * Se agrega el video a la bdd del servidor secundario
-     * @param readLine Nombre del video
+     * @param nombreVideo Nombre del video
      * @param posicion posicion
      */
-    public void agregarVideoServidorSecundario(String readLine, int posicion) {
+    public void agregarVideoServidorSecundario(String nombreVideo, int posicion) {
         String stm = "INSERT INTO VIDEO VALUES( nextval('sec_id_video'), ?, ?, ?)";
         PreparedStatement pst = null;
         Connection con=null;
@@ -161,13 +171,13 @@ public class BaseDeDatos {
             Class.forName(driver);
             con = DriverManager.getConnection(connectString, user , password);
             pst = con.prepareStatement(stm);
-            pst.setString(1, readLine );
-            pst.setString(2, ruta + readLine);    
+            pst.setString(1, nombreVideo );
+            pst.setString(2, ruta + nombreVideo);    
             pst.setInt(3, posicion);
             pst.executeUpdate();
         } catch ( SQLException | ClassNotFoundException e ){
            System.out.println(e.getMessage());        
-           System.out.println("Servidor Central > No se inscribio el video: "+ readLine );
+           System.out.println("Servidor Central > No se inscribio el video: "+ nombreVideo );
        } finally {
            // Con el finally se cierran todas las conexiones los con, pst;
                  try {
@@ -182,7 +192,7 @@ public class BaseDeDatos {
                 }
 
         }
-                System.out.println("Servidor Central > Se inscribio el video: " + readLine);
+                System.out.println("Servidor Central > Se inscribio el video: " + nombreVideo);
                 
                 
                      

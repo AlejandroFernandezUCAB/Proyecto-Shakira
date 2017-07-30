@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author pedro
  */
 public class ConsolaShakiraSecundario extends javax.swing.JFrame {
-    
+    private String ruta;
     /**
      * Creates new form ConsolaShakira
      */
@@ -26,7 +26,8 @@ public class ConsolaShakiraSecundario extends javax.swing.JFrame {
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-
+        this.ruta = JOptionPane.showInputDialog
+        (this,"Inserte ruta para almacenar archivos","SHAKIRA DOWNLOADER - SERVIDOR SECUNDARIO",JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -161,7 +162,7 @@ public class ConsolaShakiraSecundario extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             String inputComandoString = inputComando.getText();
-            new Controladora(panel , inputComando , consolaTextArea, inputComandoString).start();
+            new Controladora(this.ruta,panel , inputComando , consolaTextArea, inputComandoString).start();
             inputComando.setText("");
             
         }
@@ -174,7 +175,7 @@ public class ConsolaShakiraSecundario extends javax.swing.JFrame {
      public void enviarInformacion(){
         
         String inputComandoString = inputComando.getText();
-        new Controladora(panel , inputComando , consolaTextArea, inputComandoString).start();
+        new Controladora(this.ruta,panel , inputComando , consolaTextArea, inputComandoString).start();
         inputComando.setText("");
         
     }
