@@ -32,7 +32,7 @@ public class SocketConexionSecundario {
     private int puerto;
     private String ipLocal;
     private String nombreBaseDeDatos;
-    private String ruta;
+    private String ruta = "/home/gian/videosDescargados/";
 
     public SocketConexionSecundario(String nombreBaseDeDatos, String ruta) {
         
