@@ -20,7 +20,7 @@ public class Controladora extends Thread{
     private JTextField input;
     private JTextArea output;
     private String inputString;
-    private String nombreBaseDeDatos;
+    public String nombreBaseDeDatos = "servidorSecundario";
     private String ruta = "/home/gian/videosDescargados";
     //puertos del servidor secundario {}
     public static String[] puertosServSecundario = {"1026","1027"};
@@ -56,7 +56,11 @@ public class Controladora extends Thread{
         this.panel = panel;
         this.input = inputComando;
         this.output = consolaTextArea;
-        this.comando = inputComandoString;
+        this.inputString  = inputComandoString;
+    }
+
+    public void setNombreBaseDeDatos(String nombreBaseDeDatos) {
+        this.nombreBaseDeDatos = nombreBaseDeDatos;
     }
 
       
@@ -69,17 +73,20 @@ public class Controladora extends Thread{
         if( inputString.trim().contains("inscribir")){
             
             output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+            System.out.println("Voy a inscribir con la base: " + this.nombreBaseDeDatos);
             output.setText( output.getText() + inscribirServidor() + "\n");
             output.setLineWrap(true);
             output.setWrapStyleWord(true);
             
-        }else if (inputString.trim().contains("basedd")) {
-            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
-            nombreBaseDeDatos = inputString.substring(7);
-            output.setText(output.getText() + "Base de Datos Elegida: " + nombreBaseDeDatos + "\n");
-            output.setLineWrap(true);
-            output.setWrapStyleWord(true);
         }
+//        else if (inputString.trim().contains("basedd")) {
+//            output.setText( output.getText() + "Servidor Secundario > " + inputString + "\n");
+//            //this.nombreBaseDeDatos = inputString.substring(7);
+//            setNombreBaseDeDatos(inputString.substring(7));
+//            output.setText(output.getText() + "Base de Datos Elegida: " + nombreBaseDeDatos + "\n");
+//            output.setLineWrap(true);
+//            output.setWrapStyleWord(true);
+//        }
         else if( inputString.trim().contains( "videos_descargando" ) ){
             
         }else if ( inputString.trim().contains( "videos_descargados" ) ){
@@ -100,7 +107,7 @@ public class Controladora extends Thread{
      * @return Respuesta del servidor
      */
     private String inscribirServidor() {
-        
+    System.out.println("Servidor Secundario > LogicaCliente > Controladora > " + "Nombre de la base de datos: " + this.nombreBaseDeDatos);
         SocketConexionSecundario socket = new SocketConexionSecundario(this.nombreBaseDeDatos,this.ruta);
         return socket.inscribirServidor(datosServidorCentral[0] , 
                 Integer.parseInt( datosServidorCentral[1]) ,Controladora.puertosServSecundario );
